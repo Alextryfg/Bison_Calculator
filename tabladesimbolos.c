@@ -2,25 +2,8 @@
 #include "abb.h"
 #include "definiciones.h"
 
-/*Se trata del arbol que almacenara la tabla de simbolos*/
+/*Se trata del arbol en el que se almacenará la tabla de simbolos*/
 abb tabla;
-
-
-/* Almaceno las Keywords del programa */
-
-tipoelem initial[] = {{"identificador", ID},{"import", IMPORT},
-                    {"int", INT}, {"float", FLOAT}, {"while", WHILE},
-                    {"foreach", FOREACH}, {"return", RETURN}, {"void", VOID}, {"cast", CAST}, {"double", DOUBLE} };
-
-/*
- * Funcion auxiliar para insertar en la tabla de simbolos, las keywords iniciales
- */
-void insertSimbol(tipoelem keys){
-
-    //Insertamos el elemento en la tabla de simbolos
-    insertar(&tabla,keys);
-
-}
 
 /*
  * Funcion encargada de inicializar la tabla de simbolos
@@ -29,10 +12,6 @@ void initTabla() {
 
     /* Creo la tabla */
     crear(&tabla);
-
-    /* Inserto sus elementos */
-    for (int i = 0; i < 10; i++)
-        insertSimbol(initial[i]);
 
 }
 
@@ -46,20 +25,25 @@ void destruirTabla(){
 /*
  * Funcion encargada de encontrar un lexema dentro de el arbol. Si el elemento no esta en la tabla, se introducirá
  */
-void findCodigo(tipoelem *simb){
+tipoelem* findSimbol(char* lex){
 
-        /* Si es miembro simplemente se busca su codigo y se devuelve a _formarLexema en el lexico.c */
-        if(es_miembro(tabla,*simb)){
-            tipoelem s;
-            //Se busca el nodo por medio del lexema almacenandolo en s
-            buscar_nodo(tabla, simb->lexema, &s);
-            simb->codigo = s.codigo;
-        /* En caso de no ser miembro, lo insertamos como un nuevo ID */
-        }else{
-            simb->codigo= ID;
-            insertSimbol(*simb);
-        }
+    tipoelem *s;
+    //Se busca el nodo por medio del lexema almacenandolo en s
+    buscar_nodo(tabla, lex , s);
 
+    if(s != NULL){
+        //Si el nodo existe, se devuelve el puntero a el
+        free(lex);
+        return s;
+    }else{
+        // En caso de no existir, se crea
+        tipoelem *new;
+        new->lexema = lex;
+        new->type = VAR;//Tipo de la variable
+        new->data.val = 0; //Valor de la variable
+        insertar(&tabla, *new);
+        return new;
+    }
 }
 
 /*

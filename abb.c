@@ -150,7 +150,6 @@ void insertar(abb *A, tipoelem E) {
         strcpy((*A)->info.lexema, E.lexema);
         if (*A) {
             (*A)->info.lexema[strlen(E.lexema)] = '\0';
-            (*A)->info.codigo = E.codigo;
             (*A)->izq = NULL;
             (*A)->der = NULL;
         }

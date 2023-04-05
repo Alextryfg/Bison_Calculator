@@ -9,8 +9,13 @@
 typedef char *tipoclave;
 
 typedef struct{
-    char *lexema;
-    int codigo;
+    char *lexema; //lexema del token
+    int type;   //tipo del token
+    union{
+        float val; //valor del token
+        double (*func)(); //funcion del token
+        void (*funcVoid)(); //funcion del token
+    }data;
 }tipoelem;
 
 typedef struct celda * abb;//tipo opaco

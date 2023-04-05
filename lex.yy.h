@@ -5,16 +5,17 @@
 /*
 * Funcion de inicializacion del sistema de entrada donde se abrira el archivo
 */
-void init(char *nombreArchivo);
+double openFile(char *nombreArchivo);
 
 /*
  * Funcion encargada de devolver el componente lexico que será procesado por el Analizador sintáctico
  */
-void siguiente_componente_lexico(tipoelem *actual);
+double exit();
 
 /*
  * Funcion encargada de cerrar el archivo y liberar memoria
  */
-void cerrarD();
+void closeFile();
+
 
 #endif /* DEFINITIONS_H_ */
