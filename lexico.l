@@ -50,12 +50,18 @@ LIB <{LETTER|DIGIT}+\.h>
 
 {BREAK_LINE}        {return ((int)*yytext);}
 
-{DIGIT}             {yyval.val=atof(yytext); return (NUMBER);}
+{DIGIT}             {
+                    /* Covertimos el string a su valor numérico y lo metemos en la estructura definida en bison  */
+                    yylval.val=atof(yytext); 
+                    /* Devolvemos el token correspondiente */
+                    return (NUMBER);}
 
-{VARIABLE}          {char* lexema;
-                        lexema = strdup(yytext);
-                        yylval.elem = findSimbol(lexema);
+{VARIABLE}          {
+                        yylval.str = strdup(yytext);
+                        yylval.val = findSimbol(yylval.str);
                         /* Busco en la tabla de simbolos inicial, el tipo o id de la variable que entra */
+                        /* Dependiendo del tipo de variable, se devolverá un token u otro */
+                        /* Flex devuelve a Bison un Token con el que realizará unas reglas gramáticales establecidas */
                         if(yylval.elem->tipo == ID_EXIT){
                             return (EXIT);
                         }else if(yylval.elem->tipo == ID_WORKSPACE){
@@ -109,9 +115,9 @@ double openFile(char *nombreArchivo){
     yyin = archivo;
 }
 
-double exit(){
+void exit(){
     yylex_destroy();
-    return -1;
+    return;
 }
 
 

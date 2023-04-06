@@ -139,6 +139,21 @@ void buscar_nodo(abb A, tipoclave cl, tipoelem *nodo) {
         buscar_nodo(A->der, cl, nodo);
     }
 }
+
+int buscar_nodoComando(abb A, char *comando) {
+    if (es_vacio(A)) {
+        return 0;
+    }
+    int comp = strcmp(comando, A->info.lexema);
+
+    if (comp == 0) { // cl == A->info Son iguale sy por lo tanto se devuelve el código
+        return A->info.type;
+    } else if (comp < 0) { // cl < A->info
+        buscar_nodoComando(A->izq, comando);
+    } else { // cl > A->info
+        buscar_nodoComando(A->der, comando);
+    }
+}
 //OPERACIONES DE MODIFICACIÓN
 
 /* Funcion recursiva para insertar un nuevo nodo
@@ -304,7 +319,13 @@ void _printTabla(abb *A){
         if (&(*A)->izq != NULL) {
             _printTabla(&(*A)->izq);
             printf("\nLexema: %14s", (*A)->info.lexema);
-            printf("%15s: %-3d", "Codigo", (*A)->info.codigo);
+            printf("%15s: %-3d", "Codigo", (*A)->info.type);
+            printf("%15s: %-3d", "Inicializado", (*A)->info.initVal);
+            if ((*A)->info.type == ID_VAR) {
+                printf("%15s: %-3.2f", "Valor", (*A)->info.data.val);
+            } else {
+                printf("%15s: %-3p", "Funcion", (*A)->info.data.func);
+            }
         }
 
 

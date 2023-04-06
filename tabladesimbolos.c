@@ -2,8 +2,8 @@
 #include "abb.h"
 #include "definiciones.h"
 
-/*Se trata del arbol en el que se almacenará la tabla de simbolos*/
-abb tabla;
+/*Se trata del arbol en el que se almacenará la tablaSimbolos de simbolos*/
+abb tablaSimbolos;
 
 typedef struct{
     char* nombre;
@@ -37,59 +37,92 @@ comandos initialC[] = {
     };
 
 /*
- * Funcion encargada de inicializar la tabla de simbolos
+ * Funcion encargada de inicializar la tablaSimbolos de simbolos
  */
-void initTabla() {
+void initTablaSimbolos() {
 
-    /* Creo la tabla */
-    crear(&tabla);
+    /* Creo la tablaSimbolos */
+    crear(&tablaSimbolos);
 
     /* Inserto sus elementos */
     for (int i = 0; initialC[i].nombre != NULL ; i++)
-        insertarComando(&tabla, initialC[i].nombre, initialC[i].id, initialC[i].func);
+        insertarComando(&tablaSimbolos, initialC[i].nombre, initialC[i].id, initialC[i].func);
     
     for (int i = 0; initialConst[i].nombre != NULL ; i++)
-        insertarVar(&tabla, initialConst[i].nombre, ID_CONST, initialConst[i].valor);
+        insertarVar(&tablaSimbolos, initialConst[i].nombre, ID_CONST, initialConst[i].valor);
         
 
 }
 
+/* Funciones que se invocaran cuando FLEX detecte las palabras clave.*/
+
+void exit(){
+    destruirTablaSimbolos();
+    exit(0);
+}
+
+void workspace(){
+    printTablaSimbolos();
+}
+
+void help(){
+    printf("Hula");
+}
+
+void clear(){
+    system("clear");
+}
+
+void simbolos(){
+    printTablaSimbolos();
+}
+
+void load(){
+    printf("Hula");
+}
+
+void import(){
+    printf("Hula");
+}
+
+
+
 /*
  * Funcion encargada de la destruccion del arbol
  */
-void destruirTabla(){
-    destruir(&tabla);
+void destruirTablaSimbolos(){
+    destruir(&tablaSimbolos);
 }
 
 /*
- * Funcion encargada de encontrar un lexema dentro de el arbol. Si el elemento no esta en la tabla, se introducirá
+ * Funcion encargada de encontrar un lexema dentro de el arbol. Si el elemento no esta en la tablaSimbolos, se introducirá
  */
-tipoelem* findSimbol(char* lex){
+int findComando(char* lex){
 
     tipoelem *s;
     //Se busca el nodo por medio del lexema almacenandolo en s
-    buscar_nodo(tabla, lex , s);
+    buscar_nodo(tablaSimbolos, lex , s);
 
     if(s != NULL){
-        //Si el nodo existe, se devuelve el puntero a el
+        //Si el nodo existe, se devuelve su codigo
         free(lex);
-        return s;
+        return s->type;
     }else{
         // En caso de no existir, se crea
         tipoelem *new;
         new->lexema = lex;
         new->type = ID_VAR;//Tipo de la variable
         new->data.val = 0; //Valor de la variable
-        insertar(&tabla, *new);
-        return new;
+        insertar(&tablaSimbolos, *new);
+        return new->type;
     }
 }
 
 /*
- * Funcion que imprime la tabla, invocando a la recursiva de abb.h
+ * Funcion que imprime la tablaSimbolos, invocando a la recursiva de abb.h
  */
-void printTabla(){
+void printTablaSimbolos(){
     printf("\n*************TABLA DE SIMBOLOS*************");
-    _printTabla(&tabla);
+    _printTabla(&tablaSimbolos);
     printf("\n*******************************************\n");
 }

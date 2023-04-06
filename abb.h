@@ -74,6 +74,14 @@ unsigned es_miembro(abb A, tipoelem E);
  */
 void buscar_nodo(abb A, tipoclave cl, tipoelem *nodo);
 
+/**
+ * Busca un nodo con clave comando en el arbol y, si existe
+ * devuelve su codigo.
+ * @param A Arbol binario en el que se busca el nodo.
+ * @param comando Clave que se buscara.
+ */
+int buscar_nodoComando(abb A, char *comando);
+
 //FUNCIONES DE MODIFICACIÓN
 /**
  * Inserta un nuevo nodo en el arbol para el elemento E
