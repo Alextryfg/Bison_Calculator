@@ -77,10 +77,10 @@
     #include "abb.h"
     #include "definiciones.h"
     #include "tabladesimbolos.h"
+    #include "lex.yy.h"
 
     void yyerror(char *s);  /* prototipo de la función de error  */
     extern int yylex(void); /* Esto se utilizará desde otros archivos por eso lleva el extern */
-    void help?();
 
 
 #line 87 "sintactico.tab.c"
@@ -114,26 +114,26 @@ enum yysymbol_kind_t
   YYSYMBOL_YYEOF = 0,                      /* "end of file"  */
   YYSYMBOL_YYerror = 1,                    /* error  */
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
-  YYSYMBOL_NUM = 3,                        /* NUM  */
-  YYSYMBOL_ID = 4,                         /* ID  */
-  YYSYMBOL_ID_MAS_IGUAL = 5,               /* ID_MAS_IGUAL  */
-  YYSYMBOL_ID_MENOS_IGUAL = 6,             /* ID_MENOS_IGUAL  */
-  YYSYMBOL_ID_MULT_IGUAL = 7,              /* ID_MULT_IGUAL  */
-  YYSYMBOL_ID_DIV_IGUAL = 8,               /* ID_DIV_IGUAL  */
-  YYSYMBOL_ID_IGUAL_IGUAL = 9,             /* ID_IGUAL_IGUAL  */
-  YYSYMBOL_ID_MAYOR_IGUAL = 10,            /* ID_MAYOR_IGUAL  */
-  YYSYMBOL_ID_MENOR_IGUAL = 11,            /* ID_MENOR_IGUAL  */
-  YYSYMBOL_ID_DIFERENTE_IGUAL = 12,        /* ID_DIFERENTE_IGUAL  */
-  YYSYMBOL_ID_MAS_MAS = 13,                /* ID_MAS_MAS  */
-  YYSYMBOL_ID_MENOS_MENOS = 14,            /* ID_MENOS_MENOS  */
-  YYSYMBOL_ID_ASIGNACION = 15,             /* ID_ASIGNACION  */
-  YYSYMBOL_EXIT = 16,                      /* EXIT  */
-  YYSYMBOL_WORKSPACE = 17,                 /* WORKSPACE  */
-  YYSYMBOL_HELP = 18,                      /* HELP  */
-  YYSYMBOL_CLEAR_WORKSPACE = 19,           /* CLEAR_WORKSPACE  */
-  YYSYMBOL_SIMBOLOS = 20,                  /* SIMBOLOS  */
-  YYSYMBOL_LOAD = 21,                      /* LOAD  */
-  YYSYMBOL_IMPORT = 22,                    /* IMPORT  */
+  YYSYMBOL_TOKEN_NUM = 3,                  /* TOKEN_NUM  */
+  YYSYMBOL_TOKEN_VARIABLE = 4,             /* TOKEN_VARIABLE  */
+  YYSYMBOL_TOKEN_MAS_IGUAL = 5,            /* TOKEN_MAS_IGUAL  */
+  YYSYMBOL_TOKEN_MENOS_IGUAL = 6,          /* TOKEN_MENOS_IGUAL  */
+  YYSYMBOL_TOKEN_MULT_IGUAL = 7,           /* TOKEN_MULT_IGUAL  */
+  YYSYMBOL_TOKEN_DIV_IGUAL = 8,            /* TOKEN_DIV_IGUAL  */
+  YYSYMBOL_TOKEN_IGUAL_IGUAL = 9,          /* TOKEN_IGUAL_IGUAL  */
+  YYSYMBOL_TOKEN_MAYOR_IGUAL = 10,         /* TOKEN_MAYOR_IGUAL  */
+  YYSYMBOL_TOKEN_MENOR_IGUAL = 11,         /* TOKEN_MENOR_IGUAL  */
+  YYSYMBOL_TOKEN_DIFERENTE_IGUAL = 12,     /* TOKEN_DIFERENTE_IGUAL  */
+  YYSYMBOL_TOKEN_MAS_MAS = 13,             /* TOKEN_MAS_MAS  */
+  YYSYMBOL_TOKEN_MENOS_MENOS = 14,         /* TOKEN_MENOS_MENOS  */
+  YYSYMBOL_TOKEN_ASIGNACION = 15,          /* TOKEN_ASIGNACION  */
+  YYSYMBOL_TOKEN_EXIT = 16,                /* TOKEN_EXIT  */
+  YYSYMBOL_TOKEN_WORKSPACE = 17,           /* TOKEN_WORKSPACE  */
+  YYSYMBOL_TOKEN_HELP = 18,                /* TOKEN_HELP  */
+  YYSYMBOL_TOKEN_CLEAR_WORKSPACE = 19,     /* TOKEN_CLEAR_WORKSPACE  */
+  YYSYMBOL_TOKEN_SIMBOLOS = 20,            /* TOKEN_SIMBOLOS  */
+  YYSYMBOL_TOKEN_LOAD = 21,                /* TOKEN_LOAD  */
+  YYSYMBOL_TOKEN_IMPORT = 22,              /* TOKEN_IMPORT  */
   YYSYMBOL_23_ = 23,                       /* '='  */
   YYSYMBOL_24_ = 24,                       /* '-'  */
   YYSYMBOL_25_ = 25,                       /* '+'  */
@@ -534,7 +534,7 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    74,    74,    75,    76,    77,    78,    79,    80,    81
+       0,    83,    83,    84,    85,    86,    87,    88,    89,    90
 };
 #endif
 
@@ -550,13 +550,14 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "\"end of file\"", "error", "\"invalid token\"", "NUM", "ID",
-  "ID_MAS_IGUAL", "ID_MENOS_IGUAL", "ID_MULT_IGUAL", "ID_DIV_IGUAL",
-  "ID_IGUAL_IGUAL", "ID_MAYOR_IGUAL", "ID_MENOR_IGUAL",
-  "ID_DIFERENTE_IGUAL", "ID_MAS_MAS", "ID_MENOS_MENOS", "ID_ASIGNACION",
-  "EXIT", "WORKSPACE", "HELP", "CLEAR_WORKSPACE", "SIMBOLOS", "LOAD",
-  "IMPORT", "'='", "'-'", "'+'", "'*'", "'/'", "'>'", "'<'", "NEG", "'^'",
-  "'('", "')'", "$accept", "exp", YY_NULLPTR
+  "\"end of file\"", "error", "\"invalid token\"", "TOKEN_NUM",
+  "TOKEN_VARIABLE", "TOKEN_MAS_IGUAL", "TOKEN_MENOS_IGUAL",
+  "TOKEN_MULT_IGUAL", "TOKEN_DIV_IGUAL", "TOKEN_IGUAL_IGUAL",
+  "TOKEN_MAYOR_IGUAL", "TOKEN_MENOR_IGUAL", "TOKEN_DIFERENTE_IGUAL",
+  "TOKEN_MAS_MAS", "TOKEN_MENOS_MENOS", "TOKEN_ASIGNACION", "TOKEN_EXIT",
+  "TOKEN_WORKSPACE", "TOKEN_HELP", "TOKEN_CLEAR_WORKSPACE",
+  "TOKEN_SIMBOLOS", "TOKEN_LOAD", "TOKEN_IMPORT", "'='", "'-'", "'+'",
+  "'*'", "'/'", "'>'", "'<'", "NEG", "'^'", "'('", "')'", "$accept", "exp", YY_NULLPTR
 };
 
 static const char *
@@ -1104,56 +1105,56 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 2: /* exp: NUM  */
-#line 74 "sintactico.y"
-                 { (yyval.val) = (yyvsp[0].val);}
-#line 1111 "sintactico.tab.c"
+  case 2: /* exp: TOKEN_NUM  */
+#line 83 "sintactico.y"
+                       { (yyval.val) = (yyvsp[0].val);}
+#line 1112 "sintactico.tab.c"
     break;
 
   case 3: /* exp: exp '+' exp  */
-#line 75 "sintactico.y"
+#line 84 "sintactico.y"
                     { (yyval.val) = (yyvsp[-2].val) + (yyvsp[0].val);}
-#line 1117 "sintactico.tab.c"
+#line 1118 "sintactico.tab.c"
     break;
 
   case 4: /* exp: exp '-' exp  */
-#line 76 "sintactico.y"
+#line 85 "sintactico.y"
                     { (yyval.val) = (yyvsp[-2].val) - (yyvsp[0].val);}
-#line 1123 "sintactico.tab.c"
+#line 1124 "sintactico.tab.c"
     break;
 
   case 5: /* exp: exp '*' exp  */
-#line 77 "sintactico.y"
+#line 86 "sintactico.y"
                     { (yyval.val) = (yyvsp[-2].val) * (yyvsp[0].val);}
-#line 1129 "sintactico.tab.c"
+#line 1130 "sintactico.tab.c"
     break;
 
   case 6: /* exp: exp '/' exp  */
-#line 78 "sintactico.y"
+#line 87 "sintactico.y"
                     { (yyval.val) = (yyvsp[-2].val) / (yyvsp[0].val);}
-#line 1135 "sintactico.tab.c"
+#line 1136 "sintactico.tab.c"
     break;
 
   case 7: /* exp: '-' exp  */
-#line 79 "sintactico.y"
+#line 88 "sintactico.y"
                     { (yyval.val) = -(yyvsp[0].val);}
-#line 1141 "sintactico.tab.c"
+#line 1142 "sintactico.tab.c"
     break;
 
   case 8: /* exp: exp '^' exp  */
-#line 80 "sintactico.y"
-                    { (yyval.val) = pow ((yyvsp[-2].val), (yyvsp[0].val));}
-#line 1147 "sintactico.tab.c"
+#line 89 "sintactico.y"
+                    { (yyval.val) = 999 ;}
+#line 1148 "sintactico.tab.c"
     break;
 
   case 9: /* exp: '(' exp ')'  */
-#line 81 "sintactico.y"
+#line 90 "sintactico.y"
                     { (yyval.val) = (yyvsp[-1].val);}
-#line 1153 "sintactico.tab.c"
+#line 1154 "sintactico.tab.c"
     break;
 
 
-#line 1157 "sintactico.tab.c"
+#line 1158 "sintactico.tab.c"
 
       default: break;
     }
@@ -1346,7 +1347,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 85 "sintactico.y"
+#line 94 "sintactico.y"
 
 
 /* Función de error */

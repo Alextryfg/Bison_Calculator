@@ -10,7 +10,7 @@ void openFile(char *nombreArchivo);
 /*
  * Funcion encargada de devolver el componente lexico que será procesado por el Analizador sintáctico
  */
-void exitC();
+double exitC();
 
 /*
  * Funcion encargada de cerrar el archivo y liberar memoria

@@ -162,8 +162,27 @@ extern FILE *yyin, *yyout;
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
     
-    #define YY_LESS_LINENO(n)
-    #define YY_LINENO_REWIND_TO(ptr)
+    /* Note: We specifically omit the test for yy_rule_can_match_eol because it requires
+     *       access to the local variable yy_act. Since yyless() is a macro, it would break
+     *       existing scanners that call yyless() from OUTSIDE yylex.
+     *       One obvious solution it to make yy_act a global. I tried that, and saw
+     *       a 5% performance hit in a non-yylineno scanner, because yy_act is
+     *       normally declared as a register variable-- so it is not worth it.
+     */
+    #define  YY_LESS_LINENO(n) \
+            do { \
+                int yyl;\
+                for ( yyl = n; yyl < yyleng; ++yyl )\
+                    if ( yytext[yyl] == '\n' )\
+                        --yylineno;\
+            }while(0)
+    #define YY_LINENO_REWIND_TO(dst) \
+            do {\
+                const char *p;\
+                for ( p = yy_cp-1; p >= (dst); --p)\
+                    if ( *p == '\n' )\
+                        --yylineno;\
+            }while(0)
     
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
@@ -448,6 +467,12 @@ static const flex_int16_t yy_chk[70] =
        34,   34,   34,   34,   34,   34,   34,   34,   34
     } ;
 
+/* Table of booleans, true if rule could match eol. */
+static const flex_int32_t yy_rule_can_match_eol[20] =
+    {   0,
+0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+        };
+
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
 
@@ -467,8 +492,12 @@ char *yytext;
 #include "definiciones.h"
 #include "errores.h"
 #include "tabladesimbolos.h"
-#line 471 "lex.yy.c"
-#line 472 "lex.yy.c"
+#include "sintactico.tab.h"
+#line 497 "lex.yy.c"
+/*Opcion para que detecte la varibale yylval de Bison */
+/* Opcion para que no nos de el error de 'input' unused*/
+#define YY_NO_INPUT 1
+#line 501 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -683,10 +712,10 @@ YY_DECL
 		}
 
 	{
-#line 45 "lexico.l"
+#line 50 "lexico.l"
 
 
-#line 690 "lex.yy.c"
+#line 719 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -732,6 +761,16 @@ yy_find_action:
 
 		YY_DO_BEFORE_ACTION;
 
+		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
+			{
+			int yyl;
+			for ( yyl = 0; yyl < yyleng; ++yyl )
+				if ( yytext[yyl] == '\n' )
+					
+    yylineno++;
+;
+			}
+
 do_action:	/* This label is used only to access EOF actions. */
 
 		switch ( yy_act )
@@ -745,132 +784,133 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 47 "lexico.l"
+#line 52 "lexico.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 49 "lexico.l"
+#line 54 "lexico.l"
 {yyterminate();}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 51 "lexico.l"
+#line 56 "lexico.l"
 {return ((int)*yytext);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 53 "lexico.l"
+#line 58 "lexico.l"
 {
                     /* Covertimos el string a su valor numérico y lo metemos en la estructura definida en bison  */
                     yylval.val=atof(yytext); 
                     /* Devolvemos el token correspondiente */
-                    return (NUMBER);}
+                    return (TOKEN_NUM);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 59 "lexico.l"
-{
+#line 64 "lexico.l"
+{   
+                        /*yylval es la estructura definida en el sitactico por mi mismp de str y val*/
                         yylval.str = strdup(yytext);
-                        yylval.val = findSimbol(yylval.str);
+                        yylval.val = findComando(yylval.str);
                         /* Busco en la tabla de simbolos inicial, el tipo o id de la variable que entra */
                         /* Dependiendo del tipo de variable, se devolverá un token u otro */
                         /* Flex devuelve a Bison un Token con el que realizará unas reglas gramáticales establecidas */
-                        if(yylval.elem->tipo == ID_EXIT){
-                            return (EXIT);
-                        }else if(yylval.elem->tipo == ID_WORKSPACE){
-                            return (WORKSPACE);
-                        }else if(yylval.elem->tipo == ID_HELP){
-                            return (HELP);
-                        }else if(yylval.elem->tipo == ID_CLEAR_WORKSPACE){
-                            return (CLEAR_WORKSPACE);
-                        }else if(yylval.elem->tipo == ID_SIMBOLOS){
-                            return (SIMBOLOS);
-                        }else if(yylval.elem->tipo == ID_LOAD){
-                            return (LOAD);
-                        }else if(yylval.elem->tipo == ID_IMPORT){
-                            return (IMPORT);
+                        if(yylval.val == ID_EXIT){
+                            return (TOKEN_EXIT);
+                        }else if(yylval.val == ID_WORKSPACE){
+                            return (TOKEN_WORKSPACE);
+                        }else if(yylval.val == ID_HELP){
+                            return (TOKEN_HELP);
+                        }else if(yylval.val == ID_CLEAR_WORKSPACE){
+                            return (TOKEN_CLEAR_WORKSPACE);
+                        }else if(yylval.val == ID_SIMBOLOS){
+                            return (TOKEN_SIMBOLOS);
+                        }else if(yylval.val == ID_LOAD){
+                            return (TOKEN_LOAD);
+                        }else if(yylval.val == ID_IMPORT){
+                            return (TOKEN_IMPORT);
                         }else{
-                            return (VARIABLE);
+                            return (TOKEN_VARIABLE);
                         }
                     }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 84 "lexico.l"
-{return (MAS_IGUAL);}
+#line 90 "lexico.l"
+{return (TOKEN_MAS_IGUAL);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 85 "lexico.l"
-{return (MENOS_IGUAL);}
+#line 91 "lexico.l"
+{return (TOKEN_MENOS_IGUAL);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 86 "lexico.l"
-{return (MULT_IGUAL);}
+#line 92 "lexico.l"
+{return (TOKEN_MULT_IGUAL);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 87 "lexico.l"
-{return (DIV_IGUAL);}
+#line 93 "lexico.l"
+{return (TOKEN_DIV_IGUAL);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 88 "lexico.l"
-{return (IGUAL_IGUAL);}
+#line 94 "lexico.l"
+{return (TOKEN_IGUAL_IGUAL);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 89 "lexico.l"
-{return (MAYOR_IGUAL);}
+#line 95 "lexico.l"
+{return (TOKEN_MAYOR_IGUAL);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 90 "lexico.l"
-{return (MENOR_IGUAL);}
+#line 96 "lexico.l"
+{return (TOKEN_MENOR_IGUAL);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 91 "lexico.l"
-{return (DIFERENTE_IGUAL);}
+#line 97 "lexico.l"
+{return (TOKEN_DIFERENTE_IGUAL);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 92 "lexico.l"
-{return (MAS_MAS);}
+#line 98 "lexico.l"
+{return (TOKEN_MAS_MAS);}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 93 "lexico.l"
-{return (MENOS_MENOS);}
+#line 99 "lexico.l"
+{return (TOKEN_MENOS_MENOS);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 94 "lexico.l"
-{return (ASIGNACION);}
+#line 100 "lexico.l"
+{return (TOKEN_ASIGNACION);}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 96 "lexico.l"
+#line 102 "lexico.l"
 {return ((int)*yytext);}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 98 "lexico.l"
+#line 104 "lexico.l"
 {errorD(6);}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 100 "lexico.l"
-{closeFile(); yyrestart(yyin); return (EOF);}
+#line 106 "lexico.l"
+{yyrestart(yyin); return (EOF);}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 103 "lexico.l"
+#line 109 "lexico.l"
 ECHO;
 	YY_BREAK
-#line 874 "lex.yy.c"
+#line 914 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1275,6 +1315,11 @@ static int yy_get_next_buffer (void)
 	c = *(unsigned char *) (yy_c_buf_p);	/* cast for 8-bit char's */
 	*(yy_c_buf_p) = '\0';	/* preserve yytext */
 	(yy_hold_char) = *++(yy_c_buf_p);
+
+	if ( c == '\n' )
+		
+    yylineno++;
+;
 
 	return c;
 }
@@ -1742,6 +1787,9 @@ static int yy_init_globals (void)
      * This function is called from yylex_destroy(), so don't allocate here.
      */
 
+    /* We do not touch yylineno unless the option is enabled. */
+    yylineno =  1;
+    
     (yy_buffer_stack) = NULL;
     (yy_buffer_stack_top) = 0;
     (yy_buffer_stack_max) = 0;
@@ -1836,12 +1884,12 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 103 "lexico.l"
+#line 109 "lexico.l"
 
 
 /* Estas seran nuestras funciones personales que se volcarán automaticamente en el archivo lex.yy.c */
 
-double openFile(char *nombreArchivo){
+void openFile(char *nombreArchivo){
     FILE *archivo;
     archivo = fopen(nombreArchivo, "r");
     if(archivo == NULL){
@@ -1850,15 +1898,12 @@ double openFile(char *nombreArchivo){
     yyin = archivo;
 }
 
-void exit(){
+double exitC(){
     yylex_destroy();
-    return;
+    return 0;
 }
-
-
 
 void closeFile(){
     fclose(yyin);
     yylex_destroy();
 }
-

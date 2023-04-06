@@ -7,18 +7,6 @@
  */
 void initTablaSimbolos();
 
-void workspace();
-
-void help();
-
-void clear();
-
-void simbolos();
-
-void load();
-
-void import();
-
 /*
  * Funcion encargada de la destruccion del arbol
  */
@@ -38,6 +26,13 @@ void printTablaSimbolos();
 *
 */
 void welcome();
+
+double workspace();
+double help();
+double clear();
+double simbolos();
+double load();
+double import();
 
 
 #endif	// TABLADESIMBOLOS_H

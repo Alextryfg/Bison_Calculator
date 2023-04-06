@@ -25,12 +25,12 @@ typedef struct{
 
 
 /* Creamos los prototipos de funciones para ser detectadas por initialC */
-void workspace();
-void help();
-void clear();
-void simbolos();
-void load();
-void import();
+double workspace();
+double help();
+double clear();
+double simbolos();
+double load();
+double import();
 
 /* En initialConst se alamacenarán las constantes de las que dispondremos en la tabla d esimbolos inicial */
 
@@ -71,34 +71,6 @@ void initTablaSimbolos() {
 
 }
 
-/* Funciones que se invocaran cuando FLEX detecte las palabras clave.*/
-
-void workspace(){
-    printf("workspace ejecutado correctamente");
-    printTablaSimbolos();
-}
-
-void help(){
-    printf("Help ejecutado correctamente");
-}
-
-void clear(){
-    system("clear");
-}
-
-void simbolos(){
-    printf("simbolos ejecutado correctamente");
-    printTablaSimbolos();
-}
-
-void load(){
-    printf("load ejecutado correctamente");
-}
-
-void import(){
-    printf("import ejecutado correctamente");
-}
-
 
 
 /*
@@ -113,7 +85,7 @@ void destruirTablaSimbolos(){
  */
 int findComando(char* lex){
 
-    tipoelem *s;
+    tipoelem *s = NULL;
     //Se busca el nodo por medio del lexema almacenandolo en s
     buscar_nodo(tablaSimbolos, lex , s);
 
@@ -123,7 +95,7 @@ int findComando(char* lex){
         return s->type;
     }else{
         // En caso de no existir, se crea
-        tipoelem *new;
+        tipoelem *new = NULL;
         new->lexema = lex;
         new->type = ID_VAR;//Tipo de la variable
         new->data.val = 0; //Valor de la variable
@@ -149,4 +121,38 @@ void welcome(){
     printf("║         BIENVENIDO A LA        ║\n");
     printf("║           CALCULADORA          ║\n");
     printf("╚════════════════════════════════╝\n");
+}
+
+/* Funciones que se invocaran cuando FLEX detecte las palabras clave.*/
+
+double workspace(){
+    printf("workspace ejecutado correctamente");
+    printTablaSimbolos();
+    return 0;
+}
+
+double help(){
+    printf("Help ejecutado correctamente");
+    return 0;
+}
+
+double clear(){
+    system("clear");
+    return 0;
+}
+
+double simbolos(){
+    printf("simbolos ejecutado correctamente");
+    printTablaSimbolos();
+    return 0;
+}
+
+double load(){
+    printf("load ejecutado correctamente");
+    return 0;
+}
+
+double import(){
+    printf("import ejecutado correctamente");
+    return 0;
 }

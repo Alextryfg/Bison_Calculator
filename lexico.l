@@ -9,6 +9,8 @@
 %option nounput
 /*Opcion para que detecte la varibale yylval de Bison */
 %option yylineno
+/* Opcion para que no nos de el error de 'input' unused*/
+%option noinput
 
 ALFA [a-zA-Z]
 LETTER [ALFA]|_
@@ -59,25 +61,26 @@ LIB <{LETTER|DIGIT}+\.h>
                     /* Devolvemos el token correspondiente */
                     return (TOKEN_NUM);}
 
-{VARIABLE}          {
+{VARIABLE}          {   
+                        /*yylval es la estructura definida en el sitactico por mi mismp de str y val*/
                         yylval.str = strdup(yytext);
                         yylval.val = findComando(yylval.str);
                         /* Busco en la tabla de simbolos inicial, el tipo o id de la variable que entra */
                         /* Dependiendo del tipo de variable, se devolverá un token u otro */
                         /* Flex devuelve a Bison un Token con el que realizará unas reglas gramáticales establecidas */
-                        if(yylval.elem->tipo == ID_EXIT){
+                        if(yylval.val == ID_EXIT){
                             return (TOKEN_EXIT);
-                        }else if(yylval.elem->tipo == ID_WORKSPACE){
+                        }else if(yylval.val == ID_WORKSPACE){
                             return (TOKEN_WORKSPACE);
-                        }else if(yylval.elem->tipo == ID_HELP){
+                        }else if(yylval.val == ID_HELP){
                             return (TOKEN_HELP);
-                        }else if(yylval.elem->tipo == ID_CLEAR_WORKSPACE){
+                        }else if(yylval.val == ID_CLEAR_WORKSPACE){
                             return (TOKEN_CLEAR_WORKSPACE);
-                        }else if(yylval.elem->tipo == ID_SIMBOLOS){
+                        }else if(yylval.val == ID_SIMBOLOS){
                             return (TOKEN_SIMBOLOS);
-                        }else if(yylval.elem->tipo == ID_LOAD){
+                        }else if(yylval.val == ID_LOAD){
                             return (TOKEN_LOAD);
-                        }else if(yylval.elem->tipo == ID_IMPORT){
+                        }else if(yylval.val == ID_IMPORT){
                             return (TOKEN_IMPORT);
                         }else{
                             return (TOKEN_VARIABLE);
@@ -100,7 +103,7 @@ LIB <{LETTER|DIGIT}+\.h>
 
 .                       {errorD(6);}
 
-<<EOF>>              {closeFile(); yyrestart(yyin); return (EOF);}
+<<EOF>>              {yyrestart(yyin); return (EOF);}
 
 
 %%
@@ -116,11 +119,10 @@ void openFile(char *nombreArchivo){
     yyin = archivo;
 }
 
-void exitC(){
+double exitC(){
     yylex_destroy();
+    return 0;
 }
-
-
 
 void closeFile(){
     fclose(yyin);
