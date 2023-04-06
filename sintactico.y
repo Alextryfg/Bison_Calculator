@@ -45,23 +45,44 @@
 %token <str> WORKSPACE
 %token <str> HELP
 %token <str> CLEAR_WORKSPACE
+%token <str> SIMBOLOS
+%token <str> LOAD
+%token <str> IMPORT
 
 /* Simbolos no terminales */
 
-%type <val> expression
+%type <val> exp
+
 %type <val> assign
 %type <val> function
 
 /* Asociatividad de los operadores */
 
-%right ’=’ ID_ASIGNACION
-%left ’-’ ’+’ ID_MAS_IGUAL ID_MENOS_IGUAL
-%left ’*’ ’/’ ID_MULT_IGUAL ID_DIV_IGUAL
+%right '=' ID_ASIGNACION
+%left '-' '+' ID_MAS_IGUAL ID_MENOS_IGUAL
+%left '*' '/' ID_MULT_IGUAL ID_DIV_IGUAL
+%left '>' '<' ID_IGUAL_IGUAL ID_MAYOR_IGUAL ID_MENOR_IGUAL ID_DIFERENTE_IGUAL
 %left NEG /* Negacion--menos unario */
-%right ’^’ /* Exponenciacion */
+%right '^' /* Exponenciacion */
+
+%%
+
+/* Definición de las reglas */
+in: %empty {printf("$>");}
+    | in line
+
+line: 
 
 
-
+exp: NUM            { $$ = $1; }
+| exp ’+’ exp       { $$ = $1 + $3; }
+| exp ’-’ exp       { $$ = $1 - $3; }
+| exp ’*’ exp       { $$ = $1 * $3; }
+| exp ’/’ exp       { $$ = $1 / $3; }
+| ’-’ exp %prec NEG { $$ = -$2; }
+| exp ’^’ exp       { $$ = pow ($1, $3); }
+| ’(’ exp ’)’       { $$ = $2; }
+;
 
 
 

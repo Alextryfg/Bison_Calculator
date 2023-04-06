@@ -48,8 +48,6 @@ LIB <{LETTER|DIGIT}+\.h>
 
 "exit"              {yyterminate();}
 
-"open"              {return (READ);}
-
 {BREAK_LINE}        {return ((int)*yytext);}
 
 {DIGIT}             {yyval.val=atof(yytext); return (NUMBER);}
@@ -57,14 +55,23 @@ LIB <{LETTER|DIGIT}+\.h>
 {VARIABLE}          {char* lexema;
                         lexema = strdup(yytext);
                         yylval.elem = findSimbol(lexema);
-                        if(yylval.elem->tipo == ID_FUNC){
-                            return (FUNCION);
-                        }else if(yylval.elem->tipo == ID_FUNCVOID){
-                            return (FUNCIONVOID);
-                        }else if(yylval.elem->tipo == ID_VAR){
+                        /* Busco en la tabla de simbolos inicial, el tipo o id de la variable que entra */
+                        if(yylval.elem->tipo == ID_EXIT){
+                            return (EXIT);
+                        }else if(yylval.elem->tipo == ID_WORKSPACE){
+                            return (WORKSPACE);
+                        }else if(yylval.elem->tipo == ID_HELP){
+                            return (HELP);
+                        }else if(yylval.elem->tipo == ID_CLEAR_WORKSPACE){
+                            return (CLEAR_WORKSPACE);
+                        }else if(yylval.elem->tipo == ID_SIMBOLOS){
+                            return (SIMBOLOS);
+                        }else if(yylval.elem->tipo == ID_LOAD){
+                            return (LOAD);
+                        }else if(yylval.elem->tipo == ID_IMPORT){
+                            return (IMPORT);
+                        }else{
                             return (VARIABLE);
-                        }else if(yylval.elem->tipo == ID_CONST){
-                            return (CONSTANTE);
                         }
                     }
 

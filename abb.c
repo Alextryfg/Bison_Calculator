@@ -1,4 +1,5 @@
 #include "abb.h"
+#include "definiciones.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -164,6 +165,64 @@ void insertar(abb *A, tipoelem E) {
         insertar(&(*A)->izq, E);
     }
 }
+
+/*
+* Funcion recursiva para insertar un nuevo nodo de comando
+*/
+void insertarComando(abb *A, char *nombre, int id, void *funcion){
+    if (es_vacio(*A)) {
+        *A = (abb) malloc(sizeof (struct celda));
+        (*A)->info.lexema = (char*)malloc(sizeof(char)*(strlen(nombre) + 1));
+        strncpy((*A)->info.lexema, nombre, strlen(nombre)+1);
+        if (*A) {
+            (*A)->info.lexema[strlen(nombre)] = '\0';
+            (*A)->info.type = id;
+            (*A)->info.data.func = funcion;
+            (*A)->info.initVal = 1;
+            (*A)->izq = NULL;
+            (*A)->der = NULL;
+        }
+        return;
+
+    }
+    int comp = strcmp(nombre, (*A)->info.lexema);
+    if (comp > 0) {
+        insertarComando(&(*A)->der, nombre, id, funcion);
+    } else {
+        insertarComando(&(*A)->izq, nombre, id, funcion);
+    }
+    
+}
+
+void insertarVar(abb *A, char *nombre, int id, double valor){
+    if (es_vacio(*A)) {
+        *A = (abb) malloc(sizeof (struct celda));
+        (*A)->info.lexema = (char*)malloc(sizeof(char)*(strlen(nombre) + 1));
+        strncpy((*A)->info.lexema, nombre, strlen(nombre)+1);
+        if (*A) {
+            (*A)->info.lexema[strlen(nombre)] = '\0';
+            (*A)->info.type = id;
+            (*A)->info.data.val = valor;
+            (*A)->info.initVal = 1;
+            (*A)->izq = NULL;
+            (*A)->der = NULL;
+        }
+        return;
+
+    }
+    int comp = strcmp(nombre, (*A)->info.lexema);
+    if (!comp && (*A)->info.type == ID_VAR) {
+        (*A)->info.data.val = valor;
+        (*A)->info.initVal = 1;
+        
+    }else if( comp < 0){
+        insertarVar(&(*A)->der, nombre, id, valor);
+    } else if (comp > 0) {
+        insertarVar(&(*A)->izq, nombre, id, valor);
+    }
+    
+}
+
 /* Funcion privada que devuelve mínimo de subárbol dcho */
 tipoelem _suprimir_min(abb * A) {//Se devuelve el elemento más a la izquierda
     abb aux;

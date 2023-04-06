@@ -11,6 +11,7 @@ typedef char *tipoclave;
 typedef struct{
     char *lexema; //lexema del token
     int type;   //tipo del token
+    int initVal; //flag para saber si el token esta inicializado
     union{
         float val; //valor del token
         double (*func)(); //funcion del token
@@ -82,6 +83,15 @@ void buscar_nodo(abb A, tipoclave cl, tipoelem *nodo);
  * @param E Informacion del nuevo nodo.
  */
 void insertar(abb *A, tipoelem E);
+/*
+* Funcion recursiva para insertar un nuevo nodo de comando
+*/
+void insertarComando(abb *A, char *nombre, int id, void *funcion);
+
+/*
+* Funcion recursiva para insertar un nuevo nodo de Variable
+*/
+void insertarVar(abb *A, char *nombre, int id, double valor);
 /**
  * Suprime el nodo del arbol <A>
  * @param A

@@ -9,10 +9,13 @@
 
 
 /* Comandos especiales */
-#define EXIT 400
-#define WORKSPACE 401
-#define HELP 402
-#define CLEAR_WORKSPACE 403
+#define ID_EXIT 400
+#define ID_WORKSPACE 401
+#define ID_HELP 402
+#define ID_CLEAR_WORKSPACE 403
+#define ID_SIMBOLOS 404
+#define ID_LOAD 405
+#define ID_IMPORT 406
 
 
 #endif /* DEFINITIONS_H_ */
