@@ -2,15 +2,18 @@
 #include "definiciones.h"
 #include "errores.h"
 #include "tabladesimbolos.h"
+#include "sintactico.tab.h"
 %}
 
 %option noyywrap
 %option nounput
+/*Opcion para que detecte la varibale yylval de Bison */
+%option yylineno
 
 ALFA [a-zA-Z]
 LETTER [ALFA]|_
 DIGIT [0-9]
-LINE_BREAK \n
+BREAK_LINE \n
 SPACES [ \t\r]+
 
 
@@ -54,46 +57,44 @@ LIB <{LETTER|DIGIT}+\.h>
                     /* Covertimos el string a su valor numérico y lo metemos en la estructura definida en bison  */
                     yylval.val=atof(yytext); 
                     /* Devolvemos el token correspondiente */
-                    return (NUMBER);}
+                    return (TOKEN_NUM);}
 
 {VARIABLE}          {
                         yylval.str = strdup(yytext);
-                        yylval.val = findSimbol(yylval.str);
+                        yylval.val = findComando(yylval.str);
                         /* Busco en la tabla de simbolos inicial, el tipo o id de la variable que entra */
                         /* Dependiendo del tipo de variable, se devolverá un token u otro */
                         /* Flex devuelve a Bison un Token con el que realizará unas reglas gramáticales establecidas */
                         if(yylval.elem->tipo == ID_EXIT){
-                            return (EXIT);
+                            return (TOKEN_EXIT);
                         }else if(yylval.elem->tipo == ID_WORKSPACE){
-                            return (WORKSPACE);
+                            return (TOKEN_WORKSPACE);
                         }else if(yylval.elem->tipo == ID_HELP){
-                            return (HELP);
+                            return (TOKEN_HELP);
                         }else if(yylval.elem->tipo == ID_CLEAR_WORKSPACE){
-                            return (CLEAR_WORKSPACE);
+                            return (TOKEN_CLEAR_WORKSPACE);
                         }else if(yylval.elem->tipo == ID_SIMBOLOS){
-                            return (SIMBOLOS);
+                            return (TOKEN_SIMBOLOS);
                         }else if(yylval.elem->tipo == ID_LOAD){
-                            return (LOAD);
+                            return (TOKEN_LOAD);
                         }else if(yylval.elem->tipo == ID_IMPORT){
-                            return (IMPORT);
+                            return (TOKEN_IMPORT);
                         }else{
-                            return (VARIABLE);
+                            return (TOKEN_VARIABLE);
                         }
                     }
 
-{FILE}
-
-{MAS_IGUAL}         {return (MAS_IGUAL);}
-{MENOS_IGUAL}       {return (MENOS_IGUAL);}
-{MULT_IGUAL}        {return (MULT_IGUAL);}
-{DIV_IGUAL}         {return (DIV_IGUAL);}
-{IGUAL_IGUAL}       {return (IGUAL_IGUAL);}
-{MAYOR_IGUAL}       {return (MAYOR_IGUAL);}
-{MENOR_IGUAL}       {return (MENOR_IGUAL);}
-{DIFERENTE_IGUAL}   {return (DIFERENTE_IGUAL);}
-{MAS_MAS}           {return (MAS_MAS);}
-{MENOS_MENOS}       {return (MENOS_MENOS);}
-{ASIGNACION}        {return (ASIGNACION);}
+{MAS_IGUAL}         {return (TOKEN_MAS_IGUAL);}
+{MENOS_IGUAL}       {return (TOKEN_MENOS_IGUAL);}
+{MULT_IGUAL}        {return (TOKEN_MULT_IGUAL);}
+{DIV_IGUAL}         {return (TOKEN_DIV_IGUAL);}
+{IGUAL_IGUAL}       {return (TOKEN_IGUAL_IGUAL);}
+{MAYOR_IGUAL}       {return (TOKEN_MAYOR_IGUAL);}
+{MENOR_IGUAL}       {return (TOKEN_MENOR_IGUAL);}
+{DIFERENTE_IGUAL}   {return (TOKEN_DIFERENTE_IGUAL);}
+{MAS_MAS}           {return (TOKEN_MAS_MAS);}
+{MENOS_MENOS}       {return (TOKEN_MENOS_MENOS);}
+{ASIGNACION}        {return (TOKEN_ASIGNACION);}
 
 {OPERADORESSIMPLES} {return ((int)*yytext);}
 
@@ -106,7 +107,7 @@ LIB <{LETTER|DIGIT}+\.h>
 
 /* Estas seran nuestras funciones personales que se volcarán automaticamente en el archivo lex.yy.c */
 
-double openFile(char *nombreArchivo){
+void openFile(char *nombreArchivo){
     FILE *archivo;
     archivo = fopen(nombreArchivo, "r");
     if(archivo == NULL){
@@ -115,9 +116,8 @@ double openFile(char *nombreArchivo){
     yyin = archivo;
 }
 
-void exit(){
+void exitC(){
     yylex_destroy();
-    return;
 }
 
 

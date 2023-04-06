@@ -7,10 +7,10 @@
     #include "abb.h"
     #include "definiciones.h"
     #include "tabladesimbolos.h"
+    #include "lex.yy.h"
 
     void yyerror(char *s);  /* prototipo de la función de error  */
     extern int yylex(void); /* Esto se utilizará desde otros archivos por eso lleva el extern */
-    void help?();
 
 %}
 
@@ -23,67 +23,71 @@
 
 /* Definición de los tokens */
 
-%start in
+//%start in
 
-%token <val> NUM
-%token <str> ID
-%token ID_MAS_IGUAL
-%token ID_MENOS_IGUAL
-%token ID_MULT_IGUAL
-%token ID_DIV_IGUAL
-%token ID_IGUAL_IGUAL
-%token ID_MAYOR_IGUAL
-%token ID_MENOR_IGUAL
-%token ID_DIFERENTE_IGUAL
-%token ID_MAS_MAS
-%token ID_MENOS_MENOS
-%token ID_ASIGNACION
+%token <val> TOKEN_NUM
+%token <str> TOKEN_VARIABLE
+%token TOKEN_MAS_IGUAL
+%token TOKEN_MENOS_IGUAL
+%token TOKEN_MULT_IGUAL
+%token TOKEN_DIV_IGUAL
+%token TOKEN_IGUAL_IGUAL
+%token TOKEN_MAYOR_IGUAL
+%token TOKEN_MENOR_IGUAL
+%token TOKEN_DIFERENTE_IGUAL
+%token TOKEN_MAS_MAS
+%token TOKEN_MENOS_MENOS
+%token TOKEN_ASIGNACION
 
 /* COMANDOS ESPECIALES */
 
-%token <str> EXIT
-%token <str> WORKSPACE
-%token <str> HELP
-%token <str> CLEAR_WORKSPACE
-%token <str> SIMBOLOS
-%token <str> LOAD
-%token <str> IMPORT
+%token <str> TOKEN_EXIT
+%token <str> TOKEN_WORKSPACE
+%token <str> TOKEN_HELP
+%token <str> TOKEN_CLEAR_WORKSPACE
+%token <str> TOKEN_SIMBOLOS
+%token <str> TOKEN_LOAD
+%token <str> TOKEN_IMPORT
 
 /* Simbolos no terminales */
 
 %type <val> exp
 
+/*
 %type <val> assign
 %type <val> function
+*/
 
 /* Asociatividad de los operadores */
 
-%right '=' ID_ASIGNACION
-%left '-' '+' ID_MAS_IGUAL ID_MENOS_IGUAL
-%left '*' '/' ID_MULT_IGUAL ID_DIV_IGUAL
-%left '>' '<' ID_IGUAL_IGUAL ID_MAYOR_IGUAL ID_MENOR_IGUAL ID_DIFERENTE_IGUAL
+%right '=' TOKEN_ASIGNACION
+%left '-' '+' TOKEN_MAS_IGUAL TOKEN_MENOS_IGUAL
+%left '*' '/' TOKEN_MULT_IGUAL TOKEN_DIV_IGUAL
+%left '>' '<' TOKEN_IGUAL_IGUAL TOKEN_MAYOR_IGUAL TOKEN_MENOR_IGUAL TOKEN_DIFERENTE_IGUAL
 %left NEG /* Negacion--menos unario */
 %right '^' /* Exponenciacion */
 
 %%
 
 /* Definición de las reglas */
+/*
 in
 : %empty {printf("$>");}
-| in line
+;
+*/
 
 
 
 
 exp
 : NUM            { $$ = $1;}
-| exp ’+’ exp       { $$ = $1 + $3;}
-| exp ’-’ exp       { $$ = $1 - $3;}
-| exp ’*’ exp       { $$ = $1 * $3;}
-| exp ’/’ exp       { $$ = $1 / $3;}
-| ’-’ exp %prec NEG { $$ = -$2;}
-| exp ’^’ exp       { $$ = pow ($1, $3);}
-| ’(’ exp ’)’       { $$ = $2;}
+| exp '+' exp       { $$ = $1 + $3;}
+| exp '-' exp       { $$ = $1 - $3;}
+| exp '*' exp       { $$ = $1 * $3;}
+| exp '/' exp       { $$ = $1 / $3;}
+| '-' exp %prec NEG { $$ = -$2;}
+| exp '^' exp       { $$ = pow ($1, $3);}
+| '(' exp ')'       { $$ = $2;}
 ;
 
 

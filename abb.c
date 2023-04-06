@@ -149,11 +149,12 @@ int buscar_nodoComando(abb A, char *comando) {
     if (comp == 0) { // cl == A->info Son iguale sy por lo tanto se devuelve el código
         return A->info.type;
     } else if (comp < 0) { // cl < A->info
-        buscar_nodoComando(A->izq, comando);
+        return buscar_nodoComando(A->izq, comando);
     } else { // cl > A->info
-        buscar_nodoComando(A->der, comando);
+        return buscar_nodoComando(A->der, comando);
     }
 }
+
 //OPERACIONES DE MODIFICACIÓN
 
 /* Funcion recursiva para insertar un nuevo nodo

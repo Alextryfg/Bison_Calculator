@@ -1,22 +1,38 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "abb.h"
 #include "definiciones.h"
 #include "lex.yy.h"
 
-/*Se trata del arbol en el que se almacenará la tablaSimbolos de simbolos*/
+/* Se trata del arbol en el que se almacenará la tablaSimbolos de simbolos*/
 abb tablaSimbolos;
 
+/* Creamos una estructura para las constantes que solo albergarán nombre y valor. Esto tambien
+podria realizarse sin ellas, sin embargo facilitará el trabajo a la hora de insertar en el arbol*/
+typedef struct{
+    char *nombre;
+    double valor;
+}constante;
+
+/* Lo mismo de antes pero para una estructura de comandos que apuntan a funciones */
 typedef struct{
     char* nombre;
     int id;
     double (*func)(); //funcion del token
 }comandos;
 
-typedef struct{
-    char *nombre;
-    double valor;
-}constante;
 
+
+/* Creamos los prototipos de funciones para ser detectadas por initialC */
+void workspace();
+void help();
+void clear();
+void simbolos();
+void load();
+void import();
+
+/* En initialConst se alamacenarán las constantes de las que dispondremos en la tabla d esimbolos inicial */
 
 constante initialConst[] = {
     {"pi", 3.14159265358979},
@@ -24,10 +40,10 @@ constante initialConst[] = {
     {NULL, 0}
 };
 
-/* En initial, almacenare los distintos comandos especiales, de manera que alberguen un puntero a la función que invocarán */
+/* En initialC, almacenare los distintos comandos especiales, de manera que alberguen un puntero a la función que invocarán */
 
 comandos initialC[] = {
-    {"exit", ID_EXIT, exit}, 
+    {"exit", ID_EXIT, exitC}, 
     {"workspace", ID_WORKSPACE, workspace},
     {"help", ID_HELP, help},
     {"clear", ID_CLEAR_WORKSPACE, clear},
