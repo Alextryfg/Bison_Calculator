@@ -53,6 +53,8 @@ LIB <{LETTER|DIGIT}+\.h>
 
 "exit"              {yyterminate();}
 
+"evaluar"           {return (TOKEN_EVALUAR);}
+
 {BREAK_LINE}        {return ((int)*yytext);}
 
 {DIGIT}             {
@@ -101,9 +103,9 @@ LIB <{LETTER|DIGIT}+\.h>
 
 {OPERADORESSIMPLES} {return ((int)*yytext);}
 
-.                       {errorD(6);}
+.                   {perror("Caraacter no reconocido");}
 
-<<EOF>>              {yyrestart(yyin); return (EOF);}
+<<EOF>>             {yyrestart(yyin); return (EOF);}
 
 
 %%

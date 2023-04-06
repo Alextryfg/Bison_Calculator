@@ -11,6 +11,7 @@
 
     void yyerror(char *s);  /* prototipo de la función de error  */
     extern int yylex(void); /* Esto se utilizará desde otros archivos por eso lleva el extern */
+    int yywrap();       /* Esto se utilizará desde otros archivos por eso lleva el extern */
 
 %}
 
@@ -23,7 +24,7 @@
 
 /* Definición de los tokens */
 
-//%start in
+%start INICIO
 
 %token <val> TOKEN_NUM
 %token <str> TOKEN_VARIABLE
@@ -38,6 +39,10 @@
 %token TOKEN_MAS_MAS
 %token TOKEN_MENOS_MENOS
 %token TOKEN_ASIGNACION
+
+/* TOKEN DE PRUEBA */
+
+%token TOKEN_EVALUAR
 
 /* COMANDOS ESPECIALES */
 
@@ -70,14 +75,12 @@
 %%
 
 /* Definición de las reglas */
-/*
-in
-: %empty {printf("$>");}
-;
-*/
 
-
-
+INICIO
+: TOKEN_EVALUAR '(' exp ')'
+{
+    printf("Resultado: %f\n", $3);
+}
 
 exp
 : TOKEN_NUM            { $$ = $1;}
@@ -96,6 +99,10 @@ exp
 /* Función de error */
 void yyerror(char *s){
     printf("%s\n", s);
+}
+
+int yywrap(){
+    return 1;
 }
 
 

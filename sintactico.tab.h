@@ -67,14 +67,15 @@ extern int yydebug;
     TOKEN_MAS_MAS = 268,           /* TOKEN_MAS_MAS  */
     TOKEN_MENOS_MENOS = 269,       /* TOKEN_MENOS_MENOS  */
     TOKEN_ASIGNACION = 270,        /* TOKEN_ASIGNACION  */
-    TOKEN_EXIT = 271,              /* TOKEN_EXIT  */
-    TOKEN_WORKSPACE = 272,         /* TOKEN_WORKSPACE  */
-    TOKEN_HELP = 273,              /* TOKEN_HELP  */
-    TOKEN_CLEAR_WORKSPACE = 274,   /* TOKEN_CLEAR_WORKSPACE  */
-    TOKEN_SIMBOLOS = 275,          /* TOKEN_SIMBOLOS  */
-    TOKEN_LOAD = 276,              /* TOKEN_LOAD  */
-    TOKEN_IMPORT = 277,            /* TOKEN_IMPORT  */
-    NEG = 278                      /* NEG  */
+    TOKEN_EVALUAR = 271,           /* TOKEN_EVALUAR  */
+    TOKEN_EXIT = 272,              /* TOKEN_EXIT  */
+    TOKEN_WORKSPACE = 273,         /* TOKEN_WORKSPACE  */
+    TOKEN_HELP = 274,              /* TOKEN_HELP  */
+    TOKEN_CLEAR_WORKSPACE = 275,   /* TOKEN_CLEAR_WORKSPACE  */
+    TOKEN_SIMBOLOS = 276,          /* TOKEN_SIMBOLOS  */
+    TOKEN_LOAD = 277,              /* TOKEN_LOAD  */
+    TOKEN_IMPORT = 278,            /* TOKEN_IMPORT  */
+    NEG = 279                      /* NEG  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -83,12 +84,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 19 "sintactico.y"
+#line 20 "sintactico.y"
 
     double val;
     char *str;
 
-#line 92 "sintactico.tab.h"
+#line 93 "sintactico.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
