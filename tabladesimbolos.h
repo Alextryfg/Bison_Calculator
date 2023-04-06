@@ -34,5 +34,10 @@ int findComando(char* lex);
  */
 void printTablaSimbolos();
 
+/*
+*
+*/
+void welcome();
+
 
 #endif	// TABLADESIMBOLOS_H

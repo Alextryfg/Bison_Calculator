@@ -124,3 +124,13 @@ void printTablaSimbolos(){
     _printTabla(&tablaSimbolos);
     printf("\n*******************************************\n");
 }
+
+/*
+ *
+ */
+void welcome(){
+    printf("╔════════════════════════════════╗\n");
+    printf("║         BIENVENIDO A LA        ║\n");
+    printf("║           CALCULADORA          ║\n");
+    printf("╚════════════════════════════════╝\n");
+}
