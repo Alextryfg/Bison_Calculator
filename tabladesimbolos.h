@@ -2,27 +2,37 @@
 #define TABLADESIMBOLOS_H
 #include "abb.h"
 
-
 /*
- * Funcion encargada de inicializar la tabla de simbolos
+ * Funcion encargada de inicializar la tablaSimbolos de simbolos
  */
-void initTabla();
+void initTablaSimbolos();
+
+void workspace();
+
+void help();
+
+void clear();
+
+void simbolos();
+
+void load();
+
+void import();
 
 /*
  * Funcion encargada de la destruccion del arbol
  */
-void destruirTabla();
+void destruirTablaSimbolos();
 
 /*
- * Funcion encargada de encontrar un lexema dentro de el arbol. Si el elemento no esta en la tabla, se introducirá
+ * Funcion encargada de encontrar un lexema dentro de el arbol. Si el elemento no esta en la tablaSimbolos, se introducirá
  */
-
-tipoelem* findSimbol(char* lex);
+int findComando(char* lex);
 
 /*
- * Funcion que imprime la tabla, invocando a la recursiva de abb.h
+ * Funcion que imprime la tablaSimbolos, invocando a la recursiva de abb.h
  */
-void printTabla();
+void printTablaSimbolos();
 
 
 #endif	// TABLADESIMBOLOS_H

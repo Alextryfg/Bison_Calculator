@@ -68,13 +68,15 @@
 %%
 
 /* Definición de las reglas */
-in: %empty {printf("$>");}
-    | in line
+in
+: %empty {printf("$>");}
+| in line
 
 
 
 
-exp: NUM            { $$ = $1;}
+exp
+: NUM            { $$ = $1;}
 | exp ’+’ exp       { $$ = $1 + $3;}
 | exp ’-’ exp       { $$ = $1 - $3;}
 | exp ’*’ exp       { $$ = $1 * $3;}
@@ -86,6 +88,11 @@ exp: NUM            { $$ = $1;}
 
 
 %%
+
+/* Función de error */
+void yyerror(char *s){
+    printf("%s\n", s);
+}
 
 
 

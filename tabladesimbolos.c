@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "abb.h"
 #include "definiciones.h"
+#include "lex.yy.h"
 
 /*Se trata del arbol en el que se almacenará la tablaSimbolos de simbolos*/
 abb tablaSimbolos;
@@ -56,17 +57,13 @@ void initTablaSimbolos() {
 
 /* Funciones que se invocaran cuando FLEX detecte las palabras clave.*/
 
-void exit(){
-    destruirTablaSimbolos();
-    exit(0);
-}
-
 void workspace(){
+    printf("workspace ejecutado correctamente");
     printTablaSimbolos();
 }
 
 void help(){
-    printf("Hula");
+    printf("Help ejecutado correctamente");
 }
 
 void clear(){
@@ -74,15 +71,16 @@ void clear(){
 }
 
 void simbolos(){
+    printf("simbolos ejecutado correctamente");
     printTablaSimbolos();
 }
 
 void load(){
-    printf("Hula");
+    printf("load ejecutado correctamente");
 }
 
 void import(){
-    printf("Hula");
+    printf("import ejecutado correctamente");
 }
 
 
