@@ -10,7 +10,6 @@ int main(int argc, char **argv) {
     //Se inicializa la tabla de simbolos
     initTablaSimbolos();
     //Se comienza con el analisis
-    while(1)
-        yyparse();
+    yyparse();
 
 }

@@ -27,6 +27,7 @@
 %start INICIO
 
 %token <val> TOKEN_NUM
+/*
 %token <str> TOKEN_VARIABLE
 %token TOKEN_MAS_IGUAL
 %token TOKEN_MENOS_IGUAL
@@ -39,13 +40,11 @@
 %token TOKEN_MAS_MAS
 %token TOKEN_MENOS_MENOS
 %token TOKEN_ASIGNACION
-
-/* TOKEN DE PRUEBA */
-
-%token TOKEN_EVALUAR
+*/
 
 /* COMANDOS ESPECIALES */
 
+/*
 %token <str> TOKEN_EXIT
 %token <str> TOKEN_WORKSPACE
 %token <str> TOKEN_HELP
@@ -53,6 +52,7 @@
 %token <str> TOKEN_SIMBOLOS
 %token <str> TOKEN_LOAD
 %token <str> TOKEN_IMPORT
+*/
 
 /* Simbolos no terminales */
 
@@ -77,9 +77,9 @@
 /* Definición de las reglas */
 
 INICIO
-: TOKEN_EVALUAR '(' exp ')'
+: exp
 {
-    printf("Resultado: %f\n", $3);
+    printf("Resultado: %f\n", $1);
 }
 
 exp

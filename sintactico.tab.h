@@ -55,7 +55,7 @@ extern int yydebug;
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
     TOKEN_NUM = 258,               /* TOKEN_NUM  */
-    TOKEN_VARIABLE = 259,          /* TOKEN_VARIABLE  */
+    TOKEN_ASIGNACION = 259,        /* TOKEN_ASIGNACION  */
     TOKEN_MAS_IGUAL = 260,         /* TOKEN_MAS_IGUAL  */
     TOKEN_MENOS_IGUAL = 261,       /* TOKEN_MENOS_IGUAL  */
     TOKEN_MULT_IGUAL = 262,        /* TOKEN_MULT_IGUAL  */
@@ -64,18 +64,7 @@ extern int yydebug;
     TOKEN_MAYOR_IGUAL = 265,       /* TOKEN_MAYOR_IGUAL  */
     TOKEN_MENOR_IGUAL = 266,       /* TOKEN_MENOR_IGUAL  */
     TOKEN_DIFERENTE_IGUAL = 267,   /* TOKEN_DIFERENTE_IGUAL  */
-    TOKEN_MAS_MAS = 268,           /* TOKEN_MAS_MAS  */
-    TOKEN_MENOS_MENOS = 269,       /* TOKEN_MENOS_MENOS  */
-    TOKEN_ASIGNACION = 270,        /* TOKEN_ASIGNACION  */
-    TOKEN_EVALUAR = 271,           /* TOKEN_EVALUAR  */
-    TOKEN_EXIT = 272,              /* TOKEN_EXIT  */
-    TOKEN_WORKSPACE = 273,         /* TOKEN_WORKSPACE  */
-    TOKEN_HELP = 274,              /* TOKEN_HELP  */
-    TOKEN_CLEAR_WORKSPACE = 275,   /* TOKEN_CLEAR_WORKSPACE  */
-    TOKEN_SIMBOLOS = 276,          /* TOKEN_SIMBOLOS  */
-    TOKEN_LOAD = 277,              /* TOKEN_LOAD  */
-    TOKEN_IMPORT = 278,            /* TOKEN_IMPORT  */
-    NEG = 279                      /* NEG  */
+    NEG = 268                      /* NEG  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -89,7 +78,7 @@ union YYSTYPE
     double val;
     char *str;
 
-#line 93 "sintactico.tab.h"
+#line 82 "sintactico.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
