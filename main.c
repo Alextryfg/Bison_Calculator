@@ -6,11 +6,15 @@
 
 int main(int argc, char **argv) {
 
+
     //Mensaje de bienvenida
     welcome();
     //Se inicializa la tabla de simbolos
     initTablaSimbolos();
     //Se comienza con el analisis
     yyparse();
+    //Destruimos la tabla de simbolos
+    destruirTablaSimbolos();
+    printf("Tabla de simbolos destruida correctamente\n");
 
 }

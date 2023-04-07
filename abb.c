@@ -321,11 +321,11 @@ void _printTabla(abb *A){
             _printTabla(&(*A)->izq);
             printf("\nLexema: %14s", (*A)->info.lexema);
             printf("%15s: %-3d", "Codigo", (*A)->info.type);
-            printf("%15s: %-3d", "Inicializado", (*A)->info.initVal);
-            if ((*A)->info.type == ID_VAR) {
-                printf("%15s: %-3.2f", "Valor", (*A)->info.data.val);
+            printf("%18s: %d", "Inicializado", (*A)->info.initVal);
+            if ((*A)->info.type == ID_CONST || (*A)->info.type == ID_VAR) {
+                printf("%13s: %-7f", "Valor", (*A)->info.data.val);
             } else {
-                printf("%15s: %-3p", "Funcion", (*A)->info.data.func);
+                printf("%15s: %-3s", "Funcion", (*A)->info.lexema);
             }
         }
 

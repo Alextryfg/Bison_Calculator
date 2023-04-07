@@ -81,9 +81,51 @@ void destruirTablaSimbolos(){
 }
 
 /*
+ * Funcion encargada de averiguar si existe un simbolo en la tablaSimbolos
+ */
+int existeSimbolo(char* lex){
+    tipoelem *s = NULL;
+    buscar_nodo(tablaSimbolos, lex , s);
+    if(s != NULL){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+/*
+ * Funcion encargada de crear una variable en la tablaSimbolos
+ */
+void insertarSimbolo(char* lex, double val){
+    insertarVar(&tablaSimbolos, lex, ID_VAR, val);
+}
+
+/*
+ * Funcion de actualizacion del valor de un simbolo
+ */
+void actualizarSimbolo(char* lex, double val){
+    tipoelem *s = NULL;
+    buscar_nodo(tablaSimbolos, lex , s);
+    if(s != NULL){
+        s->data.val = val;
+    }
+}
+
+/*
+ * Funcion encargada de obtener el valor de un simbolo
+ */
+double obtenerValorSimbolo(char* lex){
+    tipoelem *s = NULL;
+    buscar_nodo(tablaSimbolos, lex , s);
+    if(s != NULL){
+        return s->data.val;
+    }
+}
+
+/*
  * Funcion encargada de encontrar un lexema dentro de el arbol. Si el elemento no esta en la tablaSimbolos, se introducirá
  */
-int findComando(char* lex){
+int findSimbol(char* lex){
 
     tipoelem *s = NULL;
     //Se busca el nodo por medio del lexema almacenandolo en s
@@ -108,13 +150,13 @@ int findComando(char* lex){
  * Funcion que imprime la tablaSimbolos, invocando a la recursiva de abb.h
  */
 void printTablaSimbolos(){
-    printf("\n*************TABLA DE SIMBOLOS*************");
+    printf("═══════════════════════════════TABLA DE SIMBOLOS════════════════════════════════════════════════");
     _printTabla(&tablaSimbolos);
-    printf("\n*******************************************\n");
+    printf("\n════════════════════════════════════════════════════════════════════════════════════════════════\n");
 }
 
 /*
- *
+ * Print de bienvenida
  */
 void welcome(){
     printf("╔════════════════════════════════╗\n");

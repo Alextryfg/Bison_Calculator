@@ -12,6 +12,7 @@
     void yyerror(char *s);  /* prototipo de la función de error  */
     extern int yylex(void); /* Esto se utilizará desde otros archivos por eso lleva el extern */
     int yywrap();       /* Esto se utilizará desde otros archivos por eso lleva el extern */
+    void prompt();      /* Prototipo de la función prompt */
 
 %}
 
@@ -38,7 +39,6 @@
 %token TOKEN_DIFERENTE_IGUAL
 %token TOKEN_MAS_MAS
 %token TOKEN_MENOS_MENOS
-%token TOKEN_ASIGNACION
 
 /* COMANDOS ESPECIALES */
 
@@ -49,6 +49,7 @@
 %token <str> TOKEN_SIMBOLOS
 %token <str> TOKEN_LOAD
 %token <str> TOKEN_IMPORT
+
 
 /* Simbolos no terminales */
 
@@ -62,7 +63,6 @@
 
 /* Asociatividad de los operadores */
 
-%right '=' TOKEN_ASIGNACION
 %left '-' '+' TOKEN_MAS_IGUAL TOKEN_MENOS_IGUAL
 %left '*' '/' TOKEN_MULT_IGUAL TOKEN_DIV_IGUAL
 %left '>' '<' TOKEN_IGUAL_IGUAL TOKEN_MAYOR_IGUAL TOKEN_MENOR_IGUAL TOKEN_DIFERENTE_IGUAL
@@ -76,7 +76,7 @@
 start
 :   %empty /* Produccion vacia que se ejecutara cuando no hay ninguna linea d eentrada */
 {
-    printf("&>");
+    prompt();
 }
 | start INICIO
 ;
@@ -84,22 +84,21 @@ start
 INICIO
 : '\n'
 {
-    printf("&>");
+    prompt();
 }
 | exp '\n'
 {
     printf("%lf\n", $1);
+    prompt();
 }
 | assign '\n'
 {
     printf("%lf\n", $1);
+    prompt();
 }
 
 exp
 : TOKEN_NUM           
-{ 
-    $$ = $1;
-}
 | exp '+' exp       
 { 
     $$ = $1 + $3;
@@ -131,8 +130,27 @@ exp
 ;
 
 assign
-: TOKEN_VARIABLE '=' exp { printf("Asignacion de variable"); }
-| assign '=' exp { printf("Asignacion de variable"); }
+: TOKEN_VARIABLE '=' exp 
+{   
+    if(!existeSimbolo($1)){
+        insertarSimbolo($1, $3);
+    }else{
+        actualizarSimbolo($1, $3);
+    }
+    $$ = $3;
+}
+| TOKEN_VARIABLE '=' TOKEN_VARIABLE
+{   
+    if(!existeSimbolo($1)){
+        insertarSimbolo($1, obtenerValorSimbolo($3));
+    }else if(!existeSimbolo($1)){
+        insertarSimbolo($1, obtenerValorSimbolo($3));
+    }else{
+        actualizarSimbolo($1, obtenerValorSimbolo($3));
+    }
+    $$ = obtenerValorSimbolo($3);
+}
+;
 
 %%
 
@@ -143,6 +161,10 @@ void yyerror(char *s){
 
 int yywrap(){
     return 1;
+}
+
+void prompt(){
+    printf("$>");
 }
 
 
