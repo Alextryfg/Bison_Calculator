@@ -12,16 +12,15 @@
 /* Opcion para que no nos de el error de 'input' unused*/
 %option noinput
 
-ALFA [a-zA-Z]
-LETTER [ALFA]|_
+ALFA [a-zA-Z_]
 DIGIT [0-9]
 BREAK_LINE \n
 SPACES [ \t\r]+
 
 
-VARIABLE {LETTER}({LETTER}|{DIGIT})*
+VARIABLE {ALFA}({ALFA}|{DIGIT})*
 
-OPERADORESSIMPLES (\(|\)|\*|\+|\-|\/|\;|\,|\<|\>|\^)
+OPERADORESSIMPLES (\(|\)|\*|\+|\-|\/|\;|\,|\<|\>|\^|\=)
 
 MAS_IGUAL                     \+=
 MENOS_IGUAL                   \-=
@@ -31,9 +30,8 @@ IGUAL_IGUAL                   \=\=
 MAYOR_IGUAL                   \>\=
 MENOR_IGUAL                   \<\=
 DIFERENTE_IGUAL               \!\=
-MAS_MAS                      \+\+
+MAS_MAS                       \+\+
 MENOS_MENOS                   \-\-
-ASIGNACION                    \=
 
 
 EXPONENCIAL [eE][+-]?{DIGITO}+
@@ -42,49 +40,40 @@ FLOAT {DIGITO}*\.{DIGITO}+({EXPONENCIAL})?|\.{DIGITO}+({EXPONENCIAL})?
 
 INTEGER {DIGITO}+
 
-FILE ({LETTER|DIGIT}+\.)*{LETTER|DIGIT}+
+FILE ({ALFA|DIGIT}+\.)*{ALFA|DIGIT}+
 
-LIB <{LETTER|DIGIT}+\.h>
+LIB <{ALFA|DIGIT}+\.h>
 
 
 %%
 
 {SPACES}
 
-"exit"              {yyterminate();}
+"exit"              {yylex_destroy();yyterminate();}
+
+"simbolos"          {return (TOKEN_SIMBOLOS);}
+
+"exit"              {return (TOKEN_EXIT);}
+
+"workspace"         {return (TOKEN_WORKSPACE);}
+
+"load"              {return (TOKEN_LOAD);}
+
+"import"            {return (TOKEN_IMPORT);}
 
 {BREAK_LINE}        {return ((int)*yytext);}
 
 {DIGIT}             {
                     /* Covertimos el string a su valor numérico y lo metemos en la estructura definida en bison  */
-                    yylval.val=atof(yytext); 
+                    yylval.val=atoi(yytext);
                     /* Devolvemos el token correspondiente */
-                    return (TOKEN_NUM);}
+                    return (TOKEN_NUM);
+                    }
 
 {VARIABLE}          {   
-                        /*yylval es la estructura definida en el sitactico por mi mismp de str y val*/
                         yylval.str = strdup(yytext);
-                        yylval.val = findComando(yylval.str);
-                        /* Busco en la tabla de simbolos inicial, el tipo o id de la variable que entra */
-                        /* Dependiendo del tipo de variable, se devolverá un token u otro */
-                        /* Flex devuelve a Bison un Token con el que realizará unas reglas gramáticales establecidas */
-                        if(yylval.val == ID_EXIT){
-                            return (TOKEN_EXIT);
-                        }else if(yylval.val == ID_WORKSPACE){
-                            return (TOKEN_WORKSPACE);
-                        }else if(yylval.val == ID_HELP){
-                            return (TOKEN_HELP);
-                        }else if(yylval.val == ID_CLEAR_WORKSPACE){
-                            return (TOKEN_CLEAR_WORKSPACE);
-                        }else if(yylval.val == ID_SIMBOLOS){
-                            return (TOKEN_SIMBOLOS);
-                        }else if(yylval.val == ID_LOAD){
-                            return (TOKEN_LOAD);
-                        }else if(yylval.val == ID_IMPORT){
-                            return (TOKEN_IMPORT);
-                        }else{
-                            return (TOKEN_VARIABLE);
-                        }
+                        /* Devolvemos el token correspondiente */
+                        return (TOKEN_VARIABLE);   
                     }
 
 {MAS_IGUAL}         {return (TOKEN_MAS_IGUAL);}
@@ -97,7 +86,6 @@ LIB <{LETTER|DIGIT}+\.h>
 {DIFERENTE_IGUAL}   {return (TOKEN_DIFERENTE_IGUAL);}
 {MAS_MAS}           {return (TOKEN_MAS_MAS);}
 {MENOS_MENOS}       {return (TOKEN_MENOS_MENOS);}
-{ASIGNACION}        {return (TOKEN_ASIGNACION);}
 
 {OPERADORESSIMPLES} {return ((int)*yytext);}
 
