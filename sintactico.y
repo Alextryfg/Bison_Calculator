@@ -24,10 +24,9 @@
 
 /* Definición de los tokens */
 
-%start INICIO
+%start start
 
 %token <val> TOKEN_NUM
-/*
 %token <str> TOKEN_VARIABLE
 %token TOKEN_MAS_IGUAL
 %token TOKEN_MENOS_IGUAL
@@ -40,11 +39,9 @@
 %token TOKEN_MAS_MAS
 %token TOKEN_MENOS_MENOS
 %token TOKEN_ASIGNACION
-*/
 
 /* COMANDOS ESPECIALES */
 
-/*
 %token <str> TOKEN_EXIT
 %token <str> TOKEN_WORKSPACE
 %token <str> TOKEN_HELP
@@ -52,14 +49,14 @@
 %token <str> TOKEN_SIMBOLOS
 %token <str> TOKEN_LOAD
 %token <str> TOKEN_IMPORT
-*/
 
 /* Simbolos no terminales */
 
 %type <val> exp
+%type <val> assign
 
 /*
-%type <val> assign
+
 %type <val> function
 */
 
@@ -76,23 +73,66 @@
 
 /* Definición de las reglas */
 
-INICIO
-: exp
+start
+:   %empty /* Produccion vacia que se ejecutara cuando no hay ninguna linea d eentrada */
 {
-    printf("Resultado: %f\n", $1);
+    printf("&>");
+}
+| start INICIO
+;
+
+INICIO
+: '\n'
+{
+    printf("&>");
+}
+| exp '\n'
+{
+    printf("%lf\n", $1);
+}
+| assign '\n'
+{
+    printf("%lf\n", $1);
 }
 
 exp
-: TOKEN_NUM            { $$ = $1;}
-| exp '+' exp       { $$ = $1 + $3;}
-| exp '-' exp       { $$ = $1 - $3;}
-| exp '*' exp       { $$ = $1 * $3;}
-| exp '/' exp       { $$ = $1 / $3;}
-| '-' exp %prec NEG { $$ = -$2;}
-| exp '^' exp       { $$ = 999 ;}
-| '(' exp ')'       { $$ = $2;}
+: TOKEN_NUM           
+{ 
+    $$ = $1;
+}
+| exp '+' exp       
+{ 
+    $$ = $1 + $3;
+}
+| exp '-' exp       
+{ 
+    $$ = $1 - $3;
+}
+| exp '*' exp       
+{ 
+    $$ = $1 * $3;
+}
+| exp '/' exp       
+{ 
+    $$ = $1 / $3;
+}
+| '-' exp %prec NEG 
+{ 
+    $$ = -$2;
+}
+| exp '^' exp       
+{ 
+    $$ = 999 ;
+}
+| '(' exp ')'       
+{ 
+    $$ = $2;
+}
 ;
 
+assign
+: TOKEN_VARIABLE '=' exp { printf("Asignacion de variable"); }
+| assign '=' exp { printf("Asignacion de variable"); }
 
 %%
 

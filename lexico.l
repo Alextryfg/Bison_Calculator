@@ -53,8 +53,6 @@ LIB <{LETTER|DIGIT}+\.h>
 
 "exit"              {yyterminate();}
 
-"evaluar"           {return (TOKEN_EVALUAR);}
-
 {BREAK_LINE}        {return ((int)*yytext);}
 
 {DIGIT}             {
