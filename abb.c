@@ -125,6 +125,10 @@ unsigned es_miembro(abb A, tipoelem E) {
     return _es_miembro_clave(A, _clave_elem(&E));
 }
 
+unsigned es_miembro_clave(abb A, tipoclave cl) {
+    return _es_miembro_clave(A, cl);
+}
+
 void buscar_nodo(abb A, tipoclave cl, tipoelem *nodo) {
     if (es_vacio(A)) {
         return;
@@ -137,21 +141,6 @@ void buscar_nodo(abb A, tipoclave cl, tipoelem *nodo) {
         buscar_nodo(A->izq, cl, nodo);
     } else { // cl > A->info
         buscar_nodo(A->der, cl, nodo);
-    }
-}
-
-int buscar_nodoComando(abb A, char *comando) {
-    if (es_vacio(A)) {
-        return 0;
-    }
-    int comp = strcmp(comando, A->info.lexema);
-
-    if (comp == 0) { // cl == A->info Son iguale sy por lo tanto se devuelve el código
-        return A->info.type;
-    } else if (comp < 0) { // cl < A->info
-        return buscar_nodoComando(A->izq, comando);
-    } else { // cl > A->info
-        return buscar_nodoComando(A->der, comando);
     }
 }
 
@@ -183,7 +172,7 @@ void insertar(abb *A, tipoelem E) {
 }
 
 /*
-* Funcion recursiva para insertar un nuevo nodo de comando
+* Funcion recursiva para insertar un nuevo nodo de simbolo
 */
 void insertarComando(abb *A, char *nombre, int id, void *funcion){
     if (es_vacio(*A)) {
@@ -231,9 +220,9 @@ void insertarVar(abb *A, char *nombre, int id, double valor){
         (*A)->info.data.val = valor;
         (*A)->info.initVal = 1;
         
-    }else if( comp < 0){
+    }else if( comp > 0){
         insertarVar(&(*A)->der, nombre, id, valor);
-    } else if (comp > 0) {
+    } else if (comp < 0) {
         insertarVar(&(*A)->izq, nombre, id, valor);
     }
     

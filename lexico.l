@@ -34,11 +34,11 @@ MAS_MAS                       \+\+
 MENOS_MENOS                   \-\-
 
 
-EXPONENCIAL [eE][+-]?{DIGITO}+
+EXPONENCIAL [eE][+-]?{DIGIT}+
 
-FLOAT {DIGITO}*\.{DIGITO}+({EXPONENCIAL})?|\.{DIGITO}+({EXPONENCIAL})?
+FLOAT {DIGIT}*\.{DIGIT}+({EXPONENCIAL})?|\.{DIGIT}+({EXPONENCIAL})?
 
-INTEGER {DIGITO}+
+INTEGER {DIGIT}+
 
 FILE ({ALFA|DIGIT}+\.)*{ALFA|DIGIT}+
 
@@ -61,7 +61,7 @@ LIB <{ALFA|DIGIT}+\.h>
 
 {BREAK_LINE}        {return ((int)*yytext);}
 
-{DIGIT}             {
+{INTEGER}             {
                     /* Covertimos el string a su valor numérico y lo metemos en la estructura definida en bison  */
                     yylval.val=atoi(yytext);
                     /* Devolvemos el token correspondiente */

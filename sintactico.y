@@ -142,6 +142,7 @@ assign
 {   
     if(!existeSimbolo($1)){
         insertarSimbolo($1, $3);
+        printf("Insertao\n");
     }else{
         actualizarSimbolo($1, $3);
     }
@@ -159,8 +160,14 @@ assign
     $$ = obtenerValorSimbolo($3);
 }
 | TOKEN_VARIABLE
-{
-    if(!existeSimbolo($1)){
+{       
+    printf("Por aqui peta");
+
+    if(existeSimbolo($1)){
+        //Comprobar pq no funciona
+        printf("Valor de la variable '%s': %lf\n", $1, obtenerValorSimbolo($1));
+        $$ = obtenerValorSimbolo($1);
+    }else{
         printf("Error: La variable '%s' no ha sido declarada\n", $1);
         print = 0;
     }

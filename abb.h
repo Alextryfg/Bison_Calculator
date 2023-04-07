@@ -66,6 +66,13 @@ void leer(abb A, tipoelem *E);
 unsigned es_miembro(abb A, tipoelem E);
 
 /**
+ * Comprueba si la clave <cl> existe en el arbol <A>
+ * @param A
+ * @param cl
+ */
+unsigned es_miembro_clave(abb A, tipoclave cl);
+
+/**
  * Busca un nodo con clave <cl> en el arbol y, si existe
  * modifica el puntero <nodo> para que lo apunte.
  * @param A Arbol binario en el que se busca el nodo.
@@ -73,14 +80,6 @@ unsigned es_miembro(abb A, tipoelem E);
  * @param nodo Puntero a un tipoelem.
  */
 void buscar_nodo(abb A, tipoclave cl, tipoelem *nodo);
-
-/**
- * Busca un nodo con clave comando en el arbol y, si existe
- * devuelve su codigo.
- * @param A Arbol binario en el que se busca el nodo.
- * @param comando Clave que se buscara.
- */
-int buscar_nodoComando(abb A, char *comando);
 
 //FUNCIONES DE MODIFICACIÓN
 /**

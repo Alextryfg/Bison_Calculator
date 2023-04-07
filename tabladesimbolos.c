@@ -84,13 +84,7 @@ void destruirTablaSimbolos(){
  * Funcion encargada de averiguar si existe un simbolo en la tablaSimbolos
  */
 int existeSimbolo(char* lex){
-    tipoelem *s = NULL;
-    buscar_nodo(tablaSimbolos, lex , s);
-    if(s != NULL){
-        return 1;
-    }else{
-        return 0;
-    }
+    return es_miembro_clave(tablaSimbolos, lex);
 }
 
 /*
