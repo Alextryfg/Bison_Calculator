@@ -13,6 +13,9 @@
     extern int yylex(void); /* Esto se utilizará desde otros archivos por eso lleva el extern */
     int yywrap();       /* Esto se utilizará desde otros archivos por eso lleva el extern */
     void prompt();      /* Prototipo de la función prompt */
+    void value(double val);       /* Prototipo de la función value para imprimir resultados*/
+    double potencia(double base, double exponente);    /* Prototipo de la función potencia */
+    int print = 1;      /* Variable que indica si se debe imprimir el resultado de la operación */
 
 %}
 
@@ -55,6 +58,7 @@
 
 %type <val> exp
 %type <val> assign
+%type <str> command
 
 /*
 
@@ -88,12 +92,16 @@ INICIO
 }
 | exp '\n'
 {
-    printf("%lf\n", $1);
+    value($1);
     prompt();
 }
 | assign '\n'
 {
-    printf("%lf\n", $1);
+    value($1);
+    prompt();
+}
+| command '\n'
+{
     prompt();
 }
 
@@ -121,7 +129,7 @@ exp
 }
 | exp '^' exp       
 { 
-    $$ = 999 ;
+    $$ = potencia($1, $3);
 }
 | '(' exp ')'       
 { 
@@ -150,6 +158,36 @@ assign
     }
     $$ = obtenerValorSimbolo($3);
 }
+| TOKEN_VARIABLE
+{
+    if(!existeSimbolo($1)){
+        printf("Error: La variable '%s' no ha sido declarada\n", $1);
+        print = 0;
+    }
+}
+;
+
+command
+: TOKEN_WORKSPACE
+{
+    printTablaSimbolos();
+}
+| TOKEN_CLEAR_WORKSPACE
+{
+    //limpiarTablaSimbolos();
+}
+| TOKEN_SIMBOLOS
+{
+    printTablaSimbolos();
+}
+| TOKEN_LOAD '(' TOKEN_VARIABLE ')'
+{
+    printf("Cargando archivo...\n");
+}
+| TOKEN_IMPORT '(' TOKEN_VARIABLE ')'
+{
+    printf("Importando archivo...\n");
+}
 ;
 
 %%
@@ -165,6 +203,35 @@ int yywrap(){
 
 void prompt(){
     printf("$>");
+}
+
+void value(double val){
+    if(print){
+        printf("%lf\n", val);
+    }else{
+        print = 1;
+    }
+}
+
+double potencia(double base, double exponente){
+        double resultado = 1;
+    int i;
+
+    // Si el exponente es positivo, multiplica la base el número de veces del exponente
+    if (exponente > 0) {
+        for (i = 1; i <= exponente; i++) {
+            resultado *= base;
+        }
+    }
+    // Si el exponente es negativo, divide la base el número de veces del exponente absoluto
+    else {
+        int exponenteAbsoluto = -exponente;
+        for (i = 1; i <= exponenteAbsoluto; i++) {
+            resultado /= base;
+        }
+    }
+
+    return resultado;
 }
 
 

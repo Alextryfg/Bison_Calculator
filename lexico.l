@@ -53,8 +53,6 @@ LIB <{ALFA|DIGIT}+\.h>
 
 "simbolos"          {return (TOKEN_SIMBOLOS);}
 
-"exit"              {return (TOKEN_EXIT);}
-
 "workspace"         {return (TOKEN_WORKSPACE);}
 
 "load"              {return (TOKEN_LOAD);}
@@ -89,7 +87,7 @@ LIB <{ALFA|DIGIT}+\.h>
 
 {OPERADORESSIMPLES} {return ((int)*yytext);}
 
-.                   {perror("Caraacter no reconocido");}
+.                   {perror("Caracter no reconocido");}
 
 <<EOF>>             {yyrestart(yyin); return (EOF);}
 

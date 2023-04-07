@@ -120,6 +120,7 @@ double obtenerValorSimbolo(char* lex){
     if(s != NULL){
         return s->data.val;
     }
+    return 0;
 }
 
 /*
