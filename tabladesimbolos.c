@@ -58,6 +58,8 @@ comandos initialC[] = {
  */
 void initTablaSimbolos() {
 
+    //MEJOR VUELVE A CREARLE UNA FUNCION PARA CREAR LA TABLA DE SIMBOLOS
+
     /* Creo la tablaSimbolos */
     crear(&tablaSimbolos);
 
@@ -91,7 +93,7 @@ int existeSimbolo(char* lex){
  * Funcion encargada de crear una variable en la tablaSimbolos
  */
 void insertarSimbolo(char* lex, double val){
-    insertarVar(&tablaSimbolos, lex, ID_VAR, val);
+    insertarVar(&tablaSimbolos, *lex, ID_VAR, val);
 }
 
 /*

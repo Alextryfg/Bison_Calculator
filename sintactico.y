@@ -147,6 +147,7 @@ assign
         actualizarSimbolo($1, $3);
     }
     $$ = $3;
+
 }
 | TOKEN_VARIABLE '=' TOKEN_VARIABLE
 {   
@@ -161,7 +162,6 @@ assign
 }
 | TOKEN_VARIABLE
 {       
-    printf("Por aqui peta");
 
     if(existeSimbolo($1)){
         //Comprobar pq no funciona

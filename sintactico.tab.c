@@ -544,8 +544,8 @@ static const yytype_int8 yytranslate[] =
 static const yytype_uint8 yyrline[] =
 {
        0,    81,    81,    85,    89,    93,    98,   103,   109,   110,
-     114,   118,   122,   126,   130,   134,   141,   151,   162,   178,
-     182,   186,   190,   194
+     114,   118,   122,   126,   130,   134,   141,   152,   163,   174,
+     178,   182,   186,   190
 };
 #endif
 
@@ -1244,12 +1244,13 @@ yyreduce:
         actualizarSimbolo((yyvsp[-2].str), (yyvsp[0].val));
     }
     (yyval.val) = (yyvsp[0].val);
+
 }
-#line 1249 "sintactico.tab.c"
+#line 1250 "sintactico.tab.c"
     break;
 
   case 17: /* assign: TOKEN_VARIABLE '=' TOKEN_VARIABLE  */
-#line 152 "sintactico.y"
+#line 153 "sintactico.y"
 {   
     if(!existeSimbolo((yyvsp[-2].str))){
         insertarSimbolo((yyvsp[-2].str), obtenerValorSimbolo((yyvsp[0].str)));
@@ -1260,68 +1261,63 @@ yyreduce:
     }
     (yyval.val) = obtenerValorSimbolo((yyvsp[0].str));
 }
-#line 1264 "sintactico.tab.c"
+#line 1265 "sintactico.tab.c"
     break;
 
   case 18: /* assign: TOKEN_VARIABLE  */
-#line 163 "sintactico.y"
+#line 164 "sintactico.y"
 {       
-    printf("Por aqui peta");
-
-    if(existeSimbolo((yyvsp[0].str))){
+        
         //Comprobar pq no funciona
         printf("Valor de la variable '%s': %lf\n", (yyvsp[0].str), obtenerValorSimbolo((yyvsp[0].str)));
         (yyval.val) = obtenerValorSimbolo((yyvsp[0].str));
-    }else{
-        printf("Error: La variable '%s' no ha sido declarada\n", (yyvsp[0].str));
-        print = 0;
-    }
+
 }
-#line 1281 "sintactico.tab.c"
+#line 1277 "sintactico.tab.c"
     break;
 
   case 19: /* command: TOKEN_WORKSPACE  */
-#line 179 "sintactico.y"
+#line 175 "sintactico.y"
 {
     printTablaSimbolos();
 }
-#line 1289 "sintactico.tab.c"
+#line 1285 "sintactico.tab.c"
     break;
 
   case 20: /* command: TOKEN_CLEAR_WORKSPACE  */
-#line 183 "sintactico.y"
+#line 179 "sintactico.y"
 {
     //limpiarTablaSimbolos();
 }
-#line 1297 "sintactico.tab.c"
+#line 1293 "sintactico.tab.c"
     break;
 
   case 21: /* command: TOKEN_SIMBOLOS  */
-#line 187 "sintactico.y"
+#line 183 "sintactico.y"
 {
     printTablaSimbolos();
 }
-#line 1305 "sintactico.tab.c"
+#line 1301 "sintactico.tab.c"
     break;
 
   case 22: /* command: TOKEN_LOAD '(' TOKEN_VARIABLE ')'  */
-#line 191 "sintactico.y"
+#line 187 "sintactico.y"
 {
     printf("Cargando archivo...\n");
 }
-#line 1313 "sintactico.tab.c"
+#line 1309 "sintactico.tab.c"
     break;
 
   case 23: /* command: TOKEN_IMPORT '(' TOKEN_VARIABLE ')'  */
-#line 195 "sintactico.y"
+#line 191 "sintactico.y"
 {
     printf("Importando archivo...\n");
 }
-#line 1321 "sintactico.tab.c"
+#line 1317 "sintactico.tab.c"
     break;
 
 
-#line 1325 "sintactico.tab.c"
+#line 1321 "sintactico.tab.c"
 
       default: break;
     }
@@ -1514,7 +1510,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 200 "sintactico.y"
+#line 196 "sintactico.y"
 
 
 /* Función de error */
