@@ -44,7 +44,7 @@ double obtenerValorSimbolo(char* lex);
  * Funcion encargada de encontrar un lexema dentro de el arbol. Si el elemento no esta en la tablaSimbolos, se introducirá
  * @return el codigo del simbolo
  */
-int findSimbol(char* lex);
+int findSimbolType(char* lex);
 
 /*
  * Funcion que imprime la tablaSimbolos, invocando a la recursiva de abb.h

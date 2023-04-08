@@ -106,7 +106,16 @@ INICIO
 }
 
 exp
-: TOKEN_NUM           
+: TOKEN_NUM  
+| TOKEN_VARIABLE 
+{   
+    if(existeSimbolo($1)){
+        $$ = obtenerValorSimbolo($1);
+    }else{
+        printf("Error: La variable '%s' no ha sido declarada\n", $1);
+        print = 0;
+    }
+}            
 | exp '+' exp       
 { 
     $$ = $1 + $3;
@@ -138,41 +147,55 @@ exp
 ;
 
 assign
+//COMO HAGO PARA PODER ASIGNAR EXPRESIONES A VARIABLES?
+
 : TOKEN_VARIABLE '=' exp 
 {   
-    if(!existeSimbolo($1)){
+    if(isdigit($3) == 0){
+        printf("$3 es una variable\n");
+    }else{
+        printf("$3 es un numero\n");
+    }
+
+    
+    if(strcmp($1, "pi") == 0 || strcmp($1, "e") == 0){
+        printf("Error: No se puede asignar un valor a las constantes\n");
+        print = 0;
+    }else if(!existeSimbolo($1)){
         insertarSimbolo($1, $3);
-        printf("Insertao\n");
     }else{
         actualizarSimbolo($1, $3);
     }
     $$ = $3;
 
 }
+
 | TOKEN_VARIABLE '=' TOKEN_VARIABLE
 {   
-    if(!existeSimbolo($1)){
-        insertarSimbolo($1, obtenerValorSimbolo($3));
-    }else if(!existeSimbolo($1)){
-        insertarSimbolo($1, obtenerValorSimbolo($3));
-    }else{
-        actualizarSimbolo($1, obtenerValorSimbolo($3));
-    }
-    $$ = obtenerValorSimbolo($3);
-}
-| TOKEN_VARIABLE
-{       
+    if(!existeSimbolo($1) && !existeSimbolo($3)){ //Si las variables no existen se crean y se le asigna el valor de la variable 3
 
-    if(existeSimbolo($1)){
-        //Comprobar pq no funciona
-        printf("Valor de la variable '%s': %lf\n", $1, obtenerValorSimbolo($1));
-        $$ = obtenerValorSimbolo($1);
-    }else{
-        printf("Error: La variable '%s' no ha sido declarada\n", $1);
+        printf("Error: Las variables no han sido declaradas\n");
         print = 0;
+        
+    }else if(!existeSimbolo($1)){ //Si la vaiable uno no existe se crea y se le asigna el valor de la variable 3
+
+        insertarSimbolo($1, obtenerValorSimbolo($3));
+        $$ = obtenerValorSimbolo($3);
+
+    }else if(!existeSimbolo($3)){ //Si la variable 3 no existe se imprime un error
+
+        printf("Error: La variable '%s' no ha sido declarada", $3);
+        print = 0;
+
+    }else{ //Si la variable 1 existe se actualiza con el valor de la variable 2
+
+        actualizarSimbolo($1, obtenerValorSimbolo($3));
+        $$ = obtenerValorSimbolo($3);
     }
+    
 }
 ;
+
 
 command
 : TOKEN_WORKSPACE

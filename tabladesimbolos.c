@@ -8,22 +8,6 @@
 /* Se trata del arbol en el que se almacenará la tablaSimbolos de simbolos*/
 abb tablaSimbolos;
 
-/* Creamos una estructura para las constantes que solo albergarán nombre y valor. Esto tambien
-podria realizarse sin ellas, sin embargo facilitará el trabajo a la hora de insertar en el arbol*/
-typedef struct{
-    char *nombre;
-    double valor;
-}constante;
-
-/* Lo mismo de antes pero para una estructura de comandos que apuntan a funciones */
-typedef struct{
-    char* nombre;
-    int id;
-    double (*func)(); //funcion del token
-}comandos;
-
-
-
 /* Creamos los prototipos de funciones para ser detectadas por initialC */
 double workspace();
 double help();
@@ -32,25 +16,21 @@ double simbolos();
 double load();
 double import();
 
-/* En initialConst se alamacenarán las constantes de las que dispondremos en la tabla d esimbolos inicial */
 
-constante initialConst[] = {
-    {"pi", 3.14159265358979},
-    {"e", 2.71828182845904},
-    {NULL, 0}
-};
 
 /* En initialC, almacenare los distintos comandos especiales, de manera que alberguen un puntero a la función que invocarán */
 
-comandos initialC[] = {
-    {"exit", ID_EXIT, exitC}, 
-    {"workspace", ID_WORKSPACE, workspace},
-    {"help", ID_HELP, help},
-    {"clear", ID_CLEAR_WORKSPACE, clear},
-    {"simbolos", ID_SIMBOLOS, simbolos},
-    {"load", ID_LOAD, load},
-    {"import", ID_IMPORT, import},
-    {NULL, 0, NULL}
+tipoelem initial[] = {
+    {"pi", ID_CONST, .data.val = 3.14159265358979},
+    {"e", ID_CONST, .data.val = 2.71828182845904},
+    {"exit", ID_EXIT, .data.func = exitC}, 
+    {"workspace", ID_WORKSPACE, .data.func = workspace},
+    {"help", ID_HELP, .data.func = help},
+    {"clear", ID_CLEAR_WORKSPACE, .data.func = clear},
+    {"simbolos", ID_SIMBOLOS, .data.func = simbolos},
+    {"load", ID_LOAD, .data.func = load},
+    {"import", ID_IMPORT, .data.func = import},
+    {NULL,0, .data.func = NULL}
     };
 
 /*
@@ -64,11 +44,8 @@ void initTablaSimbolos() {
     crear(&tablaSimbolos);
 
     /* Inserto sus elementos */
-    for (int i = 0; initialC[i].nombre != NULL ; i++)
-        insertarComando(&tablaSimbolos, initialC[i].nombre, initialC[i].id, initialC[i].func);
-    
-    for (int i = 0; initialConst[i].nombre != NULL ; i++)
-        insertarVar(&tablaSimbolos, initialConst[i].nombre, ID_CONST, initialConst[i].valor);
+    for (int i = 0; initial[i].lexema != NULL ; i++)
+        insertar(&tablaSimbolos, initial[i]);
         
 
 }
@@ -93,28 +70,27 @@ int existeSimbolo(char* lex){
  * Funcion encargada de crear una variable en la tablaSimbolos
  */
 void insertarSimbolo(char* lex, double val){
-    insertarVar(&tablaSimbolos, *lex, ID_VAR, val);
+    tipoelem s = {lex, ID_VAR, .data.val = val};
+    insertar(&tablaSimbolos,s);
 }
 
 /*
  * Funcion de actualizacion del valor de un simbolo
  */
 void actualizarSimbolo(char* lex, double val){
-    tipoelem *s = NULL;
-    buscar_nodo(tablaSimbolos, lex , s);
-    if(s != NULL){
-        s->data.val = val;
-    }
+    tipoelem s = {lex, ID_VAR, .data.val = val};
+    modificar (tablaSimbolos, s);
+    
 }
 
 /*
  * Funcion encargada de obtener el valor de un simbolo
  */
 double obtenerValorSimbolo(char* lex){
-    tipoelem *s = NULL;
-    buscar_nodo(tablaSimbolos, lex , s);
-    if(s != NULL){
-        return s->data.val;
+    tipoelem s = {};
+    buscar_nodo(tablaSimbolos, lex , &s);
+    if(s.lexema != NULL){
+        return s.data.val;
     }
     return 0;
 }
@@ -122,24 +98,21 @@ double obtenerValorSimbolo(char* lex){
 /*
  * Funcion encargada de encontrar un lexema dentro de el arbol. Si el elemento no esta en la tablaSimbolos, se introducirá
  */
-int findSimbol(char* lex){
+int findSimbolType(char* lex){
 
-    tipoelem *s = NULL;
+    tipoelem s = {};
     //Se busca el nodo por medio del lexema almacenandolo en s
-    buscar_nodo(tablaSimbolos, lex , s);
+    buscar_nodo(tablaSimbolos, lex , &s);
 
-    if(s != NULL){
+    if(s.lexema != NULL){
         //Si el nodo existe, se devuelve su codigo
         free(lex);
-        return s->type;
+        return s.type;
     }else{
         // En caso de no existir, se crea
-        tipoelem *new = NULL;
-        new->lexema = lex;
-        new->type = ID_VAR;//Tipo de la variable
-        new->data.val = 0; //Valor de la variable
-        insertar(&tablaSimbolos, *new);
-        return new->type;
+        tipoelem new = {lex, ID_VAR, .data.val = 0};
+        insertar(&tablaSimbolos, new);
+        return new.type;
     }
 }
 

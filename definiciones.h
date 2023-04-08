@@ -6,6 +6,7 @@
 #define ID_FUNC 301
 #define ID_FUNCVOID 302
 #define ID_CONST 303
+#define ID_NUM 304
 
 
 /* Comandos especiales */

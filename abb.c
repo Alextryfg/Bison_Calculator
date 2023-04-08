@@ -137,6 +137,7 @@ void buscar_nodo(abb A, tipoclave cl, tipoelem *nodo) {
 
     if (comp == 0) { // cl == A->info
         *nodo = A->info;
+
     } else if (comp < 0) { // cl < A->info
         buscar_nodo(A->izq, cl, nodo);
     } else { // cl > A->info
@@ -156,6 +157,13 @@ void insertar(abb *A, tipoelem E) {
         strcpy((*A)->info.lexema, E.lexema);
         if (*A) {
             (*A)->info.lexema[strlen(E.lexema)] = '\0';
+            (*A)->info.type = E.type;
+            if(E.type == ID_CONST || E.type == ID_VAR){
+                (*A)->info.data.val = E.data.val;
+            }else if(E.type == ID_FUNC){
+                (*A)->info.data.func = E.data.func;
+            }
+            (*A)->info.initVal = 1;
             (*A)->izq = NULL;
             (*A)->der = NULL;
         }
@@ -169,63 +177,6 @@ void insertar(abb *A, tipoelem E) {
     } else {
         insertar(&(*A)->izq, E);
     }
-}
-
-/*
-* Funcion recursiva para insertar un nuevo nodo de simbolo
-*/
-void insertarComando(abb *A, char *nombre, int id, void *funcion){
-    if (es_vacio(*A)) {
-        *A = (abb) malloc(sizeof (struct celda));
-        (*A)->info.lexema = (char*)malloc(sizeof(char)*(strlen(nombre) + 1));
-        strncpy((*A)->info.lexema, nombre, strlen(nombre)+1);
-        if (*A) {
-            (*A)->info.lexema[strlen(nombre)] = '\0';
-            (*A)->info.type = id;
-            (*A)->info.data.func = funcion;
-            (*A)->info.initVal = 1;
-            (*A)->izq = NULL;
-            (*A)->der = NULL;
-        }
-        return;
-
-    }
-    int comp = strcmp(nombre, (*A)->info.lexema);
-    if (comp > 0) {
-        insertarComando(&(*A)->der, nombre, id, funcion);
-    } else {
-        insertarComando(&(*A)->izq, nombre, id, funcion);
-    }
-    
-}
-
-void insertarVar(abb *A, char *nombre, int id, double valor){
-    if (es_vacio(*A)) {
-        *A = (abb) malloc(sizeof (struct celda));
-        (*A)->info.lexema = (char*)malloc(sizeof(char)*(strlen(nombre) + 1));
-        strncpy((*A)->info.lexema, nombre, strlen(nombre)+1);
-        if (*A) {
-            (*A)->info.lexema[strlen(nombre)] = '\0';
-            (*A)->info.type = id;
-            (*A)->info.data.val = valor;
-            (*A)->info.initVal = 1;
-            (*A)->izq = NULL;
-            (*A)->der = NULL;
-        }
-        return;
-
-    }
-    int comp = strcmp(nombre, (*A)->info.lexema);
-    if (!comp && (*A)->info.type == ID_VAR) {
-        (*A)->info.data.val = valor;
-        (*A)->info.initVal = 1;
-        
-    }else if( comp > 0){
-        insertarVar(&(*A)->der, nombre, id, valor);
-    } else if (comp < 0) {
-        insertarVar(&(*A)->izq, nombre, id, valor);
-    }
-    
 }
 
 /* Funcion privada que devuelve mínimo de subárbol dcho */
