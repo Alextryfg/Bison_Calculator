@@ -133,6 +133,12 @@ void printTablaSimbolos(){
     printf("\n════════════════════════════════════════════════════════════════════════════════════════════════\n");
 }
 
+void printWorkspace(){
+    printf("═══════════════════════════════Workspace════════════════════════════════════════════════════════");
+    _printWorkspace(&tablaSimbolos);
+    printf("\n════════════════════════════════════════════════════════════════════════════════════════════════\n");
+}
+
 /*
  * Print de bienvenida
  */
@@ -146,7 +152,7 @@ void welcome(){
 /* Funciones que se invocaran cuando FLEX detecte las palabras clave.*/
 
 unsigned workspace(){
-    printf("workspace ejecutado correctamente");
+    printWorkspace();
     return 1;
 }
 

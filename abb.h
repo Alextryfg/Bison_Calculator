@@ -109,6 +109,12 @@ void modificar(abb A, tipoelem nodo);
  */
 void _printTabla(abb *A);
 
+/**
+ * Imprime las variables del arbol A
+ * @param A
+ */
+void _printWorkspace(abb *A);
+
 
 #endif	// ABB_H
 

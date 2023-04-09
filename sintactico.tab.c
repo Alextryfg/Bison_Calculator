@@ -545,11 +545,11 @@ static const yytype_int8 yytranslate[] =
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] =
+static const yytype_int16 yyrline[] =
 {
        0,    85,    85,    89,    93,    97,   102,   107,   113,   114,
-     127,   131,   135,   139,   143,   147,   151,   160,   206,   223,
-     230,   234,   241
+     127,   131,   135,   139,   143,   147,   151,   160,   206,   220,
+     233,   246,   259
 };
 #endif
 
@@ -1291,8 +1291,22 @@ yyreduce:
 
     simbol = getSimbol("workspace");
 
-    printf("El directorio de trabajo es: %s\n", simbol.lexema);
-    printf("La funcion es: %p\n", simbol.data.func);
+    unsigned (*ptrFunc)() = simbol.data.func;
+    if (ptrFunc != NULL) {
+        (*(ptrFunc))();
+    } else {
+        printf("Error: El puntero a función es nulo.\n");
+    }
+
+    //free($1);
+}
+#line 1304 "sintactico.tab.c"
+    break;
+
+  case 19: /* command: TOKEN_CLEAR_WORKSPACE  */
+#line 221 "sintactico.y"
+{
+    simbol = getSimbol("clear");
 
     unsigned (*ptrFunc)() = simbol.data.func;
     if (ptrFunc != NULL) {
@@ -1303,52 +1317,62 @@ yyreduce:
 
     free((yyvsp[0].str));
 }
-#line 1307 "sintactico.tab.c"
-    break;
-
-  case 19: /* command: TOKEN_CLEAR_WORKSPACE  */
-#line 224 "sintactico.y"
-{
-    simbol = getSimbol((yyvsp[0].str));
-    //Invoco la funcion contenida en su puntero
-    (*(simbol.data.func))();
-    free((yyvsp[0].str));
-}
-#line 1318 "sintactico.tab.c"
+#line 1321 "sintactico.tab.c"
     break;
 
   case 20: /* command: TOKEN_SIMBOLOS  */
-#line 231 "sintactico.y"
+#line 234 "sintactico.y"
 {
-    printTablaSimbolos();
+    simbol = getSimbol("simbolos");
+
+    unsigned (*ptrFunc)() = simbol.data.func;
+    if (ptrFunc != NULL) {
+        (*(ptrFunc))();
+    } else {
+        printf("Error: El puntero a función es nulo.\n");
+    }
+
+    free((yyvsp[0].str));
 }
-#line 1326 "sintactico.tab.c"
+#line 1338 "sintactico.tab.c"
     break;
 
   case 21: /* command: TOKEN_LOAD '(' TOKEN_FILE ')'  */
-#line 235 "sintactico.y"
+#line 247 "sintactico.y"
 {
-    simbol = getSimbol((yyvsp[-3].str));
-    //Invoco la funcion contenida en su puntero
-    (*(simbol.data.func))();
+    simbol = getSimbol("load");
+
+    unsigned (*ptrFunc)() = simbol.data.func;
+    if (ptrFunc != NULL) {
+        (*(ptrFunc))();
+    } else {
+        printf("Error: El puntero a función es nulo.\n");
+    }
+
     free((yyvsp[-3].str));
 }
-#line 1337 "sintactico.tab.c"
+#line 1355 "sintactico.tab.c"
     break;
 
   case 22: /* command: TOKEN_IMPORT '(' TOKEN_VARIABLE ')'  */
-#line 242 "sintactico.y"
+#line 260 "sintactico.y"
 {
-    simbol = getSimbol((yyvsp[-3].str));
-    //Invoco la funcion contenida en su puntero
-    (*(simbol.data.func))();
+    simbol = getSimbol("import");
+
+    unsigned (*ptrFunc)() = simbol.data.func;
+    if (ptrFunc != NULL) {
+        (*(ptrFunc))();
+    } else {
+        printf("Error: El puntero a función es nulo.\n");
+    }
+
     free((yyvsp[-3].str));
 }
-#line 1348 "sintactico.tab.c"
+#line 1372 "sintactico.tab.c"
     break;
 
 
-#line 1352 "sintactico.tab.c"
+#line 1376 "sintactico.tab.c"
 
       default: break;
     }
@@ -1541,7 +1565,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 250 "sintactico.y"
+#line 274 "sintactico.y"
 
 
 /* Función de error */

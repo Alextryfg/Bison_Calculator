@@ -208,8 +208,18 @@ command
 
     simbol = getSimbol("workspace");
 
-    printf("El directorio de trabajo es: %s\n", simbol.lexema);
-    printf("La funcion es: %p\n", simbol.data.func);
+    unsigned (*ptrFunc)() = simbol.data.func;
+    if (ptrFunc != NULL) {
+        (*(ptrFunc))();
+    } else {
+        printf("Error: El puntero a función es nulo.\n");
+    }
+
+    //free($1);
+}
+| TOKEN_CLEAR_WORKSPACE
+{
+    simbol = getSimbol("clear");
 
     unsigned (*ptrFunc)() = simbol.data.func;
     if (ptrFunc != NULL) {
@@ -220,29 +230,43 @@ command
 
     free($1);
 }
-| TOKEN_CLEAR_WORKSPACE
-{
-    simbol = getSimbol($1);
-    //Invoco la funcion contenida en su puntero
-    (*(simbol.data.func))();
-    free($1);
-}
 | TOKEN_SIMBOLOS
 {
-    printTablaSimbolos();
+    simbol = getSimbol("simbolos");
+
+    unsigned (*ptrFunc)() = simbol.data.func;
+    if (ptrFunc != NULL) {
+        (*(ptrFunc))();
+    } else {
+        printf("Error: El puntero a función es nulo.\n");
+    }
+
+    free($1);
 }
 | TOKEN_LOAD '(' TOKEN_FILE ')'
 {
-    simbol = getSimbol($1);
-    //Invoco la funcion contenida en su puntero
-    (*(simbol.data.func))();
+    simbol = getSimbol("load");
+
+    unsigned (*ptrFunc)() = simbol.data.func;
+    if (ptrFunc != NULL) {
+        (*(ptrFunc))();
+    } else {
+        printf("Error: El puntero a función es nulo.\n");
+    }
+
     free($1);
 }
 | TOKEN_IMPORT '(' TOKEN_VARIABLE ')'
 {
-    simbol = getSimbol($1);
-    //Invoco la funcion contenida en su puntero
-    (*(simbol.data.func))();
+    simbol = getSimbol("import");
+
+    unsigned (*ptrFunc)() = simbol.data.func;
+    if (ptrFunc != NULL) {
+        (*(ptrFunc))();
+    } else {
+        printf("Error: El puntero a función es nulo.\n");
+    }
+
     free($1);
 }
 ;

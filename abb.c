@@ -138,7 +138,7 @@ void buscar_nodo(abb A, tipoclave cl, tipoelem *nodo) {
     if (comp == 0) { // cl == A->info
 
         *nodo = A->info;
-        
+
     } else if (comp < 0) { // cl < A->info
         buscar_nodo(A->izq, cl, nodo);
     } else { // cl > A->info
@@ -253,24 +253,49 @@ void modificar(abb A, tipoelem nodo) {
  */
 void _printTabla(abb *A){
 
+    tipoelem lect;
+
     if (!es_vacio(*A)) {
-        if (&(*A)->izq != NULL) {
             _printTabla(&(*A)->izq);
-            printf("\nLexema: %14s", (*A)->info.lexema);
-            printf("%15s: %-3d", "Codigo", (*A)->info.type);
-            printf("%18s: %d", "Inicializado", (*A)->info.initVal);
-            if ((*A)->info.type == ID_CONST || (*A)->info.type == ID_VAR) {
-                printf("%13s: %-7f", "Valor", (*A)->info.data.val);
+
+                leer(*A, &lect);
+
+                printf("\nLexema: %14s", lect.lexema);
+                printf("%15s: %-3d", "Codigo", lect.type);
+                printf("%18s: %d", "Inicializado", lect.initVal);
+            if (lect.type == ID_CONST || lect.type == ID_VAR) {
+                printf("%13s: %-7f", "Valor", lect.data.val);
             } else {
-                printf("%15s: %-3s", "Funcion", (*A)->info.lexema);
+                printf("%15s: %-3s", "Funcion", lect.lexema);
             }
-        }
 
 
 
-        if (&(*A)->der != NULL) {
             _printTabla(&(*A)->der);
-        }
+    }
+
+}
+
+/**
+ * Funcion que imprime las variables del arbol A
+ */
+void _printWorkspace(abb *A){
+
+    tipoelem lect;
+
+    if (!es_vacio(*A)) {
+
+            _printWorkspace(&(*A)->izq);
+
+            leer(*A, &lect);
+
+            if(lect.type == ID_VAR){
+                printf("\nLexema: %14s", lect.lexema);
+                printf("%15s: %-3d", "Codigo", lect.type);
+                printf("%18s: %d", "Inicializado", lect.initVal);
+                printf("%13s: %-7f", "Valor", lect.data.val);
+            }
+            _printWorkspace(&(*A)->der);
     }
 
 }
