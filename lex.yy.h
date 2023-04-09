@@ -12,5 +12,12 @@ void openFile(char *nombreArchivo);
  */
 void closeFile();
 
+/*
+ * Funcion encargada de cerrar la calculadora
+ */
+unsigned exitC();
+
+
+
 
 #endif /* DEFINITIONS_H_ */

@@ -15,7 +15,7 @@ unsigned clear();
 unsigned simbolos();
 unsigned load();
 unsigned import();
-unsigned exitC();
+
 
 
 
@@ -191,10 +191,5 @@ unsigned  load(){
 
 unsigned import(){
     printf("import ejecutado correctamente");
-    return 1;
-}
-
-unsigned exitC(){
-    printf("exit ejecutado correctamente");
     return 1;
 }

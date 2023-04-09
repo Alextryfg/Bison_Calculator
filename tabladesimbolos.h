@@ -78,7 +78,6 @@ unsigned clear();
 unsigned simbolos();
 unsigned load();
 unsigned import();
-unsigned exitC();
 
 
 #endif	// TABLADESIMBOLOS_H

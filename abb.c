@@ -225,6 +225,7 @@ void suprimir(abb *A, tipoelem E) {
     }
 }
 
+
 /* Funcion privada para pasar la clave y no tener que
    extraerla del nodo en las llamadas recursivas.*/
 void _modificar(abb A, tipoclave cl, tipoelem nodo) {
@@ -310,15 +311,19 @@ void _clearWorkspace(abb *A){
     
         if (!es_vacio(*A)) {
     
-                _clearWorkspace(&(*A)->izq);
-    
-                leer(*A, &lect);
-    
-                if(lect.type == ID_VAR){
-                    suprimir(A, lect);
-                }
+            _clearWorkspace(&(*A)->izq);
+            _clearWorkspace(&(*A)->der);
+
+            leer(*A, &lect);
+
+            if(lect.type == ID_VAR){
+                //elimino el nodo
+                suprimir(A, lect);
+
                 
-                _clearWorkspace(&(*A)->der);
+            }
+
+            
         }
     
 }

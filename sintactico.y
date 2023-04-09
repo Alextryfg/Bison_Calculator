@@ -56,13 +56,15 @@
 %token <str> TOKEN_SIMBOLOS
 %token <str> TOKEN_LOAD
 %token <str> TOKEN_IMPORT
+%token <str> TOKEN_ERROR
 
 
 /* Simbolos no terminales */
 
 %type <val> exp
-%type <val> assign
 %type <str> command
+%type <val> assign
+
 
 /*
 
@@ -89,6 +91,7 @@ start
 | start INICIO
 ;
 
+
 INICIO
 : '\n'
 {
@@ -99,15 +102,35 @@ INICIO
     value($1);
     prompt();
 }
+| command '\n'
+{
+    prompt();
+}
 | assign '\n'
 {
     value($1);
     prompt();
 }
-| command '\n'
-{
+| exp ';' '\n'
+{   
+    print = 0;
+    value($1);
     prompt();
 }
+| assign ';' '\n'
+{   
+    print = 0;
+    value($1);
+    prompt();
+}
+| TOKEN_ERROR '\n'
+{
+    printf("Error: Caracter no reconocido\n");
+    prompt();
+}
+;
+
+
 
 exp
 : TOKEN_NUM  
@@ -152,11 +175,191 @@ exp
 { 
     $$ = $2;
 }
+| exp '<' exp       
+{ 
+    $$ = $1 < $3;
+    if(!fail){
+        if($$ == 1){
+            printf("true\n");
+        }else{
+            printf("false\n");
+        }
+        
+    }
+    print = 0;
+    fail = 0;
+}
+| exp '>' exp       
+{ 
+    $$ = $1 > $3;
+    if(!fail){
+        if($$ == 1){
+            printf("true\n");
+        }else{
+            printf("false\n");
+        }
+        
+    }
+    print = 0;
+    fail = 0;
+
+}
 ;
 
-assign
-//COMO HAGO PARA PODER ASIGNAR EXPRESIONES A VARIABLES?
 
+command
+: TOKEN_WORKSPACE
+{
+
+    if(!fail){
+
+        simbol = getSimbol("workspace");
+
+        unsigned (*ptrFunc)() = simbol.data.func;
+        if (ptrFunc != NULL) {
+            (*(ptrFunc))();
+        } else {
+            printf("Error: El puntero a función es nulo.\n");
+        }
+
+    }
+    
+    fail = 0;
+
+    
+
+}
+| TOKEN_EXIT
+{
+
+
+    if(!fail){
+
+        simbol = getSimbol("exit");
+
+        unsigned (*ptrFunc)() = simbol.data.func;
+        if (ptrFunc != NULL) {
+            (*(ptrFunc))();
+            printf("Saliendo del programa...\n");
+        } else {
+            printf("Error: El puntero a función es nulo.\n");
+        }
+
+        return 1;
+
+    }
+
+    fail = 0;
+
+}
+| TOKEN_CLEAR_WORKSPACE
+{
+
+    if(!fail){
+
+        simbol = getSimbol("clear");
+
+        unsigned (*ptrFunc)() = simbol.data.func;
+        if (ptrFunc != NULL) {
+            (*(ptrFunc))();
+        } else {
+            printf("Error: El puntero a función es nulo.\n");
+        }
+
+    }
+
+    fail = 0;
+
+}
+| TOKEN_SIMBOLOS
+{
+    
+        if(!fail){
+    
+            simbol = getSimbol("simbolos");
+    
+            unsigned (*ptrFunc)() = simbol.data.func;
+            if (ptrFunc != NULL) {
+                (*(ptrFunc))();
+            } else {
+                printf("Error: El puntero a función es nulo.\n");
+            }
+    
+        }
+
+        fail = 0;
+    
+
+}
+| TOKEN_LOAD '(' TOKEN_FILE ')'
+{
+    if(!fail){
+
+        simbol = getSimbol("load");
+
+        unsigned (*ptrFunc)(char *) = simbol.data.func;
+        if (ptrFunc != NULL) {
+            (*(ptrFunc))($3);
+        } else {
+            printf("Error: El puntero a función es nulo.\n");
+        }
+
+    }
+
+    fail = 0;
+}
+| TOKEN_IMPORT '(' TOKEN_VARIABLE ')'
+{
+    if(!fail){
+
+        simbol = getSimbol("import");
+
+        unsigned (*ptrFunc)(char *) = simbol.data.func;
+        if (ptrFunc != NULL) {
+            (*(ptrFunc))($3);
+        } else {
+            printf("Error: El puntero a función es nulo.\n");
+        }
+
+    }
+    fail = 0;
+}
+| TOKEN_HELP
+{
+    if(!fail){
+
+        simbol = getSimbol("help");
+
+        unsigned (*ptrFunc)() = simbol.data.func;
+        if (ptrFunc != NULL) {
+            (*(ptrFunc))();
+        } else {
+            printf("Error: El puntero a función es nulo.\n");
+        }
+
+    }
+    fail = 0;
+}
+| TOKEN_IMPORT
+{
+    if(!fail){
+        printf("Error: No se ha especificado el nombre del archivo a importar\n");
+        print = 0;
+        fail = 1;
+    }
+} 
+| TOKEN_LOAD
+{
+    if(!fail){
+        printf("Error: No se ha especificado el nombre del archivo a cargar\n");
+        print = 0;
+        fail = 1;
+    }
+}
+;
+
+
+assign
 : TOKEN_VARIABLE '=' exp 
 {   
 
@@ -183,95 +386,24 @@ assign
     $$ = $3;
 
 }
-/*
-| TOKEN_CONSTANTE '=' exp 
-{   
-
+| TOKEN_VARIABLE '=' command
+{
     if(!fail){
-        
-        printf("Error: No se puede asignar un valor a una constante\n");
+        printf("Error: No se puede asignar una funcion a una variable o constante\n");
         print = 0;
-
+        fail = 1;
     }
-    
-    fail = 0;
-    $$ = $3;
-
 }
-*/
+
 ;
 
 
-command
-: TOKEN_WORKSPACE
-{
 
-    simbol = getSimbol("workspace");
 
-    unsigned (*ptrFunc)() = simbol.data.func;
-    if (ptrFunc != NULL) {
-        (*(ptrFunc))();
-    } else {
-        printf("Error: El puntero a función es nulo.\n");
-    }
 
-    //free($1);
-}
-| TOKEN_CLEAR_WORKSPACE
-{
 
-    //MIRAR SI FALLA AQUI!!
-    simbol = getSimbol("clear");
 
-    unsigned (*ptrFunc)() = simbol.data.func;
-    if (ptrFunc != NULL) {
-        (*(ptrFunc))();
-    } else {
-        printf("Error: El puntero a función es nulo.\n");
-    }
 
-    free($1);
-}
-| TOKEN_SIMBOLOS
-{
-    simbol = getSimbol("simbolos");
-
-    unsigned (*ptrFunc)() = simbol.data.func;
-    if (ptrFunc != NULL) {
-        (*(ptrFunc))();
-    } else {
-        printf("Error: El puntero a función es nulo.\n");
-    }
-
-    free($1);
-}
-| TOKEN_LOAD '(' TOKEN_FILE ')'
-{
-    simbol = getSimbol("load");
-
-    unsigned (*ptrFunc)() = simbol.data.func;
-    if (ptrFunc != NULL) {
-        (*(ptrFunc))();
-    } else {
-        printf("Error: El puntero a función es nulo.\n");
-    }
-
-    free($1);
-}
-| TOKEN_IMPORT '(' TOKEN_VARIABLE ')'
-{
-    simbol = getSimbol("import");
-
-    unsigned (*ptrFunc)() = simbol.data.func;
-    if (ptrFunc != NULL) {
-        (*(ptrFunc))();
-    } else {
-        printf("Error: El puntero a función es nulo.\n");
-    }
-
-    free($1);
-}
-;
 
 %%
 

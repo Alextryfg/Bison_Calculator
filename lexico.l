@@ -20,7 +20,7 @@ SPACES [ \t\r]+
 
 VARIABLE {ALFA}({ALFA}|{DIGIT})*
 
-OPERADORESSIMPLES (\(|\)|\*|\+|\-|\/|\;|\,|\<|\>|\^|\=)
+OPERADORESSIMPLES (\(|\)|\*|\+|\-|\/|\;|\<|\>|\^|\=)
 
 MAS_IGUAL                     \+=
 MENOS_IGUAL                   \-=
@@ -49,7 +49,7 @@ LIB <{ALFA|DIGIT}+\.h>
 
 {SPACES}
 
-"exit"              {yylex_destroy();yyterminate();}
+"exit"              {return (TOKEN_EXIT);}
 
 "simbolos"          {return (TOKEN_SIMBOLOS);}
 
@@ -90,7 +90,7 @@ LIB <{ALFA|DIGIT}+\.h>
 
 {OPERADORESSIMPLES} {return ((int)*yytext);}
 
-.                   {perror("Caracter no reconocido");}
+.*                   {return (TOKEN_ERROR);}
 
 <<EOF>>             {yyrestart(yyin); return (EOF);}
 
@@ -111,4 +111,10 @@ void openFile(char *nombreArchivo){
 void closeFile(){
     fclose(yyin);
     yylex_destroy();
+}
+
+unsigned exitC(){
+    yylex_destroy();
+    yyterminate();
+    return 1;
 }
