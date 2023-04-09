@@ -58,6 +58,16 @@ int findSimbolType(char* lex);
 void printTablaSimbolos();
 
 /*
+ * Funcion que imprime el workspace, invocando a la recursiva de abb.h
+ */
+void printWorkspace();
+
+/*
+ * Funcion que limpia el workspace
+ */
+void clearWorkspace();
+
+/*
 *
 */
 void welcome();

@@ -219,6 +219,8 @@ command
 }
 | TOKEN_CLEAR_WORKSPACE
 {
+
+    //MIRAR SI FALLA AQUI!!
     simbol = getSimbol("clear");
 
     unsigned (*ptrFunc)() = simbol.data.func;

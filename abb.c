@@ -299,3 +299,26 @@ void _printWorkspace(abb *A){
     }
 
 }
+
+/**
+ * Borra todas las variables del arbol A
+ * @param A
+ */
+void _clearWorkspace(abb *A){
+    
+        tipoelem lect;
+    
+        if (!es_vacio(*A)) {
+    
+                _clearWorkspace(&(*A)->izq);
+    
+                leer(*A, &lect);
+    
+                if(lect.type == ID_VAR){
+                    suprimir(A, lect);
+                }
+                
+                _clearWorkspace(&(*A)->der);
+        }
+    
+}

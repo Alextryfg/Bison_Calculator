@@ -59,6 +59,8 @@ LIB <{ALFA|DIGIT}+\.h>
 
 "import"            {return (TOKEN_IMPORT);}
 
+"clear"             {return (TOKEN_CLEAR_WORKSPACE);}
+
 {BREAK_LINE}        {return ((int)*yytext);}
 
 {INTEGER}           {

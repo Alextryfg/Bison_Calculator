@@ -133,11 +133,23 @@ void printTablaSimbolos(){
     printf("\n════════════════════════════════════════════════════════════════════════════════════════════════\n");
 }
 
+/*
+ * Funcion que imprime el workspace, invocando a la recursiva de abb.h
+ */
 void printWorkspace(){
     printf("═══════════════════════════════Workspace════════════════════════════════════════════════════════");
     _printWorkspace(&tablaSimbolos);
     printf("\n════════════════════════════════════════════════════════════════════════════════════════════════\n");
 }
+
+/*
+ * Funcion que limpia el workspace
+ */
+void clearWorkspace(){
+    _clearWorkspace(&tablaSimbolos);
+}
+
+
 
 /*
  * Print de bienvenida
@@ -162,12 +174,13 @@ unsigned  help(){
 }
 
 unsigned  clear(){
-    system("clear");
+    clearWorkspace();
+    printf("Workspace limpiado correctamente\n");
     return 1;
 }
 
 unsigned  simbolos(){
-    printf("simbolos ejecutado correctamente");
+    printTablaSimbolos();
     return 1;
 }
 

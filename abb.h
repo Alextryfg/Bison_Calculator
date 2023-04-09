@@ -115,6 +115,12 @@ void _printTabla(abb *A);
  */
 void _printWorkspace(abb *A);
 
+/**
+ * Borra todas las variables del arbol A
+ * @param A
+ */
+void _clearWorkspace(abb *A);
+
 
 #endif	// ABB_H
 
