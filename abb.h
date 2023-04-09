@@ -14,8 +14,7 @@ typedef struct{
     int initVal; //flag para saber si el token esta inicializado
     union{
         float val; //valor del token
-        double (*func)(); //funcion del token
-        void (*funcVoid)(); //funcion del token
+        unsigned (*func)(); //funcion del token
     }data;
 }tipoelem;
 

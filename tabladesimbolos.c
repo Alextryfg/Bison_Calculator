@@ -9,12 +9,13 @@
 abb tablaSimbolos;
 
 /* Creamos los prototipos de funciones para ser detectadas por initialC */
-double workspace();
-double help();
-double clear();
-double simbolos();
-double load();
-double import();
+unsigned workspace();
+unsigned help();
+unsigned clear();
+unsigned simbolos();
+unsigned load();
+unsigned import();
+unsigned exitC();
 
 
 
@@ -78,8 +79,8 @@ void insertarSimbolo(char* lex, double val){
  * Funcion de actualizacion del valor de un simbolo
  */
 void actualizarSimbolo(char* lex, double val){
-    tipoelem s = {lex, ID_VAR, .data.val = val};
-    modificar (tablaSimbolos, s);
+    tipoelem s = {lex, ID_VAR, .data.val = val, .initVal = 1};
+    modificar(tablaSimbolos, s);
     
 }
 
@@ -87,7 +88,7 @@ void actualizarSimbolo(char* lex, double val){
  * Funcion encargada de obtener el valor de un simbolo
  */
 double obtenerValorSimbolo(char* lex){
-    tipoelem s = {};
+    tipoelem s;
     buscar_nodo(tablaSimbolos, lex , &s);
     if(s.lexema != NULL){
         return s.data.val;
@@ -95,12 +96,19 @@ double obtenerValorSimbolo(char* lex){
     return 0;
 }
 
+tipoelem getSimbol(char* lex){
+    tipoelem s;
+    s.lexema = NULL;
+    buscar_nodo(tablaSimbolos, lex , &s);
+    return s;
+}
+
 /*
  * Funcion encargada de encontrar un lexema dentro de el arbol. Si el elemento no esta en la tablaSimbolos, se introducirá
  */
 int findSimbolType(char* lex){
 
-    tipoelem s = {};
+    tipoelem s;
     //Se busca el nodo por medio del lexema almacenandolo en s
     buscar_nodo(tablaSimbolos, lex , &s);
 
@@ -137,34 +145,37 @@ void welcome(){
 
 /* Funciones que se invocaran cuando FLEX detecte las palabras clave.*/
 
-double workspace(){
+unsigned workspace(){
     printf("workspace ejecutado correctamente");
-    printTablaSimbolos();
-    return 0;
+    return 1;
 }
 
-double help(){
+unsigned  help(){
     printf("Help ejecutado correctamente");
-    return 0;
+    return 1;
 }
 
-double clear(){
+unsigned  clear(){
     system("clear");
-    return 0;
+    return 1;
 }
 
-double simbolos(){
+unsigned  simbolos(){
     printf("simbolos ejecutado correctamente");
-    printTablaSimbolos();
-    return 0;
+    return 1;
 }
 
-double load(){
+unsigned  load(){
     printf("load ejecutado correctamente");
-    return 0;
+    return 1;
 }
 
-double import(){
+unsigned import(){
     printf("import ejecutado correctamente");
-    return 0;
+    return 1;
+}
+
+unsigned exitC(){
+    printf("exit ejecutado correctamente");
+    return 1;
 }

@@ -844,10 +844,10 @@ case 8:
 YY_RULE_SETUP
 #line 64 "lexico.l"
 {
-                    /* Covertimos el string a su valor numérico y lo metemos en la estructura definida en bison  */
-                    yylval.val=atoi(yytext);
-                    /* Devolvemos el token correspondiente */
-                    return (TOKEN_NUM);
+                        /* Covertimos el string a su valor numérico y lo metemos en la estructura definida en bison  */
+                        yylval.val=atoi(yytext);
+                        /* Devolvemos el token correspondiente */
+                        return (TOKEN_NUM);
                     }
 	YY_BREAK
 case 9:
@@ -855,80 +855,81 @@ YY_RULE_SETUP
 #line 71 "lexico.l"
 {   
                         yylval.str = strdup(yytext);
+
                         /* Devolvemos el token correspondiente */
                         return (TOKEN_VARIABLE);   
                     }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 77 "lexico.l"
+#line 78 "lexico.l"
 {return (TOKEN_MAS_IGUAL);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 78 "lexico.l"
+#line 79 "lexico.l"
 {return (TOKEN_MENOS_IGUAL);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 79 "lexico.l"
+#line 80 "lexico.l"
 {return (TOKEN_MULT_IGUAL);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 80 "lexico.l"
+#line 81 "lexico.l"
 {return (TOKEN_DIV_IGUAL);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 81 "lexico.l"
+#line 82 "lexico.l"
 {return (TOKEN_IGUAL_IGUAL);}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 82 "lexico.l"
+#line 83 "lexico.l"
 {return (TOKEN_MAYOR_IGUAL);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 83 "lexico.l"
+#line 84 "lexico.l"
 {return (TOKEN_MENOR_IGUAL);}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 84 "lexico.l"
+#line 85 "lexico.l"
 {return (TOKEN_DIFERENTE_IGUAL);}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 85 "lexico.l"
+#line 86 "lexico.l"
 {return (TOKEN_MAS_MAS);}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 86 "lexico.l"
+#line 87 "lexico.l"
 {return (TOKEN_MENOS_MENOS);}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 88 "lexico.l"
+#line 89 "lexico.l"
 {return ((int)*yytext);}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 90 "lexico.l"
+#line 91 "lexico.l"
 {perror("Caracter no reconocido");}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 92 "lexico.l"
+#line 93 "lexico.l"
 {yyrestart(yyin); return (EOF);}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 95 "lexico.l"
+#line 96 "lexico.l"
 ECHO;
 	YY_BREAK
-#line 932 "lex.yy.c"
+#line 933 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1902,7 +1903,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 95 "lexico.l"
+#line 96 "lexico.l"
 
 
 /* Estas seran nuestras funciones personales que se volcarán automaticamente en el archivo lex.yy.c */
@@ -1914,11 +1915,6 @@ void openFile(char *nombreArchivo){
         errorD(1);
     }
     yyin = archivo;
-}
-
-double exitC(){
-    yylex_destroy();
-    return 0;
 }
 
 void closeFile(){

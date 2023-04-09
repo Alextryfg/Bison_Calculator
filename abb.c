@@ -136,8 +136,9 @@ void buscar_nodo(abb A, tipoclave cl, tipoelem *nodo) {
     int comp = _comparar_clave_elem(cl, A->info);
 
     if (comp == 0) { // cl == A->info
-        *nodo = A->info;
 
+        *nodo = A->info;
+        
     } else if (comp < 0) { // cl < A->info
         buscar_nodo(A->izq, cl, nodo);
     } else { // cl > A->info
@@ -158,11 +159,7 @@ void insertar(abb *A, tipoelem E) {
         if (*A) {
             (*A)->info.lexema[strlen(E.lexema)] = '\0';
             (*A)->info.type = E.type;
-            if(E.type == ID_CONST || E.type == ID_VAR){
-                (*A)->info.data.val = E.data.val;
-            }else if(E.type == ID_FUNC){
-                (*A)->info.data.func = E.data.func;
-            }
+            (*A)->info.data = E.data;
             (*A)->info.initVal = 1;
             (*A)->izq = NULL;
             (*A)->der = NULL;

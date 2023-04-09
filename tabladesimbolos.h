@@ -41,6 +41,12 @@ void actualizarSimbolo(char* lex, double val);
 double obtenerValorSimbolo(char* lex);
 
 /*
+ * Funcion encargada de obtener el tipo de un simbolo
+ * @param lex es el lexema del simbolo
+ */
+tipoelem getSimbol(char* lex);
+
+/*
  * Funcion encargada de encontrar un lexema dentro de el arbol. Si el elemento no esta en la tablaSimbolos, se introducirá
  * @return el codigo del simbolo
  */
@@ -56,12 +62,13 @@ void printTablaSimbolos();
 */
 void welcome();
 
-double workspace();
-double help();
-double clear();
-double simbolos();
-double load();
-double import();
+unsigned workspace();
+unsigned help();
+unsigned clear();
+unsigned simbolos();
+unsigned load();
+unsigned import();
+unsigned exitC();
 
 
 #endif	// TABLADESIMBOLOS_H

@@ -61,15 +61,16 @@ LIB <{ALFA|DIGIT}+\.h>
 
 {BREAK_LINE}        {return ((int)*yytext);}
 
-{INTEGER}             {
-                    /* Covertimos el string a su valor numérico y lo metemos en la estructura definida en bison  */
-                    yylval.val=atoi(yytext);
-                    /* Devolvemos el token correspondiente */
-                    return (TOKEN_NUM);
+{INTEGER}           {
+                        /* Covertimos el string a su valor numérico y lo metemos en la estructura definida en bison  */
+                        yylval.val=atoi(yytext);
+                        /* Devolvemos el token correspondiente */
+                        return (TOKEN_NUM);
                     }
 
 {VARIABLE}          {   
                         yylval.str = strdup(yytext);
+
                         /* Devolvemos el token correspondiente */
                         return (TOKEN_VARIABLE);   
                     }
@@ -103,11 +104,6 @@ void openFile(char *nombreArchivo){
         errorD(1);
     }
     yyin = archivo;
-}
-
-double exitC(){
-    yylex_destroy();
-    return 0;
 }
 
 void closeFile(){

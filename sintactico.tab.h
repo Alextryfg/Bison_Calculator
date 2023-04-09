@@ -56,24 +56,26 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     TOKEN_NUM = 258,               /* TOKEN_NUM  */
     TOKEN_VARIABLE = 259,          /* TOKEN_VARIABLE  */
-    TOKEN_MAS_IGUAL = 260,         /* TOKEN_MAS_IGUAL  */
-    TOKEN_MENOS_IGUAL = 261,       /* TOKEN_MENOS_IGUAL  */
-    TOKEN_MULT_IGUAL = 262,        /* TOKEN_MULT_IGUAL  */
-    TOKEN_DIV_IGUAL = 263,         /* TOKEN_DIV_IGUAL  */
-    TOKEN_IGUAL_IGUAL = 264,       /* TOKEN_IGUAL_IGUAL  */
-    TOKEN_MAYOR_IGUAL = 265,       /* TOKEN_MAYOR_IGUAL  */
-    TOKEN_MENOR_IGUAL = 266,       /* TOKEN_MENOR_IGUAL  */
-    TOKEN_DIFERENTE_IGUAL = 267,   /* TOKEN_DIFERENTE_IGUAL  */
-    TOKEN_MAS_MAS = 268,           /* TOKEN_MAS_MAS  */
-    TOKEN_MENOS_MENOS = 269,       /* TOKEN_MENOS_MENOS  */
-    TOKEN_EXIT = 270,              /* TOKEN_EXIT  */
-    TOKEN_WORKSPACE = 271,         /* TOKEN_WORKSPACE  */
-    TOKEN_HELP = 272,              /* TOKEN_HELP  */
-    TOKEN_CLEAR_WORKSPACE = 273,   /* TOKEN_CLEAR_WORKSPACE  */
-    TOKEN_SIMBOLOS = 274,          /* TOKEN_SIMBOLOS  */
-    TOKEN_LOAD = 275,              /* TOKEN_LOAD  */
-    TOKEN_IMPORT = 276,            /* TOKEN_IMPORT  */
-    NEG = 277                      /* NEG  */
+    TOKEN_CONSTANTE = 260,         /* TOKEN_CONSTANTE  */
+    TOKEN_FILE = 261,              /* TOKEN_FILE  */
+    TOKEN_MAS_IGUAL = 262,         /* TOKEN_MAS_IGUAL  */
+    TOKEN_MENOS_IGUAL = 263,       /* TOKEN_MENOS_IGUAL  */
+    TOKEN_MULT_IGUAL = 264,        /* TOKEN_MULT_IGUAL  */
+    TOKEN_DIV_IGUAL = 265,         /* TOKEN_DIV_IGUAL  */
+    TOKEN_IGUAL_IGUAL = 266,       /* TOKEN_IGUAL_IGUAL  */
+    TOKEN_MAYOR_IGUAL = 267,       /* TOKEN_MAYOR_IGUAL  */
+    TOKEN_MENOR_IGUAL = 268,       /* TOKEN_MENOR_IGUAL  */
+    TOKEN_DIFERENTE_IGUAL = 269,   /* TOKEN_DIFERENTE_IGUAL  */
+    TOKEN_MAS_MAS = 270,           /* TOKEN_MAS_MAS  */
+    TOKEN_MENOS_MENOS = 271,       /* TOKEN_MENOS_MENOS  */
+    TOKEN_EXIT = 272,              /* TOKEN_EXIT  */
+    TOKEN_WORKSPACE = 273,         /* TOKEN_WORKSPACE  */
+    TOKEN_HELP = 274,              /* TOKEN_HELP  */
+    TOKEN_CLEAR_WORKSPACE = 275,   /* TOKEN_CLEAR_WORKSPACE  */
+    TOKEN_SIMBOLOS = 276,          /* TOKEN_SIMBOLOS  */
+    TOKEN_LOAD = 277,              /* TOKEN_LOAD  */
+    TOKEN_IMPORT = 278,            /* TOKEN_IMPORT  */
+    NEG = 279                      /* NEG  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -82,12 +84,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 24 "sintactico.y"
+#line 26 "sintactico.y"
 
     double val;
     char *str;
 
-#line 91 "sintactico.tab.h"
+#line 93 "sintactico.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

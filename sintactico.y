@@ -9,6 +9,8 @@
     #include "tabladesimbolos.h"
     #include "lex.yy.h"
 
+    tipoelem simbol = {};
+    int fail = 0;
     void yyerror(char *s);  /* prototipo de la función de error  */
     extern int yylex(void); /* Esto se utilizará desde otros archivos por eso lleva el extern */
     int yywrap();       /* Esto se utilizará desde otros archivos por eso lleva el extern */
@@ -32,6 +34,8 @@
 
 %token <val> TOKEN_NUM
 %token <str> TOKEN_VARIABLE
+%token <str> TOKEN_CONSTANTE
+%token <str> TOKEN_FILE
 %token TOKEN_MAS_IGUAL
 %token TOKEN_MENOS_IGUAL
 %token TOKEN_MULT_IGUAL
@@ -109,13 +113,17 @@ exp
 : TOKEN_NUM  
 | TOKEN_VARIABLE 
 {   
-    if(existeSimbolo($1)){
-        $$ = obtenerValorSimbolo($1);
+    simbol = getSimbol($1);
+
+    if(simbol.lexema != NULL){
+        $$ = simbol.data.val;
     }else{
-        printf("Error: La variable '%s' no ha sido declarada\n", $1);
+        printf("Error: La variable no ha sido declarada\n");
         print = 0;
+        fail = 1;
     }
-}            
+
+}           
 | exp '+' exp       
 { 
     $$ = $1 + $3;
@@ -151,72 +159,91 @@ assign
 
 : TOKEN_VARIABLE '=' exp 
 {   
-    if(isdigit($3) == 0){
-        printf("$3 es una variable\n");
-    }else{
-        printf("$3 es un numero\n");
-    }
 
-    
-    if(strcmp($1, "pi") == 0 || strcmp($1, "e") == 0){
-        printf("Error: No se puede asignar un valor a las constantes\n");
+    simbol = getSimbol($1);
+
+    if(simbol.type == ID_CONST){
+        printf("Error: No se puede asignar un valor a una constante\n");
         print = 0;
-    }else if(!existeSimbolo($1)){
-        insertarSimbolo($1, $3);
-    }else{
-        actualizarSimbolo($1, $3);
+        fail = 1;
     }
+    
+    if(!fail){
+        
+        if(!existeSimbolo($1)){
+            insertarSimbolo($1, $3);
+        }else{
+            actualizarSimbolo($1, $3);
+        }
+
+    }
+    
+    
+    fail = 0;
     $$ = $3;
 
 }
-
-| TOKEN_VARIABLE '=' TOKEN_VARIABLE
+/*
+| TOKEN_CONSTANTE '=' exp 
 {   
-    if(!existeSimbolo($1) && !existeSimbolo($3)){ //Si las variables no existen se crean y se le asigna el valor de la variable 3
 
-        printf("Error: Las variables no han sido declaradas\n");
-        print = 0;
+    if(!fail){
         
-    }else if(!existeSimbolo($1)){ //Si la vaiable uno no existe se crea y se le asigna el valor de la variable 3
-
-        insertarSimbolo($1, obtenerValorSimbolo($3));
-        $$ = obtenerValorSimbolo($3);
-
-    }else if(!existeSimbolo($3)){ //Si la variable 3 no existe se imprime un error
-
-        printf("Error: La variable '%s' no ha sido declarada", $3);
+        printf("Error: No se puede asignar un valor a una constante\n");
         print = 0;
 
-    }else{ //Si la variable 1 existe se actualiza con el valor de la variable 2
-
-        actualizarSimbolo($1, obtenerValorSimbolo($3));
-        $$ = obtenerValorSimbolo($3);
     }
     
+    fail = 0;
+    $$ = $3;
+
 }
+*/
 ;
 
 
 command
 : TOKEN_WORKSPACE
 {
-    printTablaSimbolos();
+
+    simbol = getSimbol("workspace");
+
+    printf("El directorio de trabajo es: %s\n", simbol.lexema);
+    printf("La funcion es: %p\n", simbol.data.func);
+
+    unsigned (*ptrFunc)() = simbol.data.func;
+    if (ptrFunc != NULL) {
+        (*(ptrFunc))();
+    } else {
+        printf("Error: El puntero a función es nulo.\n");
+    }
+
+    free($1);
 }
 | TOKEN_CLEAR_WORKSPACE
 {
-    //limpiarTablaSimbolos();
+    simbol = getSimbol($1);
+    //Invoco la funcion contenida en su puntero
+    (*(simbol.data.func))();
+    free($1);
 }
 | TOKEN_SIMBOLOS
 {
     printTablaSimbolos();
 }
-| TOKEN_LOAD '(' TOKEN_VARIABLE ')'
+| TOKEN_LOAD '(' TOKEN_FILE ')'
 {
-    printf("Cargando archivo...\n");
+    simbol = getSimbol($1);
+    //Invoco la funcion contenida en su puntero
+    (*(simbol.data.func))();
+    free($1);
 }
 | TOKEN_IMPORT '(' TOKEN_VARIABLE ')'
 {
-    printf("Importando archivo...\n");
+    simbol = getSimbol($1);
+    //Invoco la funcion contenida en su puntero
+    (*(simbol.data.func))();
+    free($1);
 }
 ;
 
