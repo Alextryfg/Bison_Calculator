@@ -1,13 +1,14 @@
 #ifndef DEFINICIONS_H_
 #define DEFINITIONS_H_
 
-
+/* Tipos de datos*/
 #define ID_VAR 300
 #define ID_FUNC 301
 #define ID_FUNCVOID 302
 #define ID_CONST 303
 #define ID_NUM 304
 
+/* Errores posibles */
 
 /* Comandos especiales */
 #define ID_EXIT 400

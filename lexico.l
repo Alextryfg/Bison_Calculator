@@ -36,13 +36,16 @@ MENOS_MENOS                   \-\-
 
 EXPONENCIAL [eE][+-]?{DIGIT}+
 
-FLOAT {DIGIT}*\.{DIGIT}+({EXPONENCIAL})?|\.{DIGIT}+({EXPONENCIAL})?
+FLOAT {DIGIT}+[.]{DIGIT}*{EXPONENCIAL}?|\.{DIGIT}{EXPONENCIAL}?|{DIGIT}{EXPONENCIAL}
 
 INTEGER {DIGIT}+
 
 FILE ({ALFA|DIGIT}+\.)*{ALFA|DIGIT}+
 
 LIB <{ALFA|DIGIT}+\.h>
+
+NUMBER {FLOAT}|{INTEGER}
+
 
 
 %%
@@ -63,16 +66,15 @@ LIB <{ALFA|DIGIT}+\.h>
 
 {BREAK_LINE}        {return ((int)*yytext);}
 
-{INTEGER}           {
+{NUMBER}           {
                         /* Covertimos el string a su valor numérico y lo metemos en la estructura definida en bison  */
-                        yylval.val=atoi(yytext);
+                        yylval.val=atof(yytext);
                         /* Devolvemos el token correspondiente */
                         return (TOKEN_NUM);
                     }
 
 {VARIABLE}          {   
                         yylval.str = strdup(yytext);
-
                         /* Devolvemos el token correspondiente */
                         return (TOKEN_VARIABLE);   
                     }
@@ -90,7 +92,7 @@ LIB <{ALFA|DIGIT}+\.h>
 
 {OPERADORESSIMPLES} {return ((int)*yytext);}
 
-.*                   {return (TOKEN_ERROR);}
+.                   {return (TOKEN_ERROR);}
 
 <<EOF>>             {yyrestart(yyin); return (EOF);}
 

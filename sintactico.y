@@ -18,6 +18,7 @@
     void value(double val);       /* Prototipo de la función value para imprimir resultados*/
     double potencia(double base, double exponente);    /* Prototipo de la función potencia */
     int print = 1;      /* Variable que indica si se debe imprimir el resultado de la operación */
+    int isnan(double x);    /* Prototipo de la función isnan */
 
 %}
 
@@ -108,6 +109,10 @@ INICIO
 }
 | assign '\n'
 {
+    if(isnan($1) || isnan(-$1)){
+        print=0;
+        printf("Error: El resultado es NaN\n");
+    }
     value($1);
     prompt();
 }
@@ -143,25 +148,42 @@ exp
     }else{
         printf("Error: La variable no ha sido declarada\n");
         print = 0;
-        fail = 1;
     }
 
 }           
 | exp '+' exp       
 { 
     $$ = $1 + $3;
+    if(isnan($$)){
+        print = 0;
+    }
 }
 | exp '-' exp       
 { 
     $$ = $1 - $3;
+    if(isnan($$)){
+        print = 0;
+    }
 }
 | exp '*' exp       
 { 
     $$ = $1 * $3;
+    if(isnan($$)){
+        print = 0;
+    }
 }
 | exp '/' exp       
 { 
+    
     $$ = $1 / $3;
+    //Caso de nan y -nan
+    if(isnan($$)){
+        print = 0;
+    }
+    if($3 == 0){
+        printf("Error: Division entre 0\n");
+        print = 0;
+    }
 }
 | '-' exp %prec NEG 
 { 
@@ -170,6 +192,10 @@ exp
 | exp '^' exp       
 { 
     $$ = potencia($1, $3);
+    if(isnan($$)){
+        printf("Error: El resultado es un NaN\n");
+        print = 0;
+    }
 }
 | '(' exp ')'       
 { 
@@ -203,6 +229,146 @@ exp
     print = 0;
     fail = 0;
 
+}
+| exp TOKEN_IGUAL_IGUAL exp       
+{ 
+    $$ = $1 == $3;
+    if(!fail){
+        if($$ == 1){
+            printf("true\n");
+        }else{
+            printf("false\n");
+        }
+        
+    }
+    print = 0;
+    fail = 0;
+}
+| exp TOKEN_MAYOR_IGUAL exp       
+{ 
+    $$ = $1 >= $3;
+    if(!fail){
+        if($$ == 1){
+            printf("true\n");
+        }else{
+            printf("false\n");
+        }
+        
+    }
+    print = 0;
+    fail = 0;
+}
+| exp TOKEN_MENOR_IGUAL exp       
+{ 
+    $$ = $1 <= $3;
+    if(!fail){
+        if($$ == 1){
+            printf("true\n");
+        }else{
+            printf("false\n");
+        }
+        
+    }
+    print = 0;
+    fail = 0;
+}
+| exp TOKEN_DIFERENTE_IGUAL exp       
+{ 
+    $$ = $1 != $3;
+    if(!fail){
+        if($$ == 1){
+            printf("true\n");
+        }else{
+            printf("false\n");
+        }
+        
+    }
+    print = 0;
+    fail = 0;
+}
+| TOKEN_VARIABLE TOKEN_MAS_MAS
+{
+    simbol = getSimbol($1);
+
+    if(simbol.lexema != NULL){
+        $$ = simbol.data.val;
+        $$++;
+        actualizarSimbolo($1, $$);
+    }else{
+        printf("Error: La variable no ha sido declarada1\n");
+        print = 0;
+        fail = 1;
+    }
+}
+| TOKEN_VARIABLE TOKEN_MENOS_MENOS
+{
+    simbol = getSimbol($1);
+
+    if(simbol.lexema != NULL){
+        $$ = simbol.data.val;
+        $$--;
+        actualizarSimbolo($1, $$);
+    }else{
+        printf("Error: La variable no ha sido declarada2\n");
+        print = 0;
+        fail = 1;
+    }
+}
+| TOKEN_VARIABLE TOKEN_DIV_IGUAL exp
+{
+    simbol = getSimbol($1);
+
+    if(simbol.lexema != NULL){
+        $$ = simbol.data.val;
+        $$ /= $3;
+        actualizarSimbolo($1, $$);
+    }else{
+        printf("Error: La variable no ha sido declarada3\n");
+        print = 0;
+        fail = 1;
+    }
+}
+| TOKEN_VARIABLE TOKEN_MULT_IGUAL exp
+{
+    simbol = getSimbol($1);
+
+    if(simbol.lexema != NULL){
+        $$ = simbol.data.val;
+        $$ *= $3;
+        actualizarSimbolo($1, $$);
+    }else{
+        printf("Error: La variable no ha sido declarada4\n");
+        print = 0;
+        fail = 1;
+    }
+}
+| TOKEN_VARIABLE TOKEN_MAS_IGUAL exp
+{
+    simbol = getSimbol($1);
+
+    if(simbol.lexema != NULL){
+        $$ = simbol.data.val;
+        $$ += $3;
+        actualizarSimbolo($1, $$);
+    }else{
+        printf("Error: La variable no ha sido declarada5\n");
+        print = 0;
+        fail = 1;
+    }
+}
+| TOKEN_VARIABLE TOKEN_MENOS_IGUAL exp
+{
+    simbol = getSimbol($1);
+
+    if(simbol.lexema != NULL){
+        $$ = simbol.data.val;
+        $$ -= $3;
+        actualizarSimbolo($1, $$);
+    }else{
+        printf("Error: La variable no ha sido declarada6\n");
+        print = 0;
+        fail = 1;
+    }
 }
 ;
 
@@ -365,13 +531,19 @@ assign
 
     simbol = getSimbol($1);
 
-    if(simbol.type == ID_CONST){
-        printf("Error: No se puede asignar un valor a una constante\n");
-        print = 0;
-        fail = 1;
-    }
-    
     if(!fail){
+
+        if(simbol.lexema != NULL){ 
+            if(simbol.type == ID_CONST){
+                printf("Error: No se puede asignar un valor a una constante2\n");
+                print = 0;
+                fail = 1;
+            }
+
+        }
+        
+    
+    
         
         if(!existeSimbolo($1)){
             insertarSimbolo($1, $3);
@@ -447,6 +619,10 @@ double potencia(double base, double exponente){
     }
 
     return resultado;
+}
+
+int isnan(double x){
+    return x != x;
 }
 
 
