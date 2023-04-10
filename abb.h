@@ -107,7 +107,7 @@ void modificar(abb A, tipoelem nodo);
  * Imprime todos los nodos del arbol A
  * @param A
  */
-void _printTabla(abb *A);
+void _printTabla(abb A);
 
 /**
  * Imprime las variables del arbol A

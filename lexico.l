@@ -36,11 +36,11 @@ MENOS_MENOS                   \-\-
 
 EXPONENCIAL [eE][+-]?{DIGIT}+
 
-FLOAT {DIGIT}+[.]{DIGIT}*{EXPONENCIAL}?|\.{DIGIT}{EXPONENCIAL}?|{DIGIT}{EXPONENCIAL}
+FLOAT {DIGIT}*[.]{DIGIT}*{EXPONENCIAL}?|\.{DIGIT}{EXPONENCIAL}?|{DIGIT}{EXPONENCIAL}
 
 INTEGER {DIGIT}+
 
-FILE ({ALFA|DIGIT}+\.)*{ALFA|DIGIT}+
+FILE {VARIABLE}\.{ALFA}+
 
 LIB <{ALFA|DIGIT}+\.h>
 
@@ -79,6 +79,12 @@ NUMBER {FLOAT}|{INTEGER}
                         return (TOKEN_VARIABLE);   
                     }
 
+{FILE}              {   
+                        yylval.str = strdup(yytext);
+                        /* Devolvemos el token correspondiente */
+                        return (TOKEN_FILE);   
+                    }
+
 {MAS_IGUAL}         {return (TOKEN_MAS_IGUAL);}
 {MENOS_IGUAL}       {return (TOKEN_MENOS_IGUAL);}
 {MULT_IGUAL}        {return (TOKEN_MULT_IGUAL);}
@@ -92,27 +98,25 @@ NUMBER {FLOAT}|{INTEGER}
 
 {OPERADORESSIMPLES} {return ((int)*yytext);}
 
-.                   {return (TOKEN_ERROR);}
+.                  {return (TOKEN_ERROR);}
 
-<<EOF>>             {yyrestart(yyin); return (EOF);}
+<<EOF>>             {fclose(yyin); yyrestart(stdin); return (TOKEN_EOF);}
 
 
 %%
 
 /* Estas seran nuestras funciones personales que se volcarán automaticamente en el archivo lex.yy.c */
 
-void openFile(char *nombreArchivo){
+unsigned load(char *nombreArchivo){
     FILE *archivo;
     archivo = fopen(nombreArchivo, "r");
     if(archivo == NULL){
-        errorD(1);
+        printf("Error al abrir el archivo %s \n", nombreArchivo);
+        yyin = stdin;
+        return 0;
     }
     yyin = archivo;
-}
-
-void closeFile(){
-    fclose(yyin);
-    yylex_destroy();
+    return 1;
 }
 
 unsigned exitC(){

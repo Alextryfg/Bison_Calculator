@@ -5,13 +5,7 @@
 /*
 * Funcion de inicializacion del sistema de entrada donde se abrira el archivo
 */
-void openFile(char *nombreArchivo);
-
-/*
- * Funcion encargada de cerrar el archivo y liberar memoria
- */
-void closeFile();
-
+unsigned load(char *nombreArchivo);
 /*
  * Funcion encargada de cerrar la calculadora
  */

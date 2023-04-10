@@ -19,6 +19,7 @@
     double potencia(double base, double exponente);    /* Prototipo de la función potencia */
     int print = 1;      /* Variable que indica si se debe imprimir el resultado de la operación */
     int isnan(double x);    /* Prototipo de la función isnan */
+    int loadPrint = 0;       /* Variable que indica si se debe cargar un archivo */
 
 %}
 
@@ -58,6 +59,7 @@
 %token <str> TOKEN_LOAD
 %token <str> TOKEN_IMPORT
 %token <str> TOKEN_ERROR
+%token <str> TOKEN_EOF
 
 
 /* Simbolos no terminales */
@@ -149,6 +151,8 @@ exp
         printf("Error: La variable no ha sido declarada\n");
         print = 0;
     }
+
+    free($1);
 
 }           
 | exp '+' exp       
@@ -295,10 +299,12 @@ exp
         $$++;
         actualizarSimbolo($1, $$);
     }else{
-        printf("Error: La variable no ha sido declarada1\n");
+        printf("Error: La variable no ha sido declarada\n");
         print = 0;
-        fail = 1;
     }
+
+    free($1);
+
 }
 | TOKEN_VARIABLE TOKEN_MENOS_MENOS
 {
@@ -309,10 +315,12 @@ exp
         $$--;
         actualizarSimbolo($1, $$);
     }else{
-        printf("Error: La variable no ha sido declarada2\n");
+        printf("Error: La variable no ha sido declarada\n");
         print = 0;
-        fail = 1;
     }
+
+    free($1);
+
 }
 | TOKEN_VARIABLE TOKEN_DIV_IGUAL exp
 {
@@ -323,10 +331,12 @@ exp
         $$ /= $3;
         actualizarSimbolo($1, $$);
     }else{
-        printf("Error: La variable no ha sido declarada3\n");
+        printf("Error: La variable no ha sido declarada\n");
         print = 0;
-        fail = 1;
     }
+
+    free($1);
+
 }
 | TOKEN_VARIABLE TOKEN_MULT_IGUAL exp
 {
@@ -337,10 +347,14 @@ exp
         $$ *= $3;
         actualizarSimbolo($1, $$);
     }else{
-        printf("Error: La variable no ha sido declarada4\n");
+        printf("Error: La variable no ha sido declarada\n");
         print = 0;
-        fail = 1;
     }
+
+
+    free($1);
+
+
 }
 | TOKEN_VARIABLE TOKEN_MAS_IGUAL exp
 {
@@ -351,10 +365,12 @@ exp
         $$ += $3;
         actualizarSimbolo($1, $$);
     }else{
-        printf("Error: La variable no ha sido declarada5\n");
+        printf("Error: La variable no ha sido declarada\n");
         print = 0;
-        fail = 1;
     }
+
+    free($1);
+
 }
 | TOKEN_VARIABLE TOKEN_MENOS_IGUAL exp
 {
@@ -365,10 +381,12 @@ exp
         $$ -= $3;
         actualizarSimbolo($1, $$);
     }else{
-        printf("Error: La variable no ha sido declarada6\n");
+        printf("Error: La variable no ha sido declarada\n");
         print = 0;
-        fail = 1;
     }
+
+    free($1);
+
 }
 ;
 
@@ -460,11 +478,12 @@ command
 | TOKEN_LOAD '(' TOKEN_FILE ')'
 {
     if(!fail){
-
+        
         simbol = getSimbol("load");
 
         unsigned (*ptrFunc)(char *) = simbol.data.func;
         if (ptrFunc != NULL) {
+            loadPrint = 1;
             (*(ptrFunc))($3);
         } else {
             printf("Error: El puntero a función es nulo.\n");
@@ -472,7 +491,9 @@ command
 
     }
 
+    free($3);
     fail = 0;
+
 }
 | TOKEN_IMPORT '(' TOKEN_VARIABLE ')'
 {
@@ -488,7 +509,9 @@ command
         }
 
     }
+
     fail = 0;
+
 }
 | TOKEN_HELP
 {
@@ -505,21 +528,29 @@ command
 
     }
     fail = 0;
+    //free($1);
 }
 | TOKEN_IMPORT
 {
     if(!fail){
         printf("Error: No se ha especificado el nombre del archivo a importar\n");
         print = 0;
-        fail = 1;
     }
+
 } 
 | TOKEN_LOAD
 {
     if(!fail){
         printf("Error: No se ha especificado el nombre del archivo a cargar\n");
         print = 0;
-        fail = 1;
+    }
+
+}
+| TOKEN_EOF
+{
+    if(!fail){
+        loadPrint = 0;
+        printf("Archivo cargado con exito");
     }
 }
 ;
@@ -529,13 +560,14 @@ assign
 : TOKEN_VARIABLE '=' exp 
 {   
 
+    //printf("entro a assign");
     simbol = getSimbol($1);
 
     if(!fail){
 
         if(simbol.lexema != NULL){ 
             if(simbol.type == ID_CONST){
-                printf("Error: No se puede asignar un valor a una constante2\n");
+                printf("Error: No se puede asignar un valor a una constante\n");
                 print = 0;
                 fail = 1;
             }
@@ -543,17 +575,21 @@ assign
         }
         
     
-    
-        
-        if(!existeSimbolo($1)){
-            insertarSimbolo($1, $3);
-        }else{
-            actualizarSimbolo($1, $3);
+        if(!fail){
+
+            if(!existeSimbolo($1)){
+                insertarSimbolo($1, $3);
+            }else{
+                actualizarSimbolo($1, $3);
+            }
+
         }
+        
+        
 
     }
     
-    
+    free($1);
     fail = 0;
     $$ = $3;
 
@@ -563,8 +599,9 @@ assign
     if(!fail){
         printf("Error: No se puede asignar una funcion a una variable o constante\n");
         print = 0;
-        fail = 1;
     }
+
+    free($1);
 }
 
 ;
@@ -589,7 +626,8 @@ int yywrap(){
 }
 
 void prompt(){
-    printf("$>");
+    if(!loadPrint)
+        printf("$>");
 }
 
 void value(double val){

@@ -76,7 +76,6 @@ unsigned workspace();
 unsigned help();
 unsigned clear();
 unsigned simbolos();
-unsigned load();
 unsigned import();
 
 

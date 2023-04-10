@@ -32,8 +32,8 @@ int _comparar_claves(tipoclave cl1, tipoclave cl2) {
 void _destruir_elem(tipoelem *E) {
     if(E != NULL){
         if (E->lexema != NULL) {//lexeme memory release
-            free((E)->lexema);
-            E->lexema = NULL;
+            free(E->lexema);
+            E = NULL;
         }
     }
 
@@ -53,29 +53,33 @@ void destruir(abb *A) {
     if (*A != NULL) {
         destruir(&(*A)->izq);
         destruir(&(*A)->der);
-        _destruir_elem(&((*A)->info));
+        if((*A)->info.lexema != NULL){
+            free((*A)->info.lexema);
+            (*A)->info.lexema = NULL;
+        }
     }
     free(*A);
     *A = NULL;
 }
 
 
+
 /*
 void destruir(abb *A) {
     if (es_vacio(*A)) {
-        A = (abb) malloc(sizeof (struct celda));
-        (*A)->info.lex = (char)malloc(sizeof(char) (strlen(E.lex) + 1));
-        strcpy((*A)->info.lex, E.lex);
+        *A = (abb) malloc(sizeof (struct celda));
+        (*A)->info.lexema = (char)malloc(sizeof(char) (strlen(E.lexema) + 1));
+        strcpy((*A)->info.lexema, E.lexema);
         if (*A) {
-            (*A)->info.lex[strlen(E.lex)] = '\0';
-            (*A)->info.codigo = E.;
+            (*A)->info.lexema[strlen(E.lex)] = '\0';
             (*A)->der = NULL;
             (*A)->der = NULL;
         }
     return;
     }
 }
- */
+*/
+
 
 
 
@@ -154,9 +158,9 @@ void buscar_nodo(abb A, tipoclave cl, tipoelem *nodo) {
 void insertar(abb *A, tipoelem E) {
     if (es_vacio(*A)) {
         *A = (abb) malloc(sizeof (struct celda));
-        (*A)->info.lexema = (char*)malloc(sizeof(char)*(strlen(E.lexema) + 1));
-        strcpy((*A)->info.lexema, E.lexema);
         if (*A) {
+            (*A)->info.lexema = (char*)malloc(sizeof(char)*(strlen(E.lexema) + 1));
+            strcpy((*A)->info.lexema, E.lexema);
             (*A)->info.lexema[strlen(E.lexema)] = '\0';
             (*A)->info.type = E.type;
             (*A)->info.data = E.data;
@@ -174,6 +178,8 @@ void insertar(abb *A, tipoelem E) {
     } else {
         insertar(&(*A)->izq, E);
     }
+
+    
 }
 
 /* Funcion privada que devuelve mínimo de subárbol dcho */
@@ -252,14 +258,14 @@ void modificar(abb A, tipoelem nodo) {
 /*
  * Funcion auxiliar recursiva de print de la tabla
  */
-void _printTabla(abb *A){
+void _printTabla(abb A){
 
     tipoelem lect;
 
-    if (!es_vacio(*A)) {
-            _printTabla(&(*A)->izq);
+    if (!es_vacio(A)) {
+            _printTabla(A->izq);
 
-                leer(*A, &lect);
+                leer(A, &lect);
 
                 printf("\nLexema: %14s", lect.lexema);
                 printf("%15s: %-3d", "Codigo", lect.type);
@@ -272,7 +278,7 @@ void _printTabla(abb *A){
 
 
 
-            _printTabla(&(*A)->der);
+            _printTabla(A->der);
     }
 
 }

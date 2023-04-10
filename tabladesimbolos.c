@@ -13,7 +13,6 @@ unsigned workspace();
 unsigned help();
 unsigned clear();
 unsigned simbolos();
-unsigned load();
 unsigned import();
 
 
@@ -73,6 +72,7 @@ int existeSimbolo(char* lex){
 void insertarSimbolo(char* lex, double val){
     tipoelem s = {lex, ID_VAR, .data.val = val};
     insertar(&tablaSimbolos,s);
+
 }
 
 /*
@@ -80,7 +80,8 @@ void insertarSimbolo(char* lex, double val){
  */
 void actualizarSimbolo(char* lex, double val){
     tipoelem s = {lex, ID_VAR, .data.val = val, .initVal = 1};
-    modificar(tablaSimbolos, s);
+    suprimir(&tablaSimbolos, s); //AQUI NO SE SUPRIME EL QUE ESTA EN LA TABLA, SE SUPRIME EL QUE SE LE PASA COMO PARAMETRO
+    insertar(&tablaSimbolos, s);
     
 }
 
@@ -129,7 +130,7 @@ int findSimbolType(char* lex){
  */
 void printTablaSimbolos(){
     printf("═══════════════════════════════TABLA DE SIMBOLOS════════════════════════════════════════════════");
-    _printTabla(&tablaSimbolos);
+    _printTabla(tablaSimbolos);
     printf("\n════════════════════════════════════════════════════════════════════════════════════════════════\n");
 }
 
@@ -181,11 +182,6 @@ unsigned  clear(){
 
 unsigned  simbolos(){
     printTablaSimbolos();
-    return 1;
-}
-
-unsigned  load(){
-    printf("load ejecutado correctamente");
     return 1;
 }
 

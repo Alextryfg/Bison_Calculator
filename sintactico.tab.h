@@ -76,7 +76,8 @@ extern int yydebug;
     TOKEN_LOAD = 277,              /* TOKEN_LOAD  */
     TOKEN_IMPORT = 278,            /* TOKEN_IMPORT  */
     TOKEN_ERROR = 279,             /* TOKEN_ERROR  */
-    NEG = 280                      /* NEG  */
+    TOKEN_EOF = 280,               /* TOKEN_EOF  */
+    NEG = 281                      /* NEG  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -85,12 +86,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 27 "sintactico.y"
+#line 28 "sintactico.y"
 
     double val;
     char *str;
 
-#line 94 "sintactico.tab.h"
+#line 95 "sintactico.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
