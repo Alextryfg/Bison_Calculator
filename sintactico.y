@@ -140,7 +140,6 @@ INICIO  /* Si hay ; no se imprime, en caso contrario si */
     /* No detectamos ningun token valido, por lo tanto llegamos al token terminal error */
     /* Se debe limpiar el buffer de entrada */
     yyclearin;
-    fail = 1;
 }
 ;
 
