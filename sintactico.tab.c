@@ -549,9 +549,9 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int16 yyrline[] =
 {
        0,    95,    95,    99,   104,   108,   113,   117,   126,   132,
-     138,   150,   151,   165,   172,   179,   186,   199,   203,   211,
-     215,   229,   244,   258,   272,   286,   300,   316,   332,   348,
-     366,   382,   398,   417,   445,   466,   474,   485,   522
+     138,   149,   150,   164,   171,   178,   185,   198,   202,   210,
+     214,   228,   243,   257,   271,   285,   299,   315,   331,   347,
+     365,   381,   397,   416,   444,   465,   473,   484,   521
 };
 #endif
 
@@ -1246,13 +1246,12 @@ yyreduce:
     /* No detectamos ningun token valido, por lo tanto llegamos al token terminal error */
     /* Se debe limpiar el buffer de entrada */
     yyclearin;
-    fail = 1;
 }
-#line 1252 "sintactico.tab.c"
+#line 1251 "sintactico.tab.c"
     break;
 
   case 12: /* exp: TOKEN_VARIABLE  */
-#line 152 "sintactico.y"
+#line 151 "sintactico.y"
 {   
     simbol = getSimbol((yyvsp[0].str));
 
@@ -1266,44 +1265,44 @@ yyreduce:
     free((yyvsp[0].str));
 
 }
-#line 1270 "sintactico.tab.c"
+#line 1269 "sintactico.tab.c"
     break;
 
   case 13: /* exp: exp '+' exp  */
-#line 166 "sintactico.y"
+#line 165 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) + (yyvsp[0].val);
     if(isnan((yyval.val))){
         print = 0;
     }
 }
-#line 1281 "sintactico.tab.c"
+#line 1280 "sintactico.tab.c"
     break;
 
   case 14: /* exp: exp '-' exp  */
-#line 173 "sintactico.y"
+#line 172 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) - (yyvsp[0].val);
     if(isnan((yyval.val))){
         print = 0;
     }
 }
-#line 1292 "sintactico.tab.c"
+#line 1291 "sintactico.tab.c"
     break;
 
   case 15: /* exp: exp '*' exp  */
-#line 180 "sintactico.y"
+#line 179 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) * (yyvsp[0].val);
     if(isnan((yyval.val))){
         print = 0;
     }
 }
-#line 1303 "sintactico.tab.c"
+#line 1302 "sintactico.tab.c"
     break;
 
   case 16: /* exp: exp '/' exp  */
-#line 187 "sintactico.y"
+#line 186 "sintactico.y"
 { 
     
     (yyval.val) = (yyvsp[-2].val) / (yyvsp[0].val);
@@ -1316,19 +1315,19 @@ yyreduce:
         print = 0;
     }
 }
-#line 1320 "sintactico.tab.c"
+#line 1319 "sintactico.tab.c"
     break;
 
   case 17: /* exp: '-' exp  */
-#line 200 "sintactico.y"
+#line 199 "sintactico.y"
 { 
     (yyval.val) = -(yyvsp[0].val);
 }
-#line 1328 "sintactico.tab.c"
+#line 1327 "sintactico.tab.c"
     break;
 
   case 18: /* exp: exp '^' exp  */
-#line 204 "sintactico.y"
+#line 203 "sintactico.y"
 { 
     (yyval.val) = potencia((yyvsp[-2].val), (yyvsp[0].val));
     if(isnan((yyval.val))){
@@ -1336,19 +1335,19 @@ yyreduce:
         print = 0;
     }
 }
-#line 1340 "sintactico.tab.c"
+#line 1339 "sintactico.tab.c"
     break;
 
   case 19: /* exp: '(' exp ')'  */
-#line 212 "sintactico.y"
+#line 211 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-1].val);
 }
-#line 1348 "sintactico.tab.c"
+#line 1347 "sintactico.tab.c"
     break;
 
   case 20: /* exp: exp '<' exp  */
-#line 216 "sintactico.y"
+#line 215 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) < (yyvsp[0].val);
     if(!fail){
@@ -1362,11 +1361,11 @@ yyreduce:
     print = 0;
     fail = 0;
 }
-#line 1366 "sintactico.tab.c"
+#line 1365 "sintactico.tab.c"
     break;
 
   case 21: /* exp: exp '>' exp  */
-#line 230 "sintactico.y"
+#line 229 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) > (yyvsp[0].val);
     if(!fail){
@@ -1381,11 +1380,11 @@ yyreduce:
     fail = 0;
 
 }
-#line 1385 "sintactico.tab.c"
+#line 1384 "sintactico.tab.c"
     break;
 
   case 22: /* exp: exp TOKEN_IGUAL_IGUAL exp  */
-#line 245 "sintactico.y"
+#line 244 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) == (yyvsp[0].val);
     if(!fail){
@@ -1399,11 +1398,11 @@ yyreduce:
     print = 0;
     fail = 0;
 }
-#line 1403 "sintactico.tab.c"
+#line 1402 "sintactico.tab.c"
     break;
 
   case 23: /* exp: exp TOKEN_MAYOR_IGUAL exp  */
-#line 259 "sintactico.y"
+#line 258 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) >= (yyvsp[0].val);
     if(!fail){
@@ -1417,11 +1416,11 @@ yyreduce:
     print = 0;
     fail = 0;
 }
-#line 1421 "sintactico.tab.c"
+#line 1420 "sintactico.tab.c"
     break;
 
   case 24: /* exp: exp TOKEN_MENOR_IGUAL exp  */
-#line 273 "sintactico.y"
+#line 272 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) <= (yyvsp[0].val);
     if(!fail){
@@ -1435,11 +1434,11 @@ yyreduce:
     print = 0;
     fail = 0;
 }
-#line 1439 "sintactico.tab.c"
+#line 1438 "sintactico.tab.c"
     break;
 
   case 25: /* exp: exp TOKEN_DIFERENTE_IGUAL exp  */
-#line 287 "sintactico.y"
+#line 286 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) != (yyvsp[0].val);
     if(!fail){
@@ -1453,11 +1452,11 @@ yyreduce:
     print = 0;
     fail = 0;
 }
-#line 1457 "sintactico.tab.c"
+#line 1456 "sintactico.tab.c"
     break;
 
   case 26: /* exp: TOKEN_VARIABLE TOKEN_MAS_MAS  */
-#line 301 "sintactico.y"
+#line 300 "sintactico.y"
 {
     simbol = getSimbol((yyvsp[-1].str));
 
@@ -1473,11 +1472,11 @@ yyreduce:
     free((yyvsp[-1].str));
 
 }
-#line 1477 "sintactico.tab.c"
+#line 1476 "sintactico.tab.c"
     break;
 
   case 27: /* exp: TOKEN_VARIABLE TOKEN_MENOS_MENOS  */
-#line 317 "sintactico.y"
+#line 316 "sintactico.y"
 {
     simbol = getSimbol((yyvsp[-1].str));
 
@@ -1493,11 +1492,11 @@ yyreduce:
     free((yyvsp[-1].str));
 
 }
-#line 1497 "sintactico.tab.c"
+#line 1496 "sintactico.tab.c"
     break;
 
   case 28: /* exp: TOKEN_VARIABLE TOKEN_DIV_IGUAL exp  */
-#line 333 "sintactico.y"
+#line 332 "sintactico.y"
 {
     simbol = getSimbol((yyvsp[-2].str));
 
@@ -1513,11 +1512,11 @@ yyreduce:
     free((yyvsp[-2].str));
 
 }
-#line 1517 "sintactico.tab.c"
+#line 1516 "sintactico.tab.c"
     break;
 
   case 29: /* exp: TOKEN_VARIABLE TOKEN_MULT_IGUAL exp  */
-#line 349 "sintactico.y"
+#line 348 "sintactico.y"
 {
     simbol = getSimbol((yyvsp[-2].str));
 
@@ -1535,11 +1534,11 @@ yyreduce:
 
 
 }
-#line 1539 "sintactico.tab.c"
+#line 1538 "sintactico.tab.c"
     break;
 
   case 30: /* exp: TOKEN_VARIABLE TOKEN_MAS_IGUAL exp  */
-#line 367 "sintactico.y"
+#line 366 "sintactico.y"
 {
     simbol = getSimbol((yyvsp[-2].str));
 
@@ -1555,11 +1554,11 @@ yyreduce:
     free((yyvsp[-2].str));
 
 }
-#line 1559 "sintactico.tab.c"
+#line 1558 "sintactico.tab.c"
     break;
 
   case 31: /* exp: TOKEN_VARIABLE TOKEN_MENOS_IGUAL exp  */
-#line 383 "sintactico.y"
+#line 382 "sintactico.y"
 {
     simbol = getSimbol((yyvsp[-2].str));
 
@@ -1575,11 +1574,11 @@ yyreduce:
     free((yyvsp[-2].str));
 
 }
-#line 1579 "sintactico.tab.c"
+#line 1578 "sintactico.tab.c"
     break;
 
   case 32: /* exp: TOKEN_FUNC '(' exp ')'  */
-#line 399 "sintactico.y"
+#line 398 "sintactico.y"
 {   
     simbol = getSimbol((yyvsp[-3].str));
 
@@ -1593,11 +1592,11 @@ yyreduce:
 
     free((yyvsp[-3].str));
 }
-#line 1597 "sintactico.tab.c"
+#line 1596 "sintactico.tab.c"
     break;
 
   case 33: /* command: TOKEN_COMMAND1  */
-#line 418 "sintactico.y"
+#line 417 "sintactico.y"
 {
 
     if(!fail){
@@ -1625,11 +1624,11 @@ yyreduce:
     
 
 }
-#line 1629 "sintactico.tab.c"
+#line 1628 "sintactico.tab.c"
     break;
 
   case 34: /* command: TOKEN_COMMAND2 '(' TOKEN_FILE ')'  */
-#line 446 "sintactico.y"
+#line 445 "sintactico.y"
 {
     if(!fail){
         
@@ -1650,11 +1649,11 @@ yyreduce:
     fail = 0;
 
 }
-#line 1654 "sintactico.tab.c"
+#line 1653 "sintactico.tab.c"
     break;
 
   case 35: /* command: TOKEN_COMMAND2  */
-#line 467 "sintactico.y"
+#line 466 "sintactico.y"
 {
     if(!fail){
         printf("Error: No se ha especificado el nombre del archivo a importar\n");
@@ -1662,22 +1661,22 @@ yyreduce:
     }
 
 }
-#line 1666 "sintactico.tab.c"
+#line 1665 "sintactico.tab.c"
     break;
 
   case 36: /* command: TOKEN_EOF  */
-#line 475 "sintactico.y"
+#line 474 "sintactico.y"
 {
     if(!fail){
         loadPrint = 0;
         printf("Archivo cargado con exito");
     }
 }
-#line 1677 "sintactico.tab.c"
+#line 1676 "sintactico.tab.c"
     break;
 
   case 37: /* assign: TOKEN_VARIABLE '=' exp  */
-#line 486 "sintactico.y"
+#line 485 "sintactico.y"
 {   
 
     //printf("entro a assign");
@@ -1714,24 +1713,24 @@ yyreduce:
     (yyval.val) = (yyvsp[0].val);
 
 }
-#line 1718 "sintactico.tab.c"
+#line 1717 "sintactico.tab.c"
     break;
 
   case 38: /* assign: TOKEN_VARIABLE '=' command  */
-#line 523 "sintactico.y"
+#line 522 "sintactico.y"
 {
     if(!fail){
-        printf("Error: No se puede asignar una funcion a una variable o constante\n");
+        yyerror("Error: No se puede asignar una funcion a una variable o constante\n");
         print = 0;
     }
 
     free((yyvsp[-2].str));
 }
-#line 1731 "sintactico.tab.c"
+#line 1730 "sintactico.tab.c"
     break;
 
 
-#line 1735 "sintactico.tab.c"
+#line 1734 "sintactico.tab.c"
 
       default: break;
     }
@@ -1924,7 +1923,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 542 "sintactico.y"
+#line 541 "sintactico.y"
 
 
 /* Función de error */

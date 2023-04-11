@@ -1,8 +1,7 @@
 #ifndef ERRORES_H_
 #define ERRORES_H_
-/*
- * Funcion de gestion de errores del Compilador
- */
-void errorD(int idCodigo);
+
+/*Función que indica la existencia de un error léxico*/
+void error_lexico(int linea);
 
 #endif /* ERRORES_H_ */

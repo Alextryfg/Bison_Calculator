@@ -521,7 +521,7 @@ assign
 | TOKEN_VARIABLE '=' command
 {
     if(!fail){
-        printf("Error: No se puede asignar una funcion a una variable o constante\n");
+        yyerror("Error: No se puede asignar una funcion a una variable o constante\n");
         print = 0;
     }
 
