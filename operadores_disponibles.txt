@@ -1,9 +1,0 @@
-Individuales -> () * + - / = ; , < > ^
-
-Dobles -> == ++ += -- -= *= /= >= <= != 
-
-ejemplos float : 1.0, 1.0e1, 1.0e-1, 1.0e+1 
-mas ejemplos float : .1, .1e1, .1e-1, .1e+1
-mas ejemplos float : 1., 1.e1, 1.e-1, 1.e+1
-mas ejemplos mayusculas: 1.0E1, 1.0E-1, 1.0E+1
-

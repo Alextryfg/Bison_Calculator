@@ -47,12 +47,6 @@ double obtenerValorSimbolo(char* lex);
 tipoelem getSimbol(char* lex);
 
 /*
- * Funcion encargada de encontrar un lexema dentro de el arbol. Si el elemento no esta en la tablaSimbolos, se introducirá
- * @return el codigo del simbolo
- */
-int findSimbolType(char* lex);
-
-/*
  * Funcion que imprime la tablaSimbolos, invocando a la recursiva de abb.h
  */
 void printTablaSimbolos();
@@ -68,15 +62,33 @@ void printWorkspace();
 void clearWorkspace();
 
 /*
-*
-*/
+ * Print de bienvenida
+ */
 void welcome();
 
-unsigned workspace();
-unsigned help();
-unsigned clear();
-unsigned simbolos();
-unsigned import();
+/* Funciones que se invocaran cuando FLEX detecte las palabras clave.*/
+
+/*
+* Funcion encargada de imprimir el workspace
+*/
+double workspace();
+
+/*
+* Funcion encargada de imprimir la ayuda
+*/
+double  help();
+
+
+/*
+* Funcion encargada de limpiar el workspace
+*/
+double  clear();
+
+
+/*
+* Funcion encargada de imprimir la tabla de simbolos
+*/
+double  simbolos();
 
 
 #endif	// TABLADESIMBOLOS_H

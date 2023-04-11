@@ -37,6 +37,7 @@
   "files.associations": {
     "sintactico.h": "c",
     "definiciones.h": "c",
-    "abb.h": "c"
+    "abb.h": "c",
+    "string.h": "c"
   }
 }

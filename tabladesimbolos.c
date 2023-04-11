@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "abb.h"
 #include "definiciones.h"
 #include "lex.yy.h"
@@ -9,11 +10,11 @@
 abb tablaSimbolos;
 
 /* Creamos los prototipos de funciones para ser detectadas por initialC */
-unsigned workspace();
-unsigned help();
-unsigned clear();
-unsigned simbolos();
-unsigned import();
+
+double workspace();
+double help();
+double clear();
+double simbolos();
 
 
 
@@ -21,15 +22,20 @@ unsigned import();
 /* En initialC, almacenare los distintos comandos especiales, de manera que alberguen un puntero a la función que invocarán */
 
 tipoelem initial[] = {
-    {"pi", ID_CONST, .data.val = 3.14159265358979},
-    {"e", ID_CONST, .data.val = 2.71828182845904},
+    {"pi", ID_CONST, .data.val = 3.14159265358979323846},
+    {"e", ID_CONST, .data.val = 2.71828182845904523536},
     {"exit", ID_EXIT, .data.func = exitC}, 
     {"workspace", ID_WORKSPACE, .data.func = workspace},
     {"help", ID_HELP, .data.func = help},
     {"clear", ID_CLEAR_WORKSPACE, .data.func = clear},
     {"simbolos", ID_SIMBOLOS, .data.func = simbolos},
     {"load", ID_LOAD, .data.func = load},
-    {"import", ID_IMPORT, .data.func = import},
+    {"sin", ID_FUNC, .data.func = sin},
+    {"cos", ID_FUNC, .data.func = cos},
+    {"tan", ID_FUNC, .data.func = tan},
+    {"sqrt", ID_FUNC, .data.func = sqrt},
+    {"exp", ID_FUNC, .data.func = exp},
+    {"log", ID_FUNC, .data.func= log},
     {NULL,0, .data.func = NULL}
     };
 
@@ -105,27 +111,6 @@ tipoelem getSimbol(char* lex){
 }
 
 /*
- * Funcion encargada de encontrar un lexema dentro de el arbol. Si el elemento no esta en la tablaSimbolos, se introducirá
- */
-int findSimbolType(char* lex){
-
-    tipoelem s;
-    //Se busca el nodo por medio del lexema almacenandolo en s
-    buscar_nodo(tablaSimbolos, lex , &s);
-
-    if(s.lexema != NULL){
-        //Si el nodo existe, se devuelve su codigo
-        free(lex);
-        return s.type;
-    }else{
-        // En caso de no existir, se crea
-        tipoelem new = {lex, ID_VAR, .data.val = 0};
-        insertar(&tablaSimbolos, new);
-        return new.type;
-    }
-}
-
-/*
  * Funcion que imprime la tablaSimbolos, invocando a la recursiva de abb.h
  */
 void printTablaSimbolos(){
@@ -138,7 +123,7 @@ void printTablaSimbolos(){
  * Funcion que imprime el workspace, invocando a la recursiva de abb.h
  */
 void printWorkspace(){
-    printf("═══════════════════════════════Workspace════════════════════════════════════════════════════════");
+    printf("═══════════════════════════════WORKSPACE════════════════════════════════════════════════════════");
     _printWorkspace(&tablaSimbolos);
     printf("\n════════════════════════════════════════════════════════════════════════════════════════════════\n");
 }
@@ -164,28 +149,49 @@ void welcome(){
 
 /* Funciones que se invocaran cuando FLEX detecte las palabras clave.*/
 
-unsigned workspace(){
+/*
+* Funcion encargada de imprimir el workspace
+*/
+double workspace(){
     printWorkspace();
     return 1;
 }
 
-unsigned  help(){
-    printf("Help ejecutado correctamente");
+/*
+* Funcion encargada de imprimir la ayuda
+*/
+double  help(){
+    FILE* archivo = fopen("ayuda.txt", "r");
+    if (archivo == NULL) {
+        printf("No se pudo abrir el archivo.\n");
+        return 1;
+    }
+    
+    char linea[150];
+    while (fgets(linea, 150, archivo) != NULL) {
+        printf("%s", linea);
+    }
+    
+    fclose(archivo);
+    return 0;
     return 1;
 }
 
-unsigned  clear(){
+
+/*
+* Funcion encargada de limpiar el workspace
+*/
+double  clear(){
     clearWorkspace();
     printf("Workspace limpiado correctamente\n");
     return 1;
 }
 
-unsigned  simbolos(){
-    printTablaSimbolos();
-    return 1;
-}
 
-unsigned import(){
-    printf("import ejecutado correctamente");
+/*
+* Funcion encargada de imprimir la tabla de simbolos
+*/
+double  simbolos(){
+    printTablaSimbolos();
     return 1;
 }

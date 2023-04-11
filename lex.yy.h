@@ -5,11 +5,11 @@
 /*
 * Funcion de inicializacion del sistema de entrada donde se abrira el archivo
 */
-unsigned load(char *nombreArchivo);
+double load(char *nombreArchivo);
 /*
  * Funcion encargada de cerrar la calculadora
  */
-unsigned exitC();
+double exitC();
 
 
 

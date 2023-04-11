@@ -1,0 +1,74 @@
+==========================================Autor y Programa==================================
+										           ║
+Programa: InterpreteBison								   ║
+Autor: Alex Fuentes									   ║
+											   ║									
+==========================================Utilidad==========================================
+
+Este programa permitira la realización de diferentes operaciones matematicas, además de 
+declaración de variables y llamadas a funciones del tipos seno, coseno, tangente ...etc.
+Cada operacion realizada mostrará su resultado, a nos ser que se concatene dicha opera-
+ción con un ';'.
+
+============================================================================================
+
+==========================================Compilacion y Ejecución===========================
+
+La carpeta principal del proyecto contiene un script de ejecución del programa. Este 
+podrá ser ejecutado mediante el comando 'bash compilar.sh'. A continuación, mediante
+el comando './calculadora' se ejecutará nuestro interprete, por lo que podremos comen-
+zar a probarlo.
+
+==========================================Comandos==========================================
+
+-"exit" Permitirá al usuario salir del programa.
+-"workspace" Imprime por pantalla las variable declaradas durante la ejecución.
+-"clear" Limpia el workspace.
+-"load(fichero)" Carga el fichero y realiza las operaciones que contiene.
+-"help" Muestra por pantalla un fichero con la ayuda.
+
+============================================================================================
+
+==========================================Operaciones Básicas===============================
+
+-Asignación =
+-Suma +
+-Resta -
+-Multiplicación *
+-División /
+-Potencia ^
+
+==========================================Combinaciones=====================================
+
+-Suma y Asignación +=
+-Resta y Asignación -=
+-Suma 1 ++
+-Resta 1 --
+
+==========================================Comparaciones=====================================
+
+-Mayor Igual >=
+-Menor Igual <=
+-Mayor que >
+-Menor que <
+
+============================================================================================
+
+==========================================Constantes========================================
+
+-"e" 2.718281828459045
+-"pi" 3.141592653589793
+
+============================================================================================
+
+==========================================Funciones Matemáticas=============================
+
+-tan() Tangente de un número
+-sin() Seno de un número
+-exp() Eleva e al valor entre parentesis
+-cos() Coseno de un número en radianes
+-log() Calcula el logaritmo neperiano
+-sqrt() Raíz cuadrada de un número
+
+============================================================================================
+

@@ -3,6 +3,7 @@
 #include "errores.h"
 #include "tabladesimbolos.h"
 #include "sintactico.tab.h"
+#include "lex.yy.h"
 %}
 
 %option noyywrap
@@ -46,23 +47,24 @@ LIB <{ALFA|DIGIT}+\.h>
 
 NUMBER {FLOAT}|{INTEGER}
 
+FUNC ("sin"|"cos"|"tan"|"sqrt"|"log"|"exp")
+
+COMMAND1 ("exit"|"simbolos"|"workspace"|"clear"|"help")
+
+COMMAND2 ("load")
+
 
 
 %%
 
 {SPACES}
 
-"exit"              {return (TOKEN_EXIT);}
+{COMMAND1}          { yylval.str = strdup(yytext); return (TOKEN_COMMAND1);}
 
-"simbolos"          {return (TOKEN_SIMBOLOS);}
+{COMMAND2}          {yylval.str = strdup(yytext); return (TOKEN_COMMAND2);}
 
-"workspace"         {return (TOKEN_WORKSPACE);}
+{FUNC}              { yylval.str = strdup(yytext); return (TOKEN_FUNC);}
 
-"load"              {return (TOKEN_LOAD);}
-
-"import"            {return (TOKEN_IMPORT);}
-
-"clear"             {return (TOKEN_CLEAR_WORKSPACE);}
 
 {BREAK_LINE}        {return ((int)*yytext);}
 
@@ -75,6 +77,7 @@ NUMBER {FLOAT}|{INTEGER}
 
 {VARIABLE}          {   
                         yylval.str = strdup(yytext);
+                            
                         /* Devolvemos el token correspondiente */
                         return (TOKEN_VARIABLE);   
                     }
@@ -98,7 +101,7 @@ NUMBER {FLOAT}|{INTEGER}
 
 {OPERADORESSIMPLES} {return ((int)*yytext);}
 
-.                  {return (TOKEN_ERROR);}
+.                   {return (TOKEN_ERROR);}
 
 <<EOF>>             {fclose(yyin); yyrestart(stdin); return (TOKEN_EOF);}
 
@@ -107,7 +110,7 @@ NUMBER {FLOAT}|{INTEGER}
 
 /* Estas seran nuestras funciones personales que se volcarán automaticamente en el archivo lex.yy.c */
 
-unsigned load(char *nombreArchivo){
+double load(char *nombreArchivo){
     FILE *archivo;
     archivo = fopen(nombreArchivo, "r");
     if(archivo == NULL){
@@ -119,7 +122,7 @@ unsigned load(char *nombreArchivo){
     return 1;
 }
 
-unsigned exitC(){
+double exitC(){
     yylex_destroy();
     yyterminate();
     return 1;

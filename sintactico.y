@@ -34,10 +34,15 @@
 
 %start start
 
+/* Tipos de variables */
+
 %token <val> TOKEN_NUM
 %token <str> TOKEN_VARIABLE
 %token <str> TOKEN_CONSTANTE
 %token <str> TOKEN_FILE
+
+/* Operaciones */
+
 %token TOKEN_MAS_IGUAL
 %token TOKEN_MENOS_IGUAL
 %token TOKEN_MULT_IGUAL
@@ -49,15 +54,15 @@
 %token TOKEN_MAS_MAS
 %token TOKEN_MENOS_MENOS
 
+/* Funciones matemáticas */
+
+%token <str> TOKEN_FUNC
+
 /* COMANDOS ESPECIALES */
 
-%token <str> TOKEN_EXIT
-%token <str> TOKEN_WORKSPACE
-%token <str> TOKEN_HELP
-%token <str> TOKEN_CLEAR_WORKSPACE
-%token <str> TOKEN_SIMBOLOS
-%token <str> TOKEN_LOAD
-%token <str> TOKEN_IMPORT
+%token <str> TOKEN_COMMAND1
+%token <str> TOKEN_COMMAND2
+
 %token <str> TOKEN_ERROR
 %token <str> TOKEN_EOF
 
@@ -87,7 +92,7 @@
 /* Definición de las reglas */
 
 start
-:   %empty /* Produccion vacia que se ejecutara cuando no hay ninguna linea d eentrada */
+:   %empty /* Produccion vacia que se ejecutara cuando no hay ninguna linea de entrada */
 {
     prompt();
 }
@@ -95,7 +100,7 @@ start
 ;
 
 
-INICIO
+INICIO  /* Si hay ; no se imprime, en caso contrario si */
 : '\n'
 {
     prompt();
@@ -130,10 +135,12 @@ INICIO
     value($1);
     prompt();
 }
-| TOKEN_ERROR '\n'
-{
-    printf("Error: Caracter no reconocido\n");
-    prompt();
+| error  /* El simbolo terminal error se reserva para la recuperacion de errores */
+{   
+    /* No detectamos ningun token valido, por lo tanto llegamos al token terminal error */
+    /* Se debe limpiar el buffer de entrada */
+    yyclearin;
+    fail = 1;
 }
 ;
 
@@ -388,100 +395,60 @@ exp
     free($1);
 
 }
+| TOKEN_FUNC '(' exp ')' 
+{   
+    simbol = getSimbol($1);
+
+        double (*ptrFunc)(double) = simbol.data.func;
+        if (ptrFunc != NULL) {
+            $$ = (*(ptrFunc))($3);
+        } else {
+            printf("Error: El puntero a función es nulo.\n");
+            print=0;
+        }
+
+    free($1);
+}
 ;
 
 
+
 command
-: TOKEN_WORKSPACE
+: TOKEN_COMMAND1
 {
 
     if(!fail){
 
-        simbol = getSimbol("workspace");
+        
+        simbol = getSimbol($1);
 
-        unsigned (*ptrFunc)() = simbol.data.func;
+        double (*ptrFunc)() = simbol.data.func;
         if (ptrFunc != NULL) {
             (*(ptrFunc))();
         } else {
             printf("Error: El puntero a función es nulo.\n");
         }
 
-    }
-    
-    fail = 0;
-
-    
-
-}
-| TOKEN_EXIT
-{
-
-
-    if(!fail){
-
-        simbol = getSimbol("exit");
-
-        unsigned (*ptrFunc)() = simbol.data.func;
-        if (ptrFunc != NULL) {
-            (*(ptrFunc))();
+        if(strcmp($1, "exit") == 0){
             printf("Saliendo del programa...\n");
-        } else {
-            printf("Error: El puntero a función es nulo.\n");
-        }
-
-        return 1;
-
-    }
-
-    fail = 0;
-
-}
-| TOKEN_CLEAR_WORKSPACE
-{
-
-    if(!fail){
-
-        simbol = getSimbol("clear");
-
-        unsigned (*ptrFunc)() = simbol.data.func;
-        if (ptrFunc != NULL) {
-            (*(ptrFunc))();
-        } else {
-            printf("Error: El puntero a función es nulo.\n");
+            return 1;
         }
 
     }
-
+    
     fail = 0;
+    free($1);
 
-}
-| TOKEN_SIMBOLOS
-{
-    
-        if(!fail){
-    
-            simbol = getSimbol("simbolos");
-    
-            unsigned (*ptrFunc)() = simbol.data.func;
-            if (ptrFunc != NULL) {
-                (*(ptrFunc))();
-            } else {
-                printf("Error: El puntero a función es nulo.\n");
-            }
-    
-        }
-
-        fail = 0;
     
 
 }
-| TOKEN_LOAD '(' TOKEN_FILE ')'
+| TOKEN_COMMAND2 '(' TOKEN_FILE ')'
 {
     if(!fail){
         
         simbol = getSimbol("load");
 
-        unsigned (*ptrFunc)(char *) = simbol.data.func;
+        double (*ptrFunc)(char *) = simbol.data.func;
         if (ptrFunc != NULL) {
             loadPrint = 1;
             (*(ptrFunc))($3);
@@ -491,46 +458,12 @@ command
 
     }
 
+    free($1);
     free($3);
     fail = 0;
 
 }
-| TOKEN_IMPORT '(' TOKEN_VARIABLE ')'
-{
-    if(!fail){
-
-        simbol = getSimbol("import");
-
-        unsigned (*ptrFunc)(char *) = simbol.data.func;
-        if (ptrFunc != NULL) {
-            (*(ptrFunc))($3);
-        } else {
-            printf("Error: El puntero a función es nulo.\n");
-        }
-
-    }
-
-    fail = 0;
-
-}
-| TOKEN_HELP
-{
-    if(!fail){
-
-        simbol = getSimbol("help");
-
-        unsigned (*ptrFunc)() = simbol.data.func;
-        if (ptrFunc != NULL) {
-            (*(ptrFunc))();
-        } else {
-            printf("Error: El puntero a función es nulo.\n");
-        }
-
-    }
-    fail = 0;
-    //free($1);
-}
-| TOKEN_IMPORT
+| TOKEN_COMMAND2
 {
     if(!fail){
         printf("Error: No se ha especificado el nombre del archivo a importar\n");
@@ -538,14 +471,6 @@ command
     }
 
 } 
-| TOKEN_LOAD
-{
-    if(!fail){
-        printf("Error: No se ha especificado el nombre del archivo a cargar\n");
-        print = 0;
-    }
-
-}
 | TOKEN_EOF
 {
     if(!fail){
@@ -627,7 +552,7 @@ int yywrap(){
 
 void prompt(){
     if(!loadPrint)
-        printf("$>");
+        printf("\033[32m$>\033[0m");
 }
 
 void value(double val){

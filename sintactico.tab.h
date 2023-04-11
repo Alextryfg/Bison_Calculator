@@ -68,16 +68,12 @@ extern int yydebug;
     TOKEN_DIFERENTE_IGUAL = 269,   /* TOKEN_DIFERENTE_IGUAL  */
     TOKEN_MAS_MAS = 270,           /* TOKEN_MAS_MAS  */
     TOKEN_MENOS_MENOS = 271,       /* TOKEN_MENOS_MENOS  */
-    TOKEN_EXIT = 272,              /* TOKEN_EXIT  */
-    TOKEN_WORKSPACE = 273,         /* TOKEN_WORKSPACE  */
-    TOKEN_HELP = 274,              /* TOKEN_HELP  */
-    TOKEN_CLEAR_WORKSPACE = 275,   /* TOKEN_CLEAR_WORKSPACE  */
-    TOKEN_SIMBOLOS = 276,          /* TOKEN_SIMBOLOS  */
-    TOKEN_LOAD = 277,              /* TOKEN_LOAD  */
-    TOKEN_IMPORT = 278,            /* TOKEN_IMPORT  */
-    TOKEN_ERROR = 279,             /* TOKEN_ERROR  */
-    TOKEN_EOF = 280,               /* TOKEN_EOF  */
-    NEG = 281                      /* NEG  */
+    TOKEN_FUNC = 272,              /* TOKEN_FUNC  */
+    TOKEN_COMMAND1 = 273,          /* TOKEN_COMMAND1  */
+    TOKEN_COMMAND2 = 274,          /* TOKEN_COMMAND2  */
+    TOKEN_ERROR = 275,             /* TOKEN_ERROR  */
+    TOKEN_EOF = 276,               /* TOKEN_EOF  */
+    NEG = 277                      /* NEG  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -91,7 +87,7 @@ union YYSTYPE
     double val;
     char *str;
 
-#line 95 "sintactico.tab.h"
+#line 91 "sintactico.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
