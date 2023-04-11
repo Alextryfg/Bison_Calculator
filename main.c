@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv) {
 
-
+    //valgrind --leak-check=full --show-leak-kinds=all  -s ./calculadora
     //Mensaje de bienvenida
     welcome();
     //Se inicializa la tabla de simbolos
