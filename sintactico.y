@@ -75,7 +75,6 @@
 
 
 /*
-
 %type <val> function
 */
 
@@ -118,7 +117,7 @@ INICIO  /* Si hay ; no se imprime, en caso contrario si */
 {
     if(isnan($1) || isnan(-$1)){
         print=0;
-        printf("Error: El resultado es NaN\n");
+        yyerror("Error: El resultado es NaN\n");
     }
     value($1);
     prompt();
@@ -154,7 +153,7 @@ exp
     if(simbol.lexema != NULL){
         $$ = simbol.data.val;
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -191,7 +190,7 @@ exp
         print = 0;
     }
     if($3 == 0){
-        printf("Error: Division entre 0\n");
+        yyerror("Error: Division entre 0\n");
         print = 0;
     }
 }
@@ -203,7 +202,7 @@ exp
 { 
     $$ = potencia($1, $3);
     if(isnan($$)){
-        printf("Error: El resultado es un NaN\n");
+        yyerror("Error: El resultado es un NaN\n");
         print = 0;
     }
 }
@@ -305,7 +304,7 @@ exp
         $$++;
         actualizarSimbolo($1, $$);
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -321,7 +320,7 @@ exp
         $$--;
         actualizarSimbolo($1, $$);
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -337,7 +336,7 @@ exp
         $$ /= $3;
         actualizarSimbolo($1, $$);
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -353,7 +352,7 @@ exp
         $$ *= $3;
         actualizarSimbolo($1, $$);
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -371,7 +370,7 @@ exp
         $$ += $3;
         actualizarSimbolo($1, $$);
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -387,7 +386,7 @@ exp
         $$ -= $3;
         actualizarSimbolo($1, $$);
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -402,7 +401,7 @@ exp
         if (ptrFunc != NULL) {
             $$ = (*(ptrFunc))($3);
         } else {
-            printf("Error: El puntero a función es nulo.\n");
+            yyerror("Error: El puntero a función es nulo.\n");
             print=0;
         }
 
@@ -425,11 +424,12 @@ command
         if (ptrFunc != NULL) {
             (*(ptrFunc))();
         } else {
-            printf("Error: El puntero a función es nulo.\n");
+            yyerror("Error: El puntero a función es nulo.\n");
         }
 
         if(strcmp($1, "exit") == 0){
             printf("Saliendo del programa...\n");
+            free($1);
             return 1;
         }
 
@@ -445,14 +445,14 @@ command
 {
     if(!fail){
         
-        simbol = getSimbol("load");
+        simbol = getSimbol($1);
 
         double (*ptrFunc)(char *) = simbol.data.func;
         if (ptrFunc != NULL) {
             loadPrint = 1;
             (*(ptrFunc))($3);
         } else {
-            printf("Error: El puntero a función es nulo.\n");
+            yyerror("Error: El puntero a función es nulo.\n");
         }
 
     }
@@ -465,16 +465,16 @@ command
 | TOKEN_COMMAND2
 {
     if(!fail){
-        printf("Error: No se ha especificado el nombre del archivo a importar\n");
+        yyerror("Error: No se ha especificado el nombre del archivo a importar\n");
         print = 0;
     }
+    free($1);
 
 } 
 | TOKEN_EOF
 {
     if(!fail){
         loadPrint = 0;
-        printf("Archivo cargado con exito");
     }
 }
 ;
@@ -491,7 +491,7 @@ assign
 
         if(simbol.lexema != NULL){ 
             if(simbol.type == ID_CONST){
-                printf("Error: No se puede asignar un valor a una constante\n");
+                yyerror("Error: No se puede asignar un valor a una constante\n");
                 print = 0;
                 fail = 1;
             }
@@ -542,7 +542,7 @@ assign
 
 /* Función de error */
 void yyerror(char *s){
-    printf("%s\n", s);
+    printf("%s", s);
 }
 
 int yywrap(){

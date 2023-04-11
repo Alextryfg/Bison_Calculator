@@ -16,9 +16,6 @@ double help();
 double clear();
 double simbolos();
 
-
-
-
 /* En initialC, almacenare los distintos comandos especiales, de manera que alberguen un puntero a la función que invocarán */
 
 tipoelem initial[] = {
@@ -160,11 +157,11 @@ double workspace(){
 /*
 * Funcion encargada de imprimir la ayuda
 */
-double  help(){
+double  help(){ 
     FILE* archivo = fopen("ayuda.txt", "r");
     if (archivo == NULL) {
         printf("No se pudo abrir el archivo.\n");
-        return 1;
+        return 0;
     }
     
     char linea[150];
@@ -173,8 +170,8 @@ double  help(){
     }
     
     fclose(archivo);
-    return 0;
     return 1;
+    
 }
 
 

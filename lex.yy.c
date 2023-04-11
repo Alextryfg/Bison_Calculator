@@ -538,10 +538,10 @@ char *yytext;
 #line 1 "lexico.l"
 #line 2 "lexico.l"
 #include "definiciones.h"
-#include "errores.h"
 #include "tabladesimbolos.h"
 #include "sintactico.tab.h"
 #include "lex.yy.h"
+void error_lexico(int linea);
 #line 546 "lex.yy.c"
 /*Opcion para que detecte la varibale yylval de Bison */
 /* Opcion para que no nos de el error de 'input' unused*/
@@ -844,7 +844,7 @@ YY_RULE_SETUP
 case 3:
 YY_RULE_SETUP
 #line 64 "lexico.l"
-{yylval.str = strdup(yytext); return (TOKEN_COMMAND2);}
+{ yylval.str = strdup(yytext); return (TOKEN_COMMAND2);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
@@ -1950,5 +1950,9 @@ double exitC(){
     yylex_destroy();
     yyterminate();
     return 1;
+}
+
+void error_lexico(int linea){
+    printf("Error lexico en la linea %d\n", linea);
 }
 

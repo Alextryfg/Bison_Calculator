@@ -1,8 +1,8 @@
 ==========================================Autor y Programa==================================
-										           ║
-Programa: InterpreteBison								   ║
-Autor: Alex Fuentes									   ║
-											   ║									
+										           
+Programa: InterpreteBison								   
+Autor: Alex Fuentes									   
+											   									
 ==========================================Utilidad==========================================
 
 Este programa permitira la realización de diferentes operaciones matematicas, además de 

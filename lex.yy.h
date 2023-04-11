@@ -11,7 +11,10 @@ double load(char *nombreArchivo);
  */
 double exitC();
 
-
+/*
+* Funcion encargada de imprimir el error lexico y su linea
+*/
+void error_lexico(int linea);
 
 
 #endif /* DEFINITIONS_H_ */

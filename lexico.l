@@ -1,9 +1,9 @@
 %{
 #include "definiciones.h"
-#include "errores.h"
 #include "tabladesimbolos.h"
 #include "sintactico.tab.h"
 #include "lex.yy.h"
+void error_lexico(int linea);
 %}
 
 %option noyywrap
@@ -61,7 +61,7 @@ COMMAND2 ("load")
 
 {COMMAND1}          { yylval.str = strdup(yytext); return (TOKEN_COMMAND1);}
 
-{COMMAND2}          {yylval.str = strdup(yytext); return (TOKEN_COMMAND2);}
+{COMMAND2}          { yylval.str = strdup(yytext); return (TOKEN_COMMAND2);}
 
 {FUNC}              { yylval.str = strdup(yytext); return (TOKEN_FUNC);}
 
@@ -126,4 +126,8 @@ double exitC(){
     yylex_destroy();
     yyterminate();
     return 1;
+}
+
+void error_lexico(int linea){
+    printf("Error lexico en la linea %d\n", linea);
 }

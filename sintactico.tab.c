@@ -548,10 +548,10 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    95,    95,    99,   104,   108,   113,   117,   126,   132,
-     138,   149,   150,   164,   171,   178,   185,   198,   202,   210,
-     214,   228,   243,   257,   271,   285,   299,   315,   331,   347,
-     365,   381,   397,   416,   444,   465,   473,   484,   521
+       0,    94,    94,    98,   103,   107,   112,   116,   125,   131,
+     137,   148,   149,   163,   170,   177,   184,   197,   201,   209,
+     213,   227,   242,   256,   270,   284,   298,   314,   330,   346,
+     364,   380,   396,   415,   444,   465,   474,   484,   521
 };
 #endif
 
@@ -1175,7 +1175,7 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* start: %empty  */
-#line 96 "sintactico.y"
+#line 95 "sintactico.y"
 {
     prompt();
 }
@@ -1183,7 +1183,7 @@ yyreduce:
     break;
 
   case 4: /* INICIO: '\n'  */
-#line 105 "sintactico.y"
+#line 104 "sintactico.y"
 {
     prompt();
 }
@@ -1191,7 +1191,7 @@ yyreduce:
     break;
 
   case 5: /* INICIO: exp '\n'  */
-#line 109 "sintactico.y"
+#line 108 "sintactico.y"
 {
     value((yyvsp[-1].val));
     prompt();
@@ -1200,7 +1200,7 @@ yyreduce:
     break;
 
   case 6: /* INICIO: command '\n'  */
-#line 114 "sintactico.y"
+#line 113 "sintactico.y"
 {
     prompt();
 }
@@ -1208,11 +1208,11 @@ yyreduce:
     break;
 
   case 7: /* INICIO: assign '\n'  */
-#line 118 "sintactico.y"
+#line 117 "sintactico.y"
 {
     if(isnan((yyvsp[-1].val)) || isnan(-(yyvsp[-1].val))){
         print=0;
-        printf("Error: El resultado es NaN\n");
+        yyerror("Error: El resultado es NaN\n");
     }
     value((yyvsp[-1].val));
     prompt();
@@ -1221,7 +1221,7 @@ yyreduce:
     break;
 
   case 8: /* INICIO: exp ';' '\n'  */
-#line 127 "sintactico.y"
+#line 126 "sintactico.y"
 {   
     print = 0;
     value((yyvsp[-2].val));
@@ -1231,7 +1231,7 @@ yyreduce:
     break;
 
   case 9: /* INICIO: assign ';' '\n'  */
-#line 133 "sintactico.y"
+#line 132 "sintactico.y"
 {   
     print = 0;
     value((yyvsp[-2].val));
@@ -1241,7 +1241,7 @@ yyreduce:
     break;
 
   case 10: /* INICIO: error  */
-#line 139 "sintactico.y"
+#line 138 "sintactico.y"
 {   
     /* No detectamos ningun token valido, por lo tanto llegamos al token terminal error */
     /* Se debe limpiar el buffer de entrada */
@@ -1251,14 +1251,14 @@ yyreduce:
     break;
 
   case 12: /* exp: TOKEN_VARIABLE  */
-#line 151 "sintactico.y"
+#line 150 "sintactico.y"
 {   
     simbol = getSimbol((yyvsp[0].str));
 
     if(simbol.lexema != NULL){
         (yyval.val) = simbol.data.val;
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -1269,7 +1269,7 @@ yyreduce:
     break;
 
   case 13: /* exp: exp '+' exp  */
-#line 165 "sintactico.y"
+#line 164 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) + (yyvsp[0].val);
     if(isnan((yyval.val))){
@@ -1280,7 +1280,7 @@ yyreduce:
     break;
 
   case 14: /* exp: exp '-' exp  */
-#line 172 "sintactico.y"
+#line 171 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) - (yyvsp[0].val);
     if(isnan((yyval.val))){
@@ -1291,7 +1291,7 @@ yyreduce:
     break;
 
   case 15: /* exp: exp '*' exp  */
-#line 179 "sintactico.y"
+#line 178 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) * (yyvsp[0].val);
     if(isnan((yyval.val))){
@@ -1302,7 +1302,7 @@ yyreduce:
     break;
 
   case 16: /* exp: exp '/' exp  */
-#line 186 "sintactico.y"
+#line 185 "sintactico.y"
 { 
     
     (yyval.val) = (yyvsp[-2].val) / (yyvsp[0].val);
@@ -1311,7 +1311,7 @@ yyreduce:
         print = 0;
     }
     if((yyvsp[0].val) == 0){
-        printf("Error: Division entre 0\n");
+        yyerror("Error: Division entre 0\n");
         print = 0;
     }
 }
@@ -1319,7 +1319,7 @@ yyreduce:
     break;
 
   case 17: /* exp: '-' exp  */
-#line 199 "sintactico.y"
+#line 198 "sintactico.y"
 { 
     (yyval.val) = -(yyvsp[0].val);
 }
@@ -1327,11 +1327,11 @@ yyreduce:
     break;
 
   case 18: /* exp: exp '^' exp  */
-#line 203 "sintactico.y"
+#line 202 "sintactico.y"
 { 
     (yyval.val) = potencia((yyvsp[-2].val), (yyvsp[0].val));
     if(isnan((yyval.val))){
-        printf("Error: El resultado es un NaN\n");
+        yyerror("Error: El resultado es un NaN\n");
         print = 0;
     }
 }
@@ -1339,7 +1339,7 @@ yyreduce:
     break;
 
   case 19: /* exp: '(' exp ')'  */
-#line 211 "sintactico.y"
+#line 210 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-1].val);
 }
@@ -1347,7 +1347,7 @@ yyreduce:
     break;
 
   case 20: /* exp: exp '<' exp  */
-#line 215 "sintactico.y"
+#line 214 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) < (yyvsp[0].val);
     if(!fail){
@@ -1365,7 +1365,7 @@ yyreduce:
     break;
 
   case 21: /* exp: exp '>' exp  */
-#line 229 "sintactico.y"
+#line 228 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) > (yyvsp[0].val);
     if(!fail){
@@ -1384,7 +1384,7 @@ yyreduce:
     break;
 
   case 22: /* exp: exp TOKEN_IGUAL_IGUAL exp  */
-#line 244 "sintactico.y"
+#line 243 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) == (yyvsp[0].val);
     if(!fail){
@@ -1402,7 +1402,7 @@ yyreduce:
     break;
 
   case 23: /* exp: exp TOKEN_MAYOR_IGUAL exp  */
-#line 258 "sintactico.y"
+#line 257 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) >= (yyvsp[0].val);
     if(!fail){
@@ -1420,7 +1420,7 @@ yyreduce:
     break;
 
   case 24: /* exp: exp TOKEN_MENOR_IGUAL exp  */
-#line 272 "sintactico.y"
+#line 271 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) <= (yyvsp[0].val);
     if(!fail){
@@ -1438,7 +1438,7 @@ yyreduce:
     break;
 
   case 25: /* exp: exp TOKEN_DIFERENTE_IGUAL exp  */
-#line 286 "sintactico.y"
+#line 285 "sintactico.y"
 { 
     (yyval.val) = (yyvsp[-2].val) != (yyvsp[0].val);
     if(!fail){
@@ -1456,7 +1456,7 @@ yyreduce:
     break;
 
   case 26: /* exp: TOKEN_VARIABLE TOKEN_MAS_MAS  */
-#line 300 "sintactico.y"
+#line 299 "sintactico.y"
 {
     simbol = getSimbol((yyvsp[-1].str));
 
@@ -1465,7 +1465,7 @@ yyreduce:
         (yyval.val)++;
         actualizarSimbolo((yyvsp[-1].str), (yyval.val));
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -1476,7 +1476,7 @@ yyreduce:
     break;
 
   case 27: /* exp: TOKEN_VARIABLE TOKEN_MENOS_MENOS  */
-#line 316 "sintactico.y"
+#line 315 "sintactico.y"
 {
     simbol = getSimbol((yyvsp[-1].str));
 
@@ -1485,7 +1485,7 @@ yyreduce:
         (yyval.val)--;
         actualizarSimbolo((yyvsp[-1].str), (yyval.val));
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -1496,7 +1496,7 @@ yyreduce:
     break;
 
   case 28: /* exp: TOKEN_VARIABLE TOKEN_DIV_IGUAL exp  */
-#line 332 "sintactico.y"
+#line 331 "sintactico.y"
 {
     simbol = getSimbol((yyvsp[-2].str));
 
@@ -1505,7 +1505,7 @@ yyreduce:
         (yyval.val) /= (yyvsp[0].val);
         actualizarSimbolo((yyvsp[-2].str), (yyval.val));
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -1516,7 +1516,7 @@ yyreduce:
     break;
 
   case 29: /* exp: TOKEN_VARIABLE TOKEN_MULT_IGUAL exp  */
-#line 348 "sintactico.y"
+#line 347 "sintactico.y"
 {
     simbol = getSimbol((yyvsp[-2].str));
 
@@ -1525,7 +1525,7 @@ yyreduce:
         (yyval.val) *= (yyvsp[0].val);
         actualizarSimbolo((yyvsp[-2].str), (yyval.val));
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -1538,7 +1538,7 @@ yyreduce:
     break;
 
   case 30: /* exp: TOKEN_VARIABLE TOKEN_MAS_IGUAL exp  */
-#line 366 "sintactico.y"
+#line 365 "sintactico.y"
 {
     simbol = getSimbol((yyvsp[-2].str));
 
@@ -1547,7 +1547,7 @@ yyreduce:
         (yyval.val) += (yyvsp[0].val);
         actualizarSimbolo((yyvsp[-2].str), (yyval.val));
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -1558,7 +1558,7 @@ yyreduce:
     break;
 
   case 31: /* exp: TOKEN_VARIABLE TOKEN_MENOS_IGUAL exp  */
-#line 382 "sintactico.y"
+#line 381 "sintactico.y"
 {
     simbol = getSimbol((yyvsp[-2].str));
 
@@ -1567,7 +1567,7 @@ yyreduce:
         (yyval.val) -= (yyvsp[0].val);
         actualizarSimbolo((yyvsp[-2].str), (yyval.val));
     }else{
-        printf("Error: La variable no ha sido declarada\n");
+        yyerror("Error: La variable no ha sido declarada\n");
         print = 0;
     }
 
@@ -1578,7 +1578,7 @@ yyreduce:
     break;
 
   case 32: /* exp: TOKEN_FUNC '(' exp ')'  */
-#line 398 "sintactico.y"
+#line 397 "sintactico.y"
 {   
     simbol = getSimbol((yyvsp[-3].str));
 
@@ -1586,7 +1586,7 @@ yyreduce:
         if (ptrFunc != NULL) {
             (yyval.val) = (*(ptrFunc))((yyvsp[-1].val));
         } else {
-            printf("Error: El puntero a función es nulo.\n");
+            yyerror("Error: El puntero a función es nulo.\n");
             print=0;
         }
 
@@ -1596,7 +1596,7 @@ yyreduce:
     break;
 
   case 33: /* command: TOKEN_COMMAND1  */
-#line 417 "sintactico.y"
+#line 416 "sintactico.y"
 {
 
     if(!fail){
@@ -1608,11 +1608,12 @@ yyreduce:
         if (ptrFunc != NULL) {
             (*(ptrFunc))();
         } else {
-            printf("Error: El puntero a función es nulo.\n");
+            yyerror("Error: El puntero a función es nulo.\n");
         }
 
         if(strcmp((yyvsp[0].str), "exit") == 0){
             printf("Saliendo del programa...\n");
+            free((yyvsp[0].str));
             return 1;
         }
 
@@ -1624,7 +1625,7 @@ yyreduce:
     
 
 }
-#line 1628 "sintactico.tab.c"
+#line 1629 "sintactico.tab.c"
     break;
 
   case 34: /* command: TOKEN_COMMAND2 '(' TOKEN_FILE ')'  */
@@ -1632,14 +1633,14 @@ yyreduce:
 {
     if(!fail){
         
-        simbol = getSimbol("load");
+        simbol = getSimbol((yyvsp[-3].str));
 
         double (*ptrFunc)(char *) = simbol.data.func;
         if (ptrFunc != NULL) {
             loadPrint = 1;
             (*(ptrFunc))((yyvsp[-1].str));
         } else {
-            printf("Error: El puntero a función es nulo.\n");
+            yyerror("Error: El puntero a función es nulo.\n");
         }
 
     }
@@ -1649,30 +1650,30 @@ yyreduce:
     fail = 0;
 
 }
-#line 1653 "sintactico.tab.c"
+#line 1654 "sintactico.tab.c"
     break;
 
   case 35: /* command: TOKEN_COMMAND2  */
 #line 466 "sintactico.y"
 {
     if(!fail){
-        printf("Error: No se ha especificado el nombre del archivo a importar\n");
+        yyerror("Error: No se ha especificado el nombre del archivo a importar\n");
         print = 0;
     }
+    free((yyvsp[0].str));
 
 }
-#line 1665 "sintactico.tab.c"
+#line 1667 "sintactico.tab.c"
     break;
 
   case 36: /* command: TOKEN_EOF  */
-#line 474 "sintactico.y"
+#line 475 "sintactico.y"
 {
     if(!fail){
         loadPrint = 0;
-        printf("Archivo cargado con exito");
     }
 }
-#line 1676 "sintactico.tab.c"
+#line 1677 "sintactico.tab.c"
     break;
 
   case 37: /* assign: TOKEN_VARIABLE '=' exp  */
@@ -1686,7 +1687,7 @@ yyreduce:
 
         if(simbol.lexema != NULL){ 
             if(simbol.type == ID_CONST){
-                printf("Error: No se puede asignar un valor a una constante\n");
+                yyerror("Error: No se puede asignar un valor a una constante\n");
                 print = 0;
                 fail = 1;
             }
@@ -1713,7 +1714,7 @@ yyreduce:
     (yyval.val) = (yyvsp[0].val);
 
 }
-#line 1717 "sintactico.tab.c"
+#line 1718 "sintactico.tab.c"
     break;
 
   case 38: /* assign: TOKEN_VARIABLE '=' command  */
@@ -1726,11 +1727,11 @@ yyreduce:
 
     free((yyvsp[-2].str));
 }
-#line 1730 "sintactico.tab.c"
+#line 1731 "sintactico.tab.c"
     break;
 
 
-#line 1734 "sintactico.tab.c"
+#line 1735 "sintactico.tab.c"
 
       default: break;
     }
@@ -1928,7 +1929,7 @@ yyreturnlab:
 
 /* Función de error */
 void yyerror(char *s){
-    printf("%s\n", s);
+    printf("%s", s);
 }
 
 int yywrap(){

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "tabladesimbolos.h"
-#include "errores.h"
 #include "lex.yy.h"
 #include "sintactico.tab.h"
 
