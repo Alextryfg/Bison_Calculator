@@ -8,4 +8,4 @@ Pasos para ejecutar:
 4. gcc -Wall *.c -o calculadora -lfl
 5. ./calculadora
 
-Todos estos pasos estan contenidos dentro del script 'compilar.sh' que se podra ejecutar por medio del comando 'bash compilar.sh'.
+Todos estos pasos estan contenidos dentro del script 'compilar.sh' que se podra ejecutar por medio del comando 'bash compilar.sh'. Una vez compilado, podremos probar a ejecutarlo mediante './calculadora <fichero>', siendo el fichero insertado opcional.
