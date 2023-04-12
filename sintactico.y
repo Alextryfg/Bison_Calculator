@@ -136,9 +136,7 @@ INICIO  /* Si hay ; no se imprime, en caso contrario si */
 }
 | error  /* El simbolo terminal error se reserva para la recuperacion de errores */
 {
-    /* Se debe limpiar el buffer de entrada */
-    yyclearin;
-    
+    printf("\n");
 }
 ;
 
@@ -449,7 +447,7 @@ command
 
         double (*ptrFunc)(char *) = simbol.data.func;
         if (ptrFunc != NULL) {
-            loadPrint = 1;
+            loadPrint = 0;
             (*(ptrFunc))($3);
         } else {
             yyerror("Error: El puntero a función es nulo.\n");
@@ -478,7 +476,7 @@ command
 }
 | TOKEN_ERROR
 {
-    yyerror("Error: Error lexico, caracter no reconocido\n");
+    yyerror("\nError: Lexema mal formado\n");
 }
 ;
 
@@ -545,7 +543,7 @@ assign
 
 /* Función de error */
 void yyerror(char *s){
-    printf("%s", s);
+    printf("\x1b[31m""%s""\x1b[0m", s);
 }
 
 int yywrap(){
@@ -553,13 +551,13 @@ int yywrap(){
 }
 
 void prompt(){
-    if(!loadPrint)
-        printf("\033[32m$>\033[0m");
+    //if(!loadPrint)
+        //printf("\033[32m$>\033[0m");
 }
 
 void value(double val){
     if(print){
-        printf("%lf\n", val);
+        printf("\x1b[33m""%lf\n""\x1b[0m", val);
     }else{
         print = 1;
     }
