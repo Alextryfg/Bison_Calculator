@@ -101,7 +101,7 @@ COMMAND2 ("load")
 
 {OPERADORESSIMPLES} {return ((int)*yytext);}
 
-.                   { return (TOKEN_ERROR);}
+.                   {error_lexico(yylineno);}
 
 <<EOF>>             {fclose(yyin); yyrestart(stdin); return (TOKEN_EOF);}
 
@@ -112,12 +112,26 @@ COMMAND2 ("load")
 
 double load(char *nombreArchivo){
     FILE *archivo;
-    archivo = fopen(nombreArchivo, "r");
+    archivo = fopen(nombreArchivo, "r+");
     if(archivo == NULL){
         printf("Error al abrir el archivo %s \n", nombreArchivo);
         yyin = stdin;
         return 0;
     }
+    
+    // Mover el puntero de archivo al final
+    fseek(archivo, 0, SEEK_END);
+
+    // Comprobar si el último carácter es un salto de línea
+    int ultimoCaracter = fgetc(archivo);
+    if (ultimoCaracter != '\n' && ultimoCaracter == EOF) {
+        // Si no es un salto de línea, escribir uno
+        fputc('\n', archivo);
+    }
+
+    fseek(archivo, 0, SEEK_SET);
+
+
     yyin = archivo;
     return 1;
 }
@@ -129,5 +143,5 @@ double exitC(){
 }
 
 void error_lexico(int linea){
-    printf("Error lexico en la linea %d\n", linea);
+    printf("\x1b[31m""Error: Error lexico en la linea => %d\n""\x1b[0m", linea);
 }

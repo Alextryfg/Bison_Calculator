@@ -20,6 +20,9 @@
     int print = 1;      /* Variable que indica si se debe imprimir el resultado de la operación */
     int isnan(double x);    /* Prototipo de la función isnan */
     int loadPrint = 0;       /* Variable que indica si se debe cargar un archivo */
+    int nerror=0;       /* Variable que indica si se ha producido un error y printear el salto */
+    void success(char *s);  /* Prototipo de la función success */
+    
 
 %}
 
@@ -91,16 +94,16 @@
 /* Definición de las reglas */
 
 start
-:   %empty /* Produccion vacia que se ejecutara cuando no hay ninguna linea de entrada */
-{
-    prompt();
-}
+:INICIO
 | start INICIO
 ;
 
 
 INICIO  /* Si hay ; no se imprime, en caso contrario si */
 : '\n'
+{
+    prompt();
+}
 {
     prompt();
 }
@@ -111,7 +114,7 @@ INICIO  /* Si hay ; no se imprime, en caso contrario si */
 }
 | command '\n'
 {
-    prompt();
+
 }
 | assign '\n'
 {
@@ -136,7 +139,12 @@ INICIO  /* Si hay ; no se imprime, en caso contrario si */
 }
 | error  /* El simbolo terminal error se reserva para la recuperacion de errores */
 {
-    printf("\n");
+    if(!nerror)
+        printf("\n");
+
+    yyerror("Error: Sintaxis incorrecta\n");
+
+    nerror=1;
 }
 ;
 
@@ -454,6 +462,7 @@ command
         }
 
     }
+    
 
     free($1);
     free($3);
@@ -470,9 +479,10 @@ command
 
 } 
 | TOKEN_EOF
-{
+{   
     loadPrint = 0;
     fail = 0;
+    success("Exito: Se ha terminado de leer el archivo. Pulse ENTER para continuar");
 }
 | TOKEN_ERROR
 {
@@ -485,7 +495,7 @@ assign
 : TOKEN_VARIABLE '=' exp 
 {   
 
-    //printf("entro a assign");
+
     simbol = getSimbol($1);
 
     if(!fail){
@@ -544,6 +554,10 @@ assign
 /* Función de error */
 void yyerror(char *s){
     printf("\x1b[31m""%s""\x1b[0m", s);
+}
+
+void success(char *s){
+    printf("\x1b[32m""%s""\x1b[0m", s);
 }
 
 int yywrap(){
