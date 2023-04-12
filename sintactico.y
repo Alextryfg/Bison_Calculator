@@ -135,10 +135,10 @@ INICIO  /* Si hay ; no se imprime, en caso contrario si */
     prompt();
 }
 | error  /* El simbolo terminal error se reserva para la recuperacion de errores */
-{   
-    /* No detectamos ningun token valido, por lo tanto llegamos al token terminal error */
+{
     /* Se debe limpiar el buffer de entrada */
     yyclearin;
+    
 }
 ;
 
@@ -473,9 +473,12 @@ command
 } 
 | TOKEN_EOF
 {
-    if(!fail){
-        loadPrint = 0;
-    }
+    loadPrint = 0;
+    fail = 0;
+}
+| TOKEN_ERROR
+{
+    yyerror("Error: Error lexico, caracter no reconocido\n");
 }
 ;
 

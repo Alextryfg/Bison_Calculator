@@ -101,7 +101,7 @@ COMMAND2 ("load")
 
 {OPERADORESSIMPLES} {return ((int)*yytext);}
 
-.                   { error_lexico(yylineno); return (TOKEN_ERROR);}
+.                   { return (TOKEN_ERROR);}
 
 <<EOF>>             {fclose(yyin); yyrestart(stdin); return (TOKEN_EOF);}
 

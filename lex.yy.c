@@ -944,7 +944,7 @@ YY_RULE_SETUP
 case 20:
 YY_RULE_SETUP
 #line 104 "lexico.l"
-{ error_lexico(yylineno); return (TOKEN_ERROR);}
+{ return (TOKEN_ERROR);}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 #line 106 "lexico.l"
