@@ -1,13 +1,13 @@
-# Calculadora_Bison
+#Pasos para ejecutar
 
-Pasos para ejecutar:
+Para ejecutar la calculadora es necesario seguir los siguientes pasos:
 
-1. cd Calculadora_Bison-main/P3Compiladores/
-2. flex lexico.l
-3. bison -d sintactico.y
-4. gcc -Wall *.c -o calculadora -lfl
-5. ./calculadora
+Acceder a la carpeta Calculadora_Bison-main/P3Compiladores/ mediante la consola con el comando cd Calculadora_Bison-main/P3Compiladores/
+Ejecutar el comando flex lexico.l para generar el analizador léxico.
+Ejecutar el comando bison -d sintactico.y para generar el analizador sintáctico.
+Compilar el programa con el comando gcc -Wall *.c -o calculadora -lfl.
+Ejecutar el programa con el comando ./calculadora, siendo el archivo de entrada opcional.
+En caso de duda sobre el funcionamiento del programa, se puede ejecutar el comando help para obtener información adicional.
+Para simplificar el proceso de compilación, se ha incluido un script llamado compilar.sh que automatiza estos pasos. Para ejecutarlo, basta con introducir el comando bash compilar.sh en la consola.
 
-Todos estos pasos estan contenidos dentro del script 'compilar.sh' que se podra ejecutar por medio del comando 'bash compilar.sh'. Una vez compilado, podremos probar a ejecutarlo mediante './calculadora <fichero>', siendo el fichero insertado opcional. Una vez comenzada la ejecución sería de interes activar el comando 'help' que nos ayudará a entender el funcionamiento del programa.
-  
-IMPORTANTE: Para cargar los archivos, estes deberan tener permisos de escritura y lectura. Esto es debido a que el archivo debe contener un '\n' antes del EOF. En caso de que al usuario se le olvide introducirlo, el programa lo hará automáticamente. El 'fichero.txt' viene ya con todos los permisos necesarios, por lo que si es necesario cargar algun archivo, lo mas sencillo es introducirlo en este.
+Es importante tener en cuenta que, para cargar archivos, éstos deben tener permisos de escritura y lectura. En caso de que el usuario no haya introducido un salto de línea antes del final del archivo, el programa lo añadirá automáticamente. Para evitar problemas, se recomienda utilizar el archivo fichero.txt, que ya cuenta con los permisos necesarios.
