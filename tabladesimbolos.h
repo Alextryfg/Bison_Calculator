@@ -41,7 +41,7 @@ void actualizarSimbolo(char* lex, double val);
 double obtenerValorSimbolo(char* lex);
 
 /*
- * Funcion encargada de obtener el tipo de un simbolo
+ * Funcion encargada de obtener el simbolo de la tablaSimbolos
  * @param lex es el lexema del simbolo
  */
 tipoelem getSimbol(char* lex);
@@ -78,12 +78,10 @@ double workspace();
 */
 double  help();
 
-
 /*
 * Funcion encargada de limpiar el workspace
 */
 double  clear();
-
 
 /*
 * Funcion encargada de imprimir la tabla de simbolos

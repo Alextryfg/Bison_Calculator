@@ -541,12 +541,21 @@ char *yytext;
 #include "tabladesimbolos.h"
 #include "sintactico.tab.h"
 #include "lex.yy.h"
-void error_lexico(int linea);
-#line 546 "lex.yy.c"
+void errorlex(int linea);
+void dobleLoad();
+#line 547 "lex.yy.c"
 /*Opcion para que detecte la varibale yylval de Bison */
 /* Opcion para que no nos de el error de 'input' unused*/
 #define YY_NO_INPUT 1
-#line 550 "lex.yy.c"
+#line 19 "lexico.l"
+   //En este apartado se realizan las declaraciones de las funciones que se van a utilizar en el analizador léxico.
+   //Estas expresiones regulares serán detectadas por flex y cada una de ellas realizará la operacion que se le indicará
+   //en el siguiente apartado del fichero.
+/* e+1, e+2, e+3*/
+/* 1e+1, .55, .55e+2, 2.57, 4.566e+10*/
+/* 121, 1234, 1234567890 */
+/* xxx.x, xxx.xx, xxx.xxx, xxx.xxx... */
+#line 559 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -761,10 +770,10 @@ YY_DECL
 		}
 
 	{
-#line 58 "lexico.l"
+#line 67 "lexico.l"
 
 
-#line 768 "lex.yy.c"
+#line 777 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -833,33 +842,33 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 60 "lexico.l"
+#line 69 "lexico.l"
 
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 62 "lexico.l"
+#line 71 "lexico.l"
 { yylval.str = strdup(yytext); return (TOKEN_COMMAND1);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 64 "lexico.l"
+#line 73 "lexico.l"
 { yylval.str = strdup(yytext); return (TOKEN_COMMAND2);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 66 "lexico.l"
+#line 75 "lexico.l"
 { yylval.str = strdup(yytext); return (TOKEN_FUNC);}
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 69 "lexico.l"
+#line 78 "lexico.l"
 {return ((int)*yytext);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 71 "lexico.l"
+#line 80 "lexico.l"
 {
                         /* Covertimos el string a su valor numérico y lo metemos en la estructura definida en bison  */
                         yylval.val=atof(yytext);
@@ -869,7 +878,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 78 "lexico.l"
+#line 87 "lexico.l"
 {   
                         yylval.str = strdup(yytext);
                             
@@ -879,7 +888,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 85 "lexico.l"
+#line 94 "lexico.l"
 {   
                         yylval.str = strdup(yytext);
                         /* Devolvemos el token correspondiente */
@@ -888,74 +897,74 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 91 "lexico.l"
+#line 100 "lexico.l"
 {return (TOKEN_MAS_IGUAL);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 92 "lexico.l"
+#line 101 "lexico.l"
 {return (TOKEN_MENOS_IGUAL);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 93 "lexico.l"
+#line 102 "lexico.l"
 {return (TOKEN_MULT_IGUAL);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 94 "lexico.l"
+#line 103 "lexico.l"
 {return (TOKEN_DIV_IGUAL);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 95 "lexico.l"
+#line 104 "lexico.l"
 {return (TOKEN_IGUAL_IGUAL);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 96 "lexico.l"
+#line 105 "lexico.l"
 {return (TOKEN_MAYOR_IGUAL);}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 97 "lexico.l"
+#line 106 "lexico.l"
 {return (TOKEN_MENOR_IGUAL);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 98 "lexico.l"
+#line 107 "lexico.l"
 {return (TOKEN_DIFERENTE_IGUAL);}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 99 "lexico.l"
+#line 108 "lexico.l"
 {return (TOKEN_MAS_MAS);}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 100 "lexico.l"
+#line 109 "lexico.l"
 {return (TOKEN_MENOS_MENOS);}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 102 "lexico.l"
+#line 111 "lexico.l"
 {return ((int)*yytext);}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 104 "lexico.l"
-{error_lexico(yylineno);}
+#line 113 "lexico.l"
+{errorlex(yylineno);}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 106 "lexico.l"
-{fclose(yyin); yyrestart(stdin); return (TOKEN_EOF);}
+#line 115 "lexico.l"
+{fclose(yyin); yyrestart(stdin); dobleLoad(); return (TOKEN_EOF);}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 109 "lexico.l"
+#line 118 "lexico.l"
 ECHO;
 	YY_BREAK
-#line 959 "lex.yy.c"
+#line 968 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1929,7 +1938,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 109 "lexico.l"
+#line 118 "lexico.l"
 
 
 /* Estas seran nuestras funciones personales que se volcarán automaticamente en el archivo lex.yy.c */
@@ -1940,9 +1949,13 @@ double load(char *nombreArchivo){
     if(archivo == NULL){
         printf("Error al abrir el archivo %s \n", nombreArchivo);
         yyin = stdin;
+        dobleLoad();
         return 0;
     }
     
+    //Para no permnitir que se cargue dos veces un load.
+    dobleLoad();
+
     // Mover el puntero de archivo al final
     fseek(archivo, 0, SEEK_END);
 
@@ -1953,20 +1966,23 @@ double load(char *nombreArchivo){
         fputc('\n', archivo);
     }
 
+    // Mover el puntero de archivo al principio
     fseek(archivo, 0, SEEK_SET);
-
+    
 
     yyin = archivo;
     return 1;
 }
 
+/* Funcion para salir del programa */
 double exitC(){
     yylex_destroy();
     yyterminate();
     return 1;
 }
 
-void error_lexico(int linea){
+/* Funcion para imprimir el error lexico con la linea del mismo */
+void errorlex(int linea){
     printf("\x1b[31m""Error: Error lexico en la linea => %d\n""\x1b[0m", linea);
 }
 

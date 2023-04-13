@@ -257,6 +257,7 @@ void modificar(abb A, tipoelem nodo) {
 
 /*
  * Funcion auxiliar recursiva de print de la tabla
+ * @param A
  */
 void _printTabla(abb A){
 
@@ -285,6 +286,7 @@ void _printTabla(abb A){
 
 /**
  * Funcion que imprime las variables del arbol A
+ * @param A
  */
 void _printWorkspace(abb *A){
 

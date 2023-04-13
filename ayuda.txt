@@ -8,7 +8,7 @@ Autor: Alex Fuentes
 Este programa permitira la realización de diferentes operaciones matematicas, además de 
 declaración de variables y llamadas a funciones del tipos seno, coseno, tangente ...etc.
 Cada operacion realizada mostrará su resultado, a nos ser que se concatene dicha opera-
-ción con un ';'.
+ción con un ';' al final de la misma, en cuyo caso no se mostrará por pantalla el resultado.
 
 ============================================================================================
 
@@ -17,7 +17,9 @@ ción con un ';'.
 La carpeta principal del proyecto contiene un script de ejecución del programa. Este 
 podrá ser ejecutado mediante el comando 'bash compilar.sh'. A continuación, mediante
 el comando './calculadora' se ejecutará nuestro interprete, por lo que podremos comen-
-zar a probarlo.
+zar a probarlo. Además, es posible utilizar el comando './calculadora <fichero> para
+cargar un fichero con las operaciones que queramos realizar. La forma del fichero debe-
+rá ser del tipo xxxx.xx para ser aceptado por el programa.
 
 ==========================================Comandos==========================================
 

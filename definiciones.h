@@ -8,8 +8,6 @@
 #define ID_CONST 303
 #define ID_NUM 304
 
-/* Errores posibles */
-
 /* Comandos especiales */
 #define ID_EXIT 400
 #define ID_WORKSPACE 401

@@ -8,6 +8,8 @@
 #define L 20
 typedef char *tipoclave;
 
+/* Esta será la estructura que almacenará los distintos simbolos utilizados a lo largo de nuestro intérprete */
+
 typedef struct{
     char *lexema; //lexema del token
     int type;   //tipo del token
@@ -103,14 +105,14 @@ void suprimir(abb *A,tipoelem E);
  */
 void modificar(abb A, tipoelem nodo);
 
-/**
- * Imprime todos los nodos del arbol A
+/*
+ * Funcion auxiliar recursiva de print de la tabla
  * @param A
  */
 void _printTabla(abb A);
 
 /**
- * Imprime las variables del arbol A
+ * Funcion que imprime las variables del arbol A
  * @param A
  */
 void _printWorkspace(abb *A);

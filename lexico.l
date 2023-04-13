@@ -3,7 +3,8 @@
 #include "tabladesimbolos.h"
 #include "sintactico.tab.h"
 #include "lex.yy.h"
-void error_lexico(int linea);
+void errorlex(int linea);
+void dobleLoad();
 %}
 
 %option noyywrap
@@ -12,6 +13,12 @@ void error_lexico(int linea);
 %option yylineno
 /* Opcion para que no nos de el error de 'input' unused*/
 %option noinput
+
+
+   //En este apartado se realizan las declaraciones de las funciones que se van a utilizar en el analizador léxico.
+   //Estas expresiones regulares serán detectadas por flex y cada una de ellas realizará la operacion que se le indicará
+   //en el siguiente apartado del fichero.
+
 
 ALFA [a-zA-Z_]
 DIGIT [0-9]
@@ -34,16 +41,18 @@ DIFERENTE_IGUAL               \!\=
 MAS_MAS                       \+\+
 MENOS_MENOS                   \-\-
 
-
+/* e+1, e+2, e+3*/
 EXPONENCIAL [eE][+-]?{DIGIT}+
 
+
+/* 1e+1, .55, .55e+2, 2.57, 4.566e+10*/
 FLOAT {DIGIT}*[.]{DIGIT}*{EXPONENCIAL}?|\.{DIGIT}{EXPONENCIAL}?|{DIGIT}{EXPONENCIAL}
 
+/* 121, 1234, 1234567890 */
 INTEGER {DIGIT}+
 
+/* xxx.x, xxx.xx, xxx.xxx, xxx.xxx... */
 FILE {VARIABLE}\.{ALFA}+
-
-LIB <{ALFA|DIGIT}+\.h>
 
 NUMBER {FLOAT}|{INTEGER}
 
@@ -52,7 +61,6 @@ FUNC ("sin"|"cos"|"tan"|"sqrt"|"log"|"exp")
 COMMAND1 ("exit"|"simbolos"|"workspace"|"clear"|"help")
 
 COMMAND2 ("load")
-
 
 
 %%
@@ -101,9 +109,9 @@ COMMAND2 ("load")
 
 {OPERADORESSIMPLES} {return ((int)*yytext);}
 
-.                   {error_lexico(yylineno);}
+.                   {errorlex(yylineno);}
 
-<<EOF>>             {fclose(yyin); yyrestart(stdin); return (TOKEN_EOF);}
+<<EOF>>             {fclose(yyin); yyrestart(stdin); dobleLoad(); return (TOKEN_EOF);}
 
 
 %%
@@ -116,9 +124,13 @@ double load(char *nombreArchivo){
     if(archivo == NULL){
         printf("Error al abrir el archivo %s \n", nombreArchivo);
         yyin = stdin;
+        dobleLoad();
         return 0;
     }
     
+    //Para no permnitir que se cargue dos veces un load.
+    dobleLoad();
+
     // Mover el puntero de archivo al final
     fseek(archivo, 0, SEEK_END);
 
@@ -129,19 +141,22 @@ double load(char *nombreArchivo){
         fputc('\n', archivo);
     }
 
+    // Mover el puntero de archivo al principio
     fseek(archivo, 0, SEEK_SET);
-
+    
 
     yyin = archivo;
     return 1;
 }
 
+/* Funcion para salir del programa */
 double exitC(){
     yylex_destroy();
     yyterminate();
     return 1;
 }
 
-void error_lexico(int linea){
+/* Funcion para imprimir el error lexico con la linea del mismo */
+void errorlex(int linea){
     printf("\x1b[31m""Error: Error lexico en la linea => %d\n""\x1b[0m", linea);
 }

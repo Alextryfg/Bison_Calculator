@@ -5,6 +5,7 @@
 #include "abb.h"
 #include "definiciones.h"
 #include "lex.yy.h"
+#include "sintactico.tab.h"
 
 /* Se trata del arbol en el que se almacenará la tablaSimbolos de simbolos*/
 abb tablaSimbolos;
@@ -15,6 +16,7 @@ double workspace();
 double help();
 double clear();
 double simbolos();
+void success();
 
 /* En initialC, almacenare los distintos comandos especiales, de manera que alberguen un puntero a la función que invocarán */
 
@@ -100,6 +102,9 @@ double obtenerValorSimbolo(char* lex){
     return 0;
 }
 
+/*
+ * Funcion encargada de obtener el simbolo de la tablaSimbolos
+ */
 tipoelem getSimbol(char* lex){
     tipoelem s;
     s.lexema = NULL;
@@ -132,8 +137,6 @@ void clearWorkspace(){
     _clearWorkspace(&tablaSimbolos);
 }
 
-
-
 /*
  * Print de bienvenida
  */
@@ -141,7 +144,11 @@ void welcome(){
     printf("╔════════════════════════════════╗\n");
     printf("║         BIENVENIDO A LA        ║\n");
     printf("║           CALCULADORA          ║\n");
+    printf("║                                ║\n");
+    printf("║ Para obtener ayuda, introduce  ║\n");
+    printf("║        el comando 'help'.      ║\n");
     printf("╚════════════════════════════════╝\n");
+
 }
 
 /* Funciones que se invocaran cuando FLEX detecte las palabras clave.*/
@@ -174,16 +181,14 @@ double  help(){
     
 }
 
-
 /*
 * Funcion encargada de limpiar el workspace
 */
 double  clear(){
     clearWorkspace();
-    printf("Workspace limpiado correctamente\n");
+    success("Exito: Workspace limpiado correctamente\n");
     return 1;
 }
-
 
 /*
 * Funcion encargada de imprimir la tabla de simbolos

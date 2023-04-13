@@ -10,17 +10,18 @@
     #include "lex.yy.h"
 
     tipoelem simbol = {};
-    int fail = 0;
+    int fail = 0;       /* Variable que indica si se ha producido un error y no se debe imprimir el resultado de la operación */
+    int print = 1;      /* Variable que indica si se debe imprimir el resultado de la operación */
+    int nerror=0;       /* Variable que indica si se ha producido un error y printear el salto */
+    int dobleLoadVar = 0; /* Variable para gestionar que no haya doble load */
+    
+    void dobleLoad();   /* Prototipo de la función dobleLoad */
     void yyerror(char *s);  /* prototipo de la función de error  */
     extern int yylex(void); /* Esto se utilizará desde otros archivos por eso lleva el extern */
     int yywrap();       /* Esto se utilizará desde otros archivos por eso lleva el extern */
-    void prompt();      /* Prototipo de la función prompt */
     void value(double val);       /* Prototipo de la función value para imprimir resultados*/
     double potencia(double base, double exponente);    /* Prototipo de la función potencia */
-    int print = 1;      /* Variable que indica si se debe imprimir el resultado de la operación */
     int isnan(double x);    /* Prototipo de la función isnan */
-    int loadPrint = 0;       /* Variable que indica si se debe cargar un archivo */
-    int nerror=0;       /* Variable que indica si se ha producido un error y printear el salto */
     void success(char *s);  /* Prototipo de la función success */
     
 
@@ -34,6 +35,8 @@
 }
 
 /* Definición de los tokens */
+
+/* Se trata de la definicion del simbolo de arranque de bison */
 
 %start start
 
@@ -66,6 +69,8 @@
 %token <str> TOKEN_COMMAND1
 %token <str> TOKEN_COMMAND2
 
+/* Tokens de gestion de EOF y errores */
+
 %token <str> TOKEN_ERROR
 %token <str> TOKEN_EOF
 
@@ -75,11 +80,6 @@
 %type <val> exp
 %type <str> command
 %type <val> assign
-
-
-/*
-%type <val> function
-*/
 
 /* Asociatividad de los operadores */
 
@@ -93,6 +93,8 @@
 
 /* Definición de las reglas */
 
+/* La regla de inicion comienza con el simbolo de arranque y se llama start */
+
 start
 :INICIO
 | start INICIO
@@ -101,16 +103,10 @@ start
 
 INICIO  /* Si hay ; no se imprime, en caso contrario si */
 : '\n'
-{
-    prompt();
-}
-{
-    prompt();
-}
 | exp '\n'
 {
     value($1);
-    prompt();
+    
 }
 | command '\n'
 {
@@ -118,24 +114,26 @@ INICIO  /* Si hay ; no se imprime, en caso contrario si */
 }
 | assign '\n'
 {
+    // Se comprueba que no sea un NaN
     if(isnan($1) || isnan(-$1)){
         print=0;
         yyerror("Error: El resultado es NaN\n");
     }
+
     value($1);
-    prompt();
+    
 }
 | exp ';' '\n'
 {   
     print = 0;
     value($1);
-    prompt();
+    
 }
 | assign ';' '\n'
 {   
     print = 0;
     value($1);
-    prompt();
+    
 }
 | error  /* El simbolo terminal error se reserva para la recuperacion de errores */
 {
@@ -149,11 +147,15 @@ INICIO  /* Si hay ; no se imprime, en caso contrario si */
 ;
 
 
+/* Reglas para las expresiones matematicas */
 
 exp
 : TOKEN_NUM  
 | TOKEN_VARIABLE 
 {   
+
+    /* Si nos llega una variable, se comprueba que exista en la tabla de simbolos y se carga su valor para operar con ella */
+
     simbol = getSimbol($1);
 
     if(simbol.lexema != NULL){
@@ -165,7 +167,8 @@ exp
 
     free($1);
 
-}           
+}   
+/* A partir de aqui solo serán reglas de operaciones con calculos totalmente sencillo por lo que no será necesario entrar en detalle a comentarlos */        
 | exp '+' exp       
 { 
     $$ = $1 + $3;
@@ -401,6 +404,11 @@ exp
 }
 | TOKEN_FUNC '(' exp ')' 
 {   
+
+    /* En el momento en el que se detecte una función, será necesario buscarla en la tabla de símbolos.
+    y ejecutrala mediante un puntero a dicha funcion. En caso de ser nulo el puntero no se realizará
+    ninguna ejecucion y se liberará la memoria */
+
     simbol = getSimbol($1);
 
         double (*ptrFunc)(double) = simbol.data.func;
@@ -415,11 +423,17 @@ exp
 }
 ;
 
-
+/* Esta es la definicion de los distintos comandos que se pueden ejecutar en el lenguaje.
+    En este caso los dividimos en dos grupos, los que no requieren de parametros y los que si. 
+*/
 
 command
 : TOKEN_COMMAND1
 {
+
+    /* La unica diferencia entre el COMMAND1 y el COMMAND2 es que el primero no requiere de parametros
+        por lo que no se introducirá ningun parametro detectable en su definicion, luego la ejecucion
+        es similar a la de las funciones explicada anteriormente. */
 
     if(!fail){
 
@@ -434,7 +448,7 @@ command
         }
 
         if(strcmp($1, "exit") == 0){
-            printf("Saliendo del programa...\n");
+            success("Exito: Saliendo del programa...\n");
             free($1);
             return 1;
         }
@@ -450,19 +464,24 @@ command
 | TOKEN_COMMAND2 '(' TOKEN_FILE ')'
 {
     if(!fail){
-        
-        simbol = getSimbol($1);
+        if (!dobleLoadVar){
+            simbol = getSimbol($1);
+            double (*ptrFunc)(char *) = simbol.data.func;
+            if (ptrFunc != NULL) {
+                (*(ptrFunc))($3);
+            } else {
+                yyerror("Error: El puntero a función es nulo.\n");
+            }
 
-        double (*ptrFunc)(char *) = simbol.data.func;
-        if (ptrFunc != NULL) {
-            loadPrint = 0;
-            (*(ptrFunc))($3);
-        } else {
-            yyerror("Error: El puntero a función es nulo.\n");
+        }else{
+            yyerror("Error: No es posible cargar un script dentro de otro.\n");
         }
+        
 
     }
     
+    /* Es importante observar que la reserva de memroia realizada en el analizador lexico es liberada siempre,
+       despues de realizar las operaciones pertinentes. */
 
     free($1);
     free($3);
@@ -480,9 +499,9 @@ command
 } 
 | TOKEN_EOF
 {   
-    loadPrint = 0;
     fail = 0;
     success("Exito: Se ha terminado de leer el archivo. Pulse ENTER para continuar");
+
 }
 | TOKEN_ERROR
 {
@@ -490,6 +509,8 @@ command
 }
 ;
 
+/* De nuevo las reglas de asignacion, no tienen nada de especial, solo se realiza la comprobacion de que
+    la variable no sea una constante y se realiza la asignacion en codigo c. */
 
 assign
 : TOKEN_VARIABLE '=' exp 
@@ -530,7 +551,10 @@ assign
 
 }
 | TOKEN_VARIABLE '=' command
-{
+{   
+
+    /* Además se añade un error en caso de intentar asignar una funcion a una variable o constante */
+
     if(!fail){
         yyerror("Error: No se puede asignar una funcion a una variable o constante\n");
         print = 0;
@@ -538,37 +562,35 @@ assign
 
     free($1);
 }
-
 ;
 
-
-
-
-
-
-
-
-
 %%
+
+/* Simplemente es como un interruptor, que cambia al valor opuesto cada vez que se llama a la función */
+void dobleLoad(){
+    if(dobleLoadVar){
+        dobleLoadVar = 0;
+    }else{
+        dobleLoadVar = 1;
+    }
+}
 
 /* Función de error */
 void yyerror(char *s){
     printf("\x1b[31m""%s""\x1b[0m", s);
 }
 
+/* Función de éxito */
 void success(char *s){
     printf("\x1b[32m""%s""\x1b[0m", s);
 }
 
+/* Función que se ejecuta al final del programa */
 int yywrap(){
     return 1;
 }
 
-void prompt(){
-    //if(!loadPrint)
-        //printf("\033[32m$>\033[0m");
-}
-
+/* Funcion que muestra los resultados de las operaciones */
 void value(double val){
     if(print){
         printf("\x1b[33m""%lf\n""\x1b[0m", val);
@@ -577,6 +599,7 @@ void value(double val){
     }
 }
 
+/* Funcion para calcular la potencia */
 double potencia(double base, double exponente){
         double resultado = 1;
     int i;
@@ -598,6 +621,7 @@ double potencia(double base, double exponente){
     return resultado;
 }
 
+/* Funcion para saber si un numero es o no nan */
 int isnan(double x){
     return x != x;
 }
