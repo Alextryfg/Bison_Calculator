@@ -2,7 +2,7 @@
 ## Pasos para Compilar y ejecutar
 Para ejecutar la calculadora es necesario seguir los siguientes pasos:
 
-1. Acceder a la carpeta Calculadora_Bison-main/P3Compiladores/ mediante la consola con el comando cd Calculadora_Bison-main/P3Compiladores/
+1. Acceder a la carpeta Calculadora_Bison-main/P3Compiladores/ mediante la consola con el comando cd Calculadora_Bison-main/P3Compiladores/.
 2. Ejecutar el comando flex lexico.l para generar el analizador léxico.
 3. Ejecutar el comando bison -d sintactico.y para generar el analizador sintáctico.
 4. Compilar el programa con el comando gcc -Wall *.c -o calculadora -lfl.
